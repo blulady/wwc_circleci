@@ -80,3 +80,35 @@ $ docker-compose down -v
 ```
 This command is helpful if you want to start with a clean slate. However, it
 will completely remove any data you have already stored in the database.
+
+## Deploying onto Heroku
+* Check that the containers are working on the localhost.
+* Login to heroku
+```
+heroku login
+```
+
+* Login for heroku container registry
+```
+heroku container:login
+```
+
+* Build and push container to heroku registry
+```
+heroku container:push web -a wwcode-chtools-api -r wwcode-chtools-api
+```
+
+* Release container on heroku
+```
+heroku container:release web -a wwcode-chtools-api -r wwcode-chtools-api
+```
+
+* Check releases
+```
+heroku releases -a wwcode-chtools-api
+```
+
+* Check logs
+```
+heroku logs --tail -a wwcode-chtools-api
+```

@@ -1,5 +1,5 @@
-Django
-psycopg2
-south
-django-registration
-gunicorn
+Django==3.1
+psycopg2==2.8.5
+South==1.0.2
+django-registration==3.1
+gunicorn==20.0.4

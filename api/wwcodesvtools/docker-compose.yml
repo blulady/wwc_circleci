@@ -3,9 +3,7 @@ services:
   db:
     image: postgres:12
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - ./.env.dev.db
   migrations:
     build: .
     command: python manage.py migrate --noinput
@@ -20,6 +18,8 @@ services:
       - .:/code
     ports:
       - "8000:8000"
+    environment:
+      - ./.env.dev
     depends_on:
       - db
       - migrations

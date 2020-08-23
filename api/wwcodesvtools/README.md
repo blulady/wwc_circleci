@@ -112,3 +112,8 @@ heroku releases -a wwcode-chtools-api
 ```
 heroku logs --tail -a wwcode-chtools-api
 ```
+
+* To set a config for secret_key or anything else
+```
+heroku config:set SECRET_KEY=SOME_SECRET_VALUE -a wwcode-chtools-api
+```

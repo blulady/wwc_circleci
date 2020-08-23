@@ -1,58 +1,82 @@
-#WWCode-SV Chapter Tools API
+# WWCode-SV Chapter Tools API
 
-##Setup instructions using Docker:
+## Setup instructions using Docker:
+1. Install [Docker Community Edition](https://docs.docker.com/install/) if it
+is not already installed.
+1. Once Docker is installed, run the following commands:
+    ```
+    $ cd api/wwcodesvtools/
+    $ docker-compose up
+    ```
+1. The web application will be available at http://localhost:8000
 
-* Install Docker and docker-compose. [Someone to fill installation instructions for docker]
-* Once Docker and Docker Compose is installed, run the following command:
-```
-$ cd api/wwcodesvtools/
-$ docker-compose up
-```
-* Check if the containers are running by running
-```
-$ docker ps -a
-```
-
-### Compose 
-* To start the containers in daemon mode, use the following command:
+### Compose
+Generally it is more convenient to run the containers in the background using daemon mode. To start the containers in daemon mode, use the following command:
 ```
 $ docker-compose up -d
 ```
-* To rebuild all the containers, use the following command:
+To check if the containers are running, use:
+```
+$ docker-compose ps
+```
+To rebuild all the containers, use the following command:
 ```
 $ docker-compose up -d --build
 ```
-* To run any command in the app container, use 
+To restart the web service, run:
+```
+$ docker-compose restart web
+```
+To run any command in the app container, use:
 ```
 $ docker-compose exec web <command>
 ```
-* To be able to interactively run or debug inside the container environment,
+
+To be able to interactively run or debug inside the container environment, run:
 ```
-$ docker ps -a
-$ docker exec -it <container name> bash 
+$ docker-compose exec <service> bash
 ```
 
-###Logs
-* To tail logs, run
+For example:
 ```
-$ docker logs -f wwcodesvtools_web_1
+$ docker-compose exec web bash
 ```
 
-###Migrations
-When you bring up docker containers for the first time or rebuild them, migrations are automatically run. If your 
-containers are already running and you want to add a few migrations and run migrations in the db, you can use 
-the following commands.
-* To make a new migration, run
+### Logs
+To tail logs, run:
+```
+$ docker-compose logs -f web
+```
+
+### Migrations
+When you bring up docker containers for the first time or rebuild them,
+migrations are automatically run. If your containers are already running and
+you want to add a few migrations and run migrations in the db, you can use the
+following commands.
+
+To make a new migration, run:
 ```
 $ docker-compose exec web python manage.py makemigrations --name <name of migration>
 ```
-* To run migrations, run
+To run migrations, run:
 ```
 $ docker-compose exec web python manage.py migrate --noinput
 ```
 
-###Shut down
-* To stop the containers, run
+### Shut down
+To stop the containers but not remove them, run:
+```
+$ docker-compose stop
+```
+
+To stop and remove containers, run:
 ```
 $ docker-compose down
 ```
+
+To stop and remove all containers, as well as volumes as networks, run:
+```
+$ docker-compose down -v
+```
+This command is helpful if you want to start with a clean slate. However, it
+will completely remove any data you have already stored in the database.

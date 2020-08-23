@@ -25,7 +25,7 @@ SECRET_KEY = '))yt4hmt-$lmjqhw4=@d+rr1*s@9y^jr&oge3u1-bm)@2(q%t2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wwcode-chtools-api.herokuapp.com']
 
 
 # Application definition

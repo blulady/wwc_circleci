@@ -19,7 +19,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./wwcodesvtools/.env.dev
+      - ./wwcodesvtools/.env
     depends_on:
       - db
       - migrations

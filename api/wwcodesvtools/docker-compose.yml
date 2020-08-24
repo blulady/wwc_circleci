@@ -2,8 +2,10 @@ version: '3'
 services:
   db:
     image: postgres:12
-    env_file:
-      - ./wwcodesvtools/.env.dev.db
+    environment:
+      - POSTGRES_USER=postgres_dev
+      - POSTGRES_DB=postgres_dev
+      - POSTGRES_HOST_AUTH_METHOD=trust
   migrations:
     build: .
     command: python manage.py migrate --noinput

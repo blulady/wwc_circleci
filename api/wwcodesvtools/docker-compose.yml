@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:12
     env_file:
-      - ./.env.dev.db
+      - ./wwcodesvtools/.env.dev.db
   migrations:
     build: .
     command: python manage.py migrate --noinput
@@ -19,7 +19,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./.env.dev
+      - ./wwcodesvtools/.env.dev
     depends_on:
       - db
       - migrations

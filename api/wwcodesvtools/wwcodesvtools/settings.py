@@ -15,7 +15,7 @@ import environ
 
 env = environ.Env()
 # reading .env file
-environ.Env.read_env()
+environ.Env.read_env(".env")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,10 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '))yt4hmt-$lmjqhw4=@d+rr1*s@9y^jr&oge3u1-bm)@2(q%t2'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -80,14 +80,8 @@ WSGI_APPLICATION = 'wwcodesvtools.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        "ENGINE": env("SQL_ENGINE", default= "django.db.backends.postgresql"),
-        "NAME": env("SQL_DATABASE"),
-        "USER": env("SQL_USER"),
-        # "PASSWORD": env("SQL_PASSWORD"),
-        "HOST": env("SQL_HOST"),
-        "PORT": env("SQL_PORT"),
-    }
+    # read os.environ['DATABASE_URL'] and raises ImproperlyConfigured exception if not found
+    'default': env.db(),
 }
 
 

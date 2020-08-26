@@ -3,9 +3,10 @@ services:
   db:
     image: postgres:12
     environment:
-      - POSTGRES_USER=postgres_dev
-      - POSTGRES_DB=postgres_dev
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      POSTGRES_USER: $DATABASE_USER
+      POSTGRES_DB: $DATABASE_NAME
+      POSTGRES_PASS: $DATABASE_PASSWORD
+      POSTGRES_HOST_AUTH_METHOD: $POSTGRES_HOST_AUTH_METHOD
   migrations:
     build: .
     command: python manage.py migrate --noinput
@@ -21,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./wwcodesvtools/.env
+      - .env
     depends_on:
       - db
       - migrations

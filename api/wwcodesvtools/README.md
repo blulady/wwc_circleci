@@ -95,11 +95,15 @@ heroku container:login
 
 * Build and push container to heroku registry
 ```
+heroku container:push web -a wwcode-chtools-api -r <git remote of app>
+
 heroku container:push web -a wwcode-chtools-api -r wwcode-chtools-api
 ```
 
 * Release container on heroku
 ```
+heroku container:release web -a wwcode-chtools-api -r <git remote of app>
+
 heroku container:release web -a wwcode-chtools-api -r wwcode-chtools-api
 ```
 

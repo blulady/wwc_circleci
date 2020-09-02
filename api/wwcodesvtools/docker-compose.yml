@@ -9,6 +9,8 @@ services:
       POSTGRES_HOST_AUTH_METHOD: $POSTGRES_HOST_AUTH_METHOD
   migrations:
     build: .
+    environment:
+      PORT: 8000
     command: python manage.py migrate --noinput
     volumes:
       - .:/code
@@ -16,6 +18,8 @@ services:
       - db
   web:
     build: .
+    environment:
+      PORT: 8000
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code

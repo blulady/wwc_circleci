@@ -17,7 +17,29 @@
 
  - In the terminal, navigate to the frontend directory in the project.
 
- - Running `docker-compose up` will install all the dependencies and run the application
+ - To clear all previous versions of this container:
+- To see the created images, use the command:   
+   ```
+   docker images
+   ```  
+    If you see an image called **frontend_web**, run 
+     ```
+     docker rmi frontend_web
+     ```
+    to remove that image.
+- Next, to see the containers, use the command:  
+    ```
+    docker ps -a
+    ```
+    If you see a container called **frontend_web**, remove it using:  
+    ```
+    docker rm frontend_web
+    ```
+ - Now to start up the project, use this command:
+   ```
+   docker-compose up
+   ```
+  This will install all the dependencies and run the application
 
  -  Open [http://localhost:3000](http://localhost:3000) to view it in the browser.  
     ![](READMEImages/rootscreen.gif)

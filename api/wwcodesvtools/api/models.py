@@ -24,9 +24,9 @@ class UserProfile(models.Model):
       return self.status == self.NEW
 
 
-# class RegistrationToken(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     token = models.CharField(max_length=150)
-#     used = models.BooleanField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class RegistrationToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=150)
+    used = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

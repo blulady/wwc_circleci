@@ -1,11 +1,11 @@
 from django.test import TestCase
-# from .models import UserStatus
+from .models import UserProfile
 # Create your tests here.
 
 
-# class UserStatusTests(TestCase):
+class UserProfileTests(TestCase):
 
-#     def test_userstatus_is_new(self):
-#         us = UserStatus(user=None, status=UserStatus.NEW)
-#         self.assertIs(us.is_new(), True)
+    def test_userprofile_is_new(self):
+        us = UserProfile(user=None, status=UserProfile.NEW)
+        self.assertIs(us.is_new(), True)
 

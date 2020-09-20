@@ -9,13 +9,25 @@ from .serializers import UserSerializer
 # Create your views here.
 
 class UserRegistrationView(APIView):
+    USER_NOT_FOUND_ERROR_MESSAGE = "User not found"
+    USER_ALREADY_ACTIVE_ERROR_MESSAGE = 'User is already Active'
+    USER_TOKEN_MISMATCH_ERROR_MESSAGE = 'Invalid token. Token Does not match the token generated for this user.'
+    TOKE_NOT_FOUND_ERROR_MESSAGE = 'Token not found.'
+    INTERNAL_SERVER_ERROR_MESSAGE = "Something went wrong : {0}"
+    ERROR_STATUS = {
+        USER_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
+        USER_ALREADY_ACTIVE_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
+        USER_TOKEN_MISMATCH_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
+        TOKE_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
+        INTERNAL_SERVER_ERROR_MESSAGE : status.HTTP_500_INTERNAL_SERVER_ERROR
+    }
 
     def post(self, request, format=None):
         res_status = None
         error = None
         req = request.data
         user_queryset = User.objects.select_related('userprofile').filter(email=req['user']['email'])
-        result = self.validate_request(user_queryset, req['token'])
+        result = self.__validate_request(user_queryset, req['token'])
         if result['error']:
             return Response({'error': result['error']}, status=result['status'])
         try:
@@ -31,35 +43,24 @@ class UserRegistrationView(APIView):
                 error = serializer.errors
                 res_status = status.HTTP_400_BAD_REQUEST
         except Exception as e:
-            error = "Something went wrong : {0}".format(e)
-            res_status = res_status or status.HTTP_500_INTERNAL_SERVER_ERROR
+            error = self.INTERNAL_SERVER_ERROR_MESSAGE.format(e)
+            res_status = self.ERROR_STATUS[self.INTERNAL_SERVER_ERROR_MESSAGE]
         return Response({'error': error}, status=res_status)
 
-    def validate_request(self, user_queryset, request_token):
-        result = {'error': None, 'user' : None, 'toke': None, 'status': None }
+    def __validate_request(self, user_queryset, request_token):
         if not user_queryset.exists():
-            result['error'] = "User not created"
-            result['status'] = status.HTTP_404_NOT_FOUND
-            return result
+            return self.__build_error_result(self.USER_NOT_FOUND_ERROR_MESSAGE)
         user = user_queryset.first()
         if not user.userprofile.is_new():
-            result['error'] = 'User is already Active.'
-            result['status'] = status.HTTP_400_BAD_REQUEST
-            return result
+            return self.__build_error_result(self.USER_ALREADY_ACTIVE_ERROR_MESSAGE)
         token_qs = RegistrationToken.objects.filter(token=request_token)
         if token_qs.exists():
             token = token_qs.first()
             if not token or token.user.email != user.email:
-                result['error'] = 'Invalid token. Token Does not match the token generated for this user.'
-                result['status'] = status.HTTP_400_BAD_REQUEST
-                return result
+                return self.__build_error_result(self.USER_TOKEN_MISMATCH_ERROR_MESSAGE)
         else:
-            result['error'] = 'Token does not exist.'
-            result['status'] = status.HTTP_400_BAD_REQUEST
-            return result
-        result['user'] = user
-        result['token'] = token
-        return result
+            return self.__build_error_result(self.TOKE_NOT_FOUND_ERROR_MESSAGE)
+        return {'user' : user, 'token' : token}
 
-
-
+    def __build_error_result(self, error):
+        return {'error' : error, 'status' : self.ERROR_STATUS[error]}

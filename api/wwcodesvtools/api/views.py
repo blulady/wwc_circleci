@@ -9,28 +9,30 @@ from .serializers import UserSerializer
 # Create your views here.
 
 class UserRegistrationView(APIView):
-    USER_NOT_FOUND_ERROR_MESSAGE = "User not found"
+    USER_NOT_FOUND_ERROR_MESSAGE = 'User not found'
     USER_ALREADY_ACTIVE_ERROR_MESSAGE = 'User is already Active'
-    USER_TOKEN_MISMATCH_ERROR_MESSAGE = 'Invalid token. Token Does not match the token generated for this user.'
+    USER_TOKEN_MISMATCH_ERROR_MESSAGE = 'Invalid token. Token in request does not match the token generated for this user.'
     TOKE_NOT_FOUND_ERROR_MESSAGE = 'Token not found.'
-    INTERNAL_SERVER_ERROR_MESSAGE = "Something went wrong : {0}"
+    INTERNAL_SERVER_ERROR_MESSAGE = 'Something went wrong : {0}'
+    EXPECTED_KEY_NOT_PRESENT_IN_REQUEST = 'Key not present in request : {0}'
     ERROR_STATUS = {
         USER_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
         USER_ALREADY_ACTIVE_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
         USER_TOKEN_MISMATCH_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
         TOKE_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
-        INTERNAL_SERVER_ERROR_MESSAGE : status.HTTP_500_INTERNAL_SERVER_ERROR
+        INTERNAL_SERVER_ERROR_MESSAGE : status.HTTP_500_INTERNAL_SERVER_ERROR,
+        EXPECTED_KEY_NOT_PRESENT_IN_REQUEST : status.HTTP_400_BAD_REQUEST
     }
 
     def post(self, request, format=None):
         res_status = None
         error = None
         req = request.data
-        user_queryset = User.objects.select_related('userprofile').filter(email=req['user']['email'])
-        result = self.__validate_request(user_queryset, req['token'])
-        if result['error']:
-            return Response({'error': result['error']}, status=result['status'])
         try:
+            user_queryset = User.objects.select_related('userprofile').filter(email=req['user']['email'])
+            result = self.__validate_request(user_queryset, req['token'])
+            if 'error' in result:
+                return Response({'error': result['error']}, status=result['status'])
             user = result['user']
             serializer = UserSerializer(user,data=req['user'])
             if serializer.is_valid():
@@ -42,6 +44,9 @@ class UserRegistrationView(APIView):
             else:
                 error = serializer.errors
                 res_status = status.HTTP_400_BAD_REQUEST
+        except KeyError as key_error:
+            error = self.EXPECTED_KEY_NOT_PRESENT_IN_REQUEST.format(key_error)
+            res_status = self.ERROR_STATUS[self.EXPECTED_KEY_NOT_PRESENT_IN_REQUEST]
         except Exception as e:
             error = self.INTERNAL_SERVER_ERROR_MESSAGE.format(e)
             res_status = self.ERROR_STATUS[self.INTERNAL_SERVER_ERROR_MESSAGE]

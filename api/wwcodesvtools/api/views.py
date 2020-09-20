@@ -15,39 +15,51 @@ class UserRegistrationView(APIView):
         error = None
         req = request.data
         user_queryset = User.objects.select_related('userprofile').filter(email=req['user']['email'])
-        if not user_queryset.exists():
-            error = "User not created"
-            res_status = status.HTTP_404_NOT_FOUND
-            return Response({'error': error}, status=res_status)
+        result = self.validate_request(user_queryset, req['token'])
+        if result['error']:
+            return Response({'error': result['error']}, status=result['status'])
         try:
-            user = user_queryset.first()
-            error = self.validate_request(user, req['token'])
+            user = result['user']
             serializer = UserSerializer(user,data=req['user'])
-            if not error and serializer.is_valid():
+            if serializer.is_valid():
                 password = make_password(req['user']['password'])
                 serializer.save(password=password)
                 user.userprofile.status = UserProfile.ACTIVE
                 user.userprofile.save(update_fields=['status'])
                 res_status = status.HTTP_201_CREATED
             else:
-                error = error or "Invalid Data"
+                error = serializer.errors
                 res_status = status.HTTP_400_BAD_REQUEST
         except Exception as e:
             error = "Something went wrong : {0}".format(e)
             res_status = res_status or status.HTTP_500_INTERNAL_SERVER_ERROR
         return Response({'error': error}, status=res_status)
 
-    def validate_request(self, user, request_token):
+    def validate_request(self, user_queryset, request_token):
+        result = {'error': None, 'user' : None, 'toke': None, 'status': None }
+        if not user_queryset.exists():
+            result['error'] = "User not created"
+            result['status'] = status.HTTP_404_NOT_FOUND
+            return result
+        user = user_queryset.first()
         if not user.userprofile.is_new():
-            return 'User is already Active.'
+            result['error'] = 'User is already Active.'
+            result['status'] = status.HTTP_400_BAD_REQUEST
+            return result
         token_qs = RegistrationToken.objects.filter(token=request_token)
         if token_qs.exists():
             token = token_qs.first()
             if not token or token.user.email != user.email:
-                return 'Invalid token. Token Does not match the token generated for this user.'
+                result['error'] = 'Invalid token. Token Does not match the token generated for this user.'
+                result['status'] = status.HTTP_400_BAD_REQUEST
+                return result
         else:
-            return 'Token does not exist.'
-        return None
+            result['error'] = 'Token does not exist.'
+            result['status'] = status.HTTP_400_BAD_REQUEST
+            return result
+        result['user'] = user
+        result['token'] = token
+        return result
 
 
 

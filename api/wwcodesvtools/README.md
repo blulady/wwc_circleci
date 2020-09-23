@@ -6,7 +6,7 @@ is not already installed.
 1. Once Docker is installed, run the following commands:
     ```
     $ cd api/wwcodesvtools/
-    $ rename ".env.example" file to ".env"
+    $ create a .env file and copy the content of ".env.example" to the new file
     $ docker-compose up
     ```
 1. The web application will be available at http://localhost:8000
@@ -122,3 +122,9 @@ heroku logs --tail -a wwcode-chtools-api
 ```
 heroku config:set SECRET_KEY=SOME_SECRET_VALUE -a wwcode-chtools-api
 ```
+### How to contribute
+
+* Please follow the following naming convention for branch: 
+sprintXFeatureNameIssue#Developer
+E.g.: sprint1UserLoginIssue12Rita
+* Feature name can be shortened so that it’s not too long

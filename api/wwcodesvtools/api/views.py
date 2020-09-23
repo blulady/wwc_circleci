@@ -8,12 +8,12 @@ from .serializers import UserRegistrationSerializer
 # Create your views here.
 
 class UserRegistrationView(APIView):
-    USER_NOT_FOUND_ERROR_MESSAGE = 'User not found'
-    USER_ALREADY_ACTIVE_ERROR_MESSAGE = 'User is already Active'
+    USER_NOT_FOUND_ERROR_MESSAGE = 'Email does not exist in our invites system. You need to be invited to be able to register.'
+    USER_ALREADY_ACTIVE_ERROR_MESSAGE = 'User is already registered and Active'
     USER_TOKEN_MISMATCH_ERROR_MESSAGE = 'Invalid token. Token in request does not match the token generated for this user.'
-    TOKE_NOT_FOUND_ERROR_MESSAGE = 'Token not found.'
+    TOKE_NOT_FOUND_ERROR_MESSAGE = 'Invalid token. Token does not exist in our system.'
     INTERNAL_SERVER_ERROR_MESSAGE = 'Something went wrong : {0}'
-    EXPECTED_KEY_NOT_PRESENT_IN_REQUEST = 'Key not present in request : {0}'
+    EXPECTED_KEY_NOT_PRESENT_IN_REQUEST = 'Invalid Request. Key not present in request : {0}'
     ERROR_STATUS = {
         USER_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
         USER_ALREADY_ACTIVE_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,

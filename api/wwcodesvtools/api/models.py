@@ -23,6 +23,8 @@ class UserProfile(models.Model):
     def is_new(self):
       return self.status == self.NEW
 
+    def activate(self):
+      self.status = self.ACTIVE
 
 class RegistrationToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -30,3 +32,6 @@ class RegistrationToken(models.Model):
     used = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def mark_as_used(self):
+      self.used = True

@@ -1,10 +1,9 @@
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile, RegistrationToken
-from .serializers import UserSerializer
+from .serializers import UserRegistrationSerializer
 
 # Create your views here.
 
@@ -29,17 +28,16 @@ class UserRegistrationView(APIView):
         error = None
         req = request.data
         try:
-            user_queryset = User.objects.select_related('userprofile').filter(email=req['user']['email'])
+            user_queryset = User.objects.filter(email=req['user']['email'])
             result = self.__validate_request(user_queryset, req['token'])
             if 'error' in result:
                 return Response({'error': result['error']}, status=result['status'])
             user = result['user']
-            serializer = UserSerializer(user,data=req['user'])
+            serializer = UserRegistrationSerializer(user,data=req['user'])
             if serializer.is_valid():
-                password = make_password(req['user']['password'])
-                serializer.save(password=password)
-                user.userprofile.status = UserProfile.ACTIVE
-                user.userprofile.save(update_fields=['status'])
+                serializer.save()
+                self.__activate_user(user.userprofile)
+                self.__mark_token_used(result['token'])
                 res_status = status.HTTP_201_CREATED
             else:
                 error = serializer.errors
@@ -58,10 +56,10 @@ class UserRegistrationView(APIView):
         user = user_queryset.first()
         if not user.userprofile.is_new():
             return self.__build_error_result(self.USER_ALREADY_ACTIVE_ERROR_MESSAGE)
-        token_qs = RegistrationToken.objects.filter(token=request_token)
+        token_qs = RegistrationToken.objects.filter(token=request_token, used=False)
         if token_qs.exists():
             token = token_qs.first()
-            if not token or token.user.email != user.email:
+            if not (token and token.user.email == user.email):
                 return self.__build_error_result(self.USER_TOKEN_MISMATCH_ERROR_MESSAGE)
         else:
             return self.__build_error_result(self.TOKE_NOT_FOUND_ERROR_MESSAGE)
@@ -69,3 +67,12 @@ class UserRegistrationView(APIView):
 
     def __build_error_result(self, error):
         return {'error' : error, 'status' : self.ERROR_STATUS[error]}
+
+    def __activate_user(self, userprofile):
+        userprofile.activate()
+        userprofile.save()
+
+    def __mark_token_used(self, token):
+        token.mark_as_used()
+        token.save()
+

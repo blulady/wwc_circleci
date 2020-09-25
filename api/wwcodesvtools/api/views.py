@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
@@ -7,6 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile, RegistrationToken
 from .serializers import UserRegistrationSerializer
+from .helper_functions import sendmail_helper
+import logging
+
+
+logger = logging.getLogger('django')
 
 # Create your views here.
 
@@ -82,19 +86,20 @@ class UserRegistrationView(APIView):
 
 class mailSender(APIView):
     def post(self, request):
-        
-        subject = request.data.get('subject', '')
-        message = request.data.get('message', '')
-        fromEmail = request.data.get('fromEmail', '')
         toEmail = request.data.get('email', '')
-
-        print('POST data=>'+ toEmail+':'+subject +":" + message+ ' :' + fromEmail)
-
-        if subject and message  and toEmail:
-            try:
-                send_mail(subject, message, fromEmail, [toEmail])
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-            return Response(status=status.HTTP_200_OK)
+        subject = 'Welcome to WWCode-SV'
+        templateFile = 'welcome_sample.html'
+        contextData = {"user": "UserName",
+                       "registrationLink": "https://login.yahoo.com/account/create",
+                       "socialMediaLink": "https://twitter.com/womenwhocode"
+                       }
+        logger.debug('toEmail: '+ toEmail)            
+        if subject and templateFile and toEmail and contextData:
+            messageSent = sendmail_helper(
+                toEmail, subject, templateFile, contextData)
+            if messageSent:
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_502_BAD_GATEWAY)
         else:
-            return HttpResponse('Make sure all fields namely email,fromEmail,subject,message are entered and valid.')
+            return HttpResponse('Make sure all fields are entered and valid.')

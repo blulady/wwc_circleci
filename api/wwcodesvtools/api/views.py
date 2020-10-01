@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserProfile, RegistrationToken
 from .serializers import UserRegistrationSerializer
-from .helper_functions import sendmail_helper
+from .helper_functions import send_email_helper
 import logging
 
 
@@ -84,20 +84,20 @@ class UserRegistrationView(APIView):
         token.save()
 
 
-class mailSender(APIView):
+class MailSender(APIView):
     def post(self, request):
-        toEmail = request.data.get('email', '')
+        to_email = request.data.get('email', '')
         subject = 'Welcome to WWCode-SV'
-        templateFile = 'welcome_sample.html'
-        contextData = {"user": "UserName",
-                       "registrationLink": "https://login.yahoo.com/account/create",
-                       "socialMediaLink": "https://twitter.com/womenwhocode"
+        template_file = 'welcome_sample.html'
+        context_data = {"user": "UserName",
+                       "registration_link": "https://login.yahoo.com/account/create",
+                       "social_media_link": "https://twitter.com/womenwhocode"
                        }
-        logger.debug('toEmail: '+ toEmail)            
-        if subject and templateFile and toEmail and contextData:
-            messageSent = sendmail_helper(
-                toEmail, subject, templateFile, contextData)
-            if messageSent:
+        logger.debug(f"post: to_email: {to_email}")   
+        if subject and template_file and to_email and context_data:
+            message_sent = send_email_helper(
+                to_email, subject, template_file, context_data)
+            if message_sent:
                 return Response(status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_502_BAD_GATEWAY)

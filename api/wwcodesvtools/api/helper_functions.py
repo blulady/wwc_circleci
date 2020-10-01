@@ -7,22 +7,22 @@ import logging
 
 logger = logging.getLogger('django')
 
-def sendmail_helper(toEmail, subject, templateFile, contextData):
-    logger.debug(f"sendemail: toEmail: {toEmail} subject: {subject} templateFile: {templateFile} contextData: {contextData}")
-    if subject and templateFile and toEmail and contextData:
-        fromEmail = settings.EMAIL_HOST_USER
-        message = get_template(templateFile).render(contextData)
-        msg = EmailMessage(subject, message, fromEmail, [toEmail])
+def send_email_helper(to_email, subject, template_file, context_data):
+    logger.debug(f"send_email_helper: to_email: {to_email} subject: {subject} template_file: {template_file} contextData: {context_data}")
+    if subject and template_file and to_email and context_data:
+        from_email = settings.EMAIL_HOST_USER
+        message = get_template(template_file).render(context_data)
+        msg = EmailMessage(subject, message, from_email, [to_email])
         msg.content_subtype = "html"
 
         try:
             msg.send()
         except (ValueError, SMTPException) as e:
-            logger.error('sendemail: There was an error sending an email: %s', e)
+            logger.error(f"send_email_helper: There was an error sending an email: {e}")
             return False
         else:
-            logger.info('sendemail: Mail successfully sent')
+            logger.info("send_email_helper: Mail successfully sent")
             return True
     else:
-        logger.error('sendemail: Make sure all parameters values are passed and valid.')
+        logger.error("send_email_helper: Make sure all parameters values are passed and valid.")
         return False

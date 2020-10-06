@@ -61,7 +61,7 @@ class UserRegistrationView(APIView):
         if not user_queryset.exists():
             return self.__build_error_result(self.USER_NOT_FOUND_ERROR_MESSAGE)
         user = user_queryset.first()
-        if not user.userprofile.is_new():
+        if not user.userprofile.is_pending():
             return self.__build_error_result(self.USER_ALREADY_ACTIVE_ERROR_MESSAGE)
         token_qs = RegistrationToken.objects.filter(token=request_token, used=False)
         if token_qs.exists():

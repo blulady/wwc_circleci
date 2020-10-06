@@ -6,9 +6,9 @@ from .models import UserProfile
 # Create your tests here.
 class UserProfileTests(TestCase):
 
-    def test_userprofile_is_new(self):
-        us = UserProfile(user=None, status=UserProfile.NEW)
-        self.assertIs(us.is_new(), True)
+    def test_userprofile_is_pending(self):
+        user_profile = UserProfile(user=None, status=UserProfile.PENDING)
+        self.assertIs(user_profile.is_pending(), True)
         
 class HelperFunctionsTest(TestCase):
 

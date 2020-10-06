@@ -1,0 +1,40 @@
+[
+    {
+        "model": "auth.User",
+        "pk": 1,
+        "fields": {
+            "email": "test1@domain.com",
+            "username": "test1@domain.com"
+      }
+    },
+    {
+        "model": "api.UserProfile",
+        "pk": 1,
+        "fields": {
+          "user": 1,
+          "status": "PENDING",
+          "role": "VOLUNTEER",
+          "created_at": "2020-09-29 11:13:06.202291",
+          "updated_at": "2020-09-29 11:13:06.202291"
+        }
+    },
+    {
+        "model": "auth.User",
+        "pk": 2,
+        "fields": {
+          "email": "test2@domain.com",
+          "username": "test2@domain.com"
+        }
+    },
+    {
+        "model": "api.UserProfile",
+        "pk": 2,
+        "fields": {
+          "user": 2,
+          "status": "PENDING",
+          "role": "VOLUNTEER",
+          "created_at": "2020-09-29 11:13:06.202291",
+          "updated_at": "2020-09-29 11:13:06.202291"
+        }
+    }
+  ]

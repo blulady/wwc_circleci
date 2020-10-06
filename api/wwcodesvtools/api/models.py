@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class UserProfile(models.Model):
-    NEW = 'NEW'
+    PENDING = 'PENDING'
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
     VOLUNTEER = 'VOLUNTEER'
@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     DIRECTOR = 'DIRECTOR'
     user =  models.OneToOneField(User, on_delete=models.CASCADE)
     status =  models.CharField(max_length=20, 
-      choices = ((NEW, NEW), (ACTIVE,ACTIVE), (INACTIVE, INACTIVE))
+      choices = ((PENDING, PENDING), (ACTIVE,ACTIVE), (INACTIVE, INACTIVE))
       )
     role = models.CharField(max_length=20, 
       choices = ((VOLUNTEER, VOLUNTEER), (LEADER, LEADER), (DIRECTOR, DIRECTOR)) 
@@ -20,8 +20,8 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def is_new(self):
-      return self.status == self.NEW
+    def is_pending(self):
+      return self.status == self.PENDING
 
     def activate(self):
       self.status = self.ACTIVE

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -16,3 +17,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         instance.password = make_password(validated_data.get('password', instance.password))
         instance.save()
         return instance
+
+
+class MailSenderSerializer(serializers.Serializer):
+    email = serializers.EmailField()

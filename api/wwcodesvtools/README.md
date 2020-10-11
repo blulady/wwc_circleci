@@ -122,6 +122,25 @@ heroku logs --tail -a wwcode-chtools-api
 ```
 heroku config:set SECRET_KEY=SOME_SECRET_VALUE -a wwcode-chtools-api
 ```
+The config variables set in this way are available as environment variables to 
+the application.
+
+* Check environment variables that are available to the app
+```
+heroku run env -a wwcode-chtools-api
+```
+
+* SSH into the dyno
+```
+heroku ps:exec --dyno=web.1 -a wwcode-chtools-api
+```
+Environment variables cannot be accessed by ssh-ing in the dyno.
+
+* Run migrations in the app
+```
+heroku run python manage.py migrate --noinput -a wwcode-chtools-api
+```
+
 ### How to contribute
 
 * Please follow the following naming convention for branch: 

@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import environ 
+import environ
+from datetime import timedelta
+
 
 env = environ.Env()
 # reading .env file
@@ -166,4 +168,15 @@ LOGGING = {
         }
 
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=520),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
 }

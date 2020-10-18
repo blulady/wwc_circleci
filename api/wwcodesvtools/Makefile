@@ -5,7 +5,7 @@ TEST_SETTINGS={{ project_name }}.test_settings
 
 # target: all - Default target. Does nothing.
 all:
-	@echo "Hello $(LOGNAME), nothing to do by default"
+	@echo "Hello $(LOGNAME)!"
 	@echo "Try 'make help'"
 
 # target: help - Display callable targets.
@@ -20,7 +20,7 @@ migrate:
 test:
 	python manage.py test
 
-# target: setup - sets up your repository and project
-setup:
+# target: setup_repo - sets up your local repository and project
+setup_repo:
 	pip install pre-commit
 	pre-commit install

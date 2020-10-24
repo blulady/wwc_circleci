@@ -1,20 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .models import UserProfile, RegistrationToken
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer, MailSenderSerializer
 from .helper_functions import send_email_helper
 import logging
 
-
 logger = logging.getLogger('django')
 
-# Create your views here.
 
-class UserRegistrationView(APIView):
+class UserRegistrationView(GenericAPIView):
     USER_NOT_FOUND_ERROR_MESSAGE = 'Email does not exist in our invites system. You need to be invited to be able to register.'
     USER_ALREADY_ACTIVE_ERROR_MESSAGE = 'User is already registered and Active'
     USER_TOKEN_MISMATCH_ERROR_MESSAGE = 'Invalid token. Token in request does not match the token generated for this user.'
@@ -22,15 +22,35 @@ class UserRegistrationView(APIView):
     INTERNAL_SERVER_ERROR_MESSAGE = 'Something went wrong : {0}'
     EXPECTED_KEY_NOT_PRESENT_IN_REQUEST = 'Invalid Request. Key not present in request : {0}'
     ERROR_STATUS = {
-        USER_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
-        USER_ALREADY_ACTIVE_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
-        USER_TOKEN_MISMATCH_ERROR_MESSAGE : status.HTTP_400_BAD_REQUEST,
-        TOKE_NOT_FOUND_ERROR_MESSAGE : status.HTTP_404_NOT_FOUND,
-        INTERNAL_SERVER_ERROR_MESSAGE : status.HTTP_500_INTERNAL_SERVER_ERROR,
-        EXPECTED_KEY_NOT_PRESENT_IN_REQUEST : status.HTTP_400_BAD_REQUEST
+        USER_NOT_FOUND_ERROR_MESSAGE: status.HTTP_404_NOT_FOUND,
+        USER_ALREADY_ACTIVE_ERROR_MESSAGE: status.HTTP_400_BAD_REQUEST,
+        USER_TOKEN_MISMATCH_ERROR_MESSAGE: status.HTTP_400_BAD_REQUEST,
+        TOKE_NOT_FOUND_ERROR_MESSAGE: status.HTTP_404_NOT_FOUND,
+        INTERNAL_SERVER_ERROR_MESSAGE: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        EXPECTED_KEY_NOT_PRESENT_IN_REQUEST: status.HTTP_400_BAD_REQUEST
     }
 
-    def post(self, request, format=None):
+    serializer_class = UserRegistrationSerializer
+
+    post_response_schema = {
+        status.HTTP_201_CREATED: openapi.Response(
+            description="User successfully created",
+            examples={
+                "application/json": {}
+            }
+        ),
+        ERROR_STATUS[EXPECTED_KEY_NOT_PRESENT_IN_REQUEST]: openapi.Response(
+            description="Key error: Key not present",
+            examples={
+                "application/json": {
+                    "error": EXPECTED_KEY_NOT_PRESENT_IN_REQUEST.format("email not present")
+                }
+            }
+        ),
+    }
+
+    @swagger_auto_schema(responses=post_response_schema)
+    def post(self, request):
         res_status = None
         error = None
         req = request.data
@@ -40,7 +60,7 @@ class UserRegistrationView(APIView):
             if 'error' in result:
                 return Response({'error': result['error']}, status=result['status'])
             user = result['user']
-            serializer = UserRegistrationSerializer(user,data=req['user'])
+            serializer = UserRegistrationSerializer(user, data=req['user'])
             if serializer.is_valid():
                 serializer.save()
                 self.__activate_user(user.userprofile)
@@ -70,10 +90,10 @@ class UserRegistrationView(APIView):
                 return self.__build_error_result(self.USER_TOKEN_MISMATCH_ERROR_MESSAGE)
         else:
             return self.__build_error_result(self.TOKE_NOT_FOUND_ERROR_MESSAGE)
-        return {'user' : user, 'token' : token}
+        return {'user': user, 'token': token}
 
     def __build_error_result(self, error):
-        return {'error' : error, 'status' : self.ERROR_STATUS[error]}
+        return {'error': error, 'status': self.ERROR_STATUS[error]}
 
     def __activate_user(self, userprofile):
         userprofile.activate()
@@ -84,22 +104,51 @@ class UserRegistrationView(APIView):
         token.save()
 
 
-class MailSender(APIView):
+class MailSender(GenericAPIView):
+    serializer_class = MailSenderSerializer
+
+    post_response_schema = {
+        status.HTTP_200_OK: openapi.Response(
+            description="Email sent",
+            examples={
+                "application/json": {}
+            }
+        ),
+        status.HTTP_502_BAD_GATEWAY: openapi.Response(
+            description="Bad Gateway",
+            examples={
+                "application/json": {}
+            }
+        ),
+        status.HTTP_400_BAD_REQUEST: openapi.Response(
+            description="Bad Gateway",
+            examples={
+                "application/json": {
+                    'error': 'Make sure all fields are entered and valid.'
+                }
+            }
+        ),
+    }
+
+    @swagger_auto_schema(responses=post_response_schema)
     def post(self, request):
-        to_email = request.data.get('email', '')
-        subject = 'Welcome to WWCode-SV'
-        template_file = 'welcome_sample.html'
-        context_data = {"user": "UserName",
-                       "registration_link": "https://login.yahoo.com/account/create",
-                       "social_media_link": "https://twitter.com/womenwhocode"
-                       }
-        logger.debug(f"post: to_email: {to_email}")   
-        if subject and template_file and to_email and context_data:
-            message_sent = send_email_helper(
-                to_email, subject, template_file, context_data)
-            if message_sent:
-                return Response(status=status.HTTP_200_OK)
-            else:
-                return Response(status=status.HTTP_502_BAD_GATEWAY)
+        serializer = MailSenderSerializer(data=request.data)
+        if serializer.is_valid():
+            to_email = serializer.data['email']
+            subject = 'Welcome to WWCode-SV'
+            template_file = 'welcome_sample.html'
+            context_data = {"user": "UserName",
+                            "registration_link": "https://login.yahoo.com/account/create",
+                            "social_media_link": "https://twitter.com/womenwhocode"
+                            }
+            logger.debug(f"post: to_email: {to_email}")
         else:
-            return HttpResponse('Make sure all fields are entered and valid.')
+            return Response({'error': 'Make sure all fields are entered and valid.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        message_sent = send_email_helper(
+            to_email, subject, template_file, context_data)
+        if message_sent:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_502_BAD_GATEWAY)

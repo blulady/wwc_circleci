@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
+from .models import RegistrationToken, UserProfile
 import re
 
 
@@ -56,3 +57,73 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 class MailSenderSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'first_name', 'last_name', 'password')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        email = data['email']
+        username = data['username']
+        if (email is not None and username is not None and email != username):
+            raise serializers.ValidationError({"email_username":
+                                               "Email and Username should be same"})
+        return data
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('status', 'role')
+
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status', instance.status)
+        instance.role = validated_data.get('role', instance.role)
+        instance.save()
+        return instance
+
+
+class RegistrationTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegistrationToken
+        fields = ('token', 'used')
+
+    def update(self, instance, validated_data):
+        instance.used = validated_data.get('used', instance.used)
+        instance.token = validated_data.get('token', instance.token)
+        instance.save()
+        return instance
+
+
+class AddMemberSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    role = serializers.CharField(max_length=20)
+
+    def validate_role(self, value):
+        valid_roles = [UserProfile.DIRECTOR, UserProfile.LEADER, UserProfile.VOLUNTEER]
+        if value not in valid_roles:
+            raise serializers.ValidationError("Invalid Role: accepted values are 'VOLUNTEER','LEADER','DIRECTOR'")
+        return value
+
+    def validate_email(self, value):
+        # email and username  fields store same value
+        # Validate for username field's regex pattern - UnicodeUsernameValidator
+        regex = r'^[\w.@+-]+\Z'
+        if not re.match(regex, value):
+            raise serializers.ValidationError("Enter valid email. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        # Validate for username field's char size 150
+        if len(value) > 150:
+            raise serializers.ValidationError("Email should be less than 150 characters")
+        return value

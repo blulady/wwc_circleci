@@ -1,3 +1,4 @@
+import json
 from unittest.mock import MagicMock
 
 from django.core import mail
@@ -7,7 +8,10 @@ from rest_framework_simplejwt.serializers import TokenObtainSerializer, TokenObt
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from .helper_functions import send_email_helper
-from .models import UserProfile, User
+from .models import UserProfile, User, RegistrationToken
+from rest_framework import status
+from rest_framework.test import APITestCase
+from .serializers import UserSerializer, RegistrationTokenSerializer, UserProfileSerializer, AddMemberSerializer
 
 
 class UserProfileTests(TestCase):
@@ -115,3 +119,263 @@ class TestAuthTokenObtainPairSerializer(TestCase):
         # encoded tokens should not raise an exception.
         AccessToken(s.validated_data['access'])
         RefreshToken(s.validated_data['refresh'])
+
+
+class TestUserSerializer(TestCase):
+
+    def test_it_should_not_validate_if_username_missing(self):
+        serializer = UserSerializer(data={
+            'password': 'mypassword',
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['username']))
+
+    def test_it_should_not_validate_if_password_missing(self):
+        serializer = UserSerializer(data={
+            'username': 'Jane@example.com',
+        })
+
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['password']))
+
+    def test_it_should_not_validate_if_user_email_is_invalid(self):
+        serializer = UserSerializer(data={
+            'email': 'Jan+e@Doe@Jane.com',
+            'username': 'Jan+e@Doe@Jane.com',
+            'password': 'password'
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['email']))
+
+    def test_it_should_not_validate_if_email_and_username_not_same(self):
+        serializer = UserSerializer(data={
+            'email': 'JaneDoe@example.com',
+            'username': 'JaneDoe',
+            'password': 'password'
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['email_username']))
+
+    def test_it_should_save_user_when_valid(self):
+        serializer = UserSerializer(data={
+            'email': 'JaneDoe@example.com',
+            'username': 'JaneDoe@example.com',
+            'first_name': 'Jane',
+            'last_name': 'Doe',
+            'password': 'mypassword'
+        })
+        self.assertTrue(serializer.is_valid())
+        self.assertEquals(serializer.errors, {})
+        self.new_user = serializer.save()
+
+        self.new_user.refresh_from_db()
+        self.assertEquals(self.new_user.email, 'JaneDoe@example.com')
+        self.assertEquals(self.new_user.username, 'JaneDoe@example.com')
+        self.assertEquals(self.new_user.first_name, 'Jane')
+        self.assertEquals(self.new_user.last_name, 'Doe')
+        self.assertEqual(self.new_user.check_password('mypassword'), True)
+
+
+class TestUserProfileSerializer(TestCase):
+
+    def setUp(self):
+        self.user_attributes = {
+            "email": 'JohnDoe@example.com',
+            "username": 'JohnDoe@example.com',
+            "password": "passsword1"
+        }
+        self.new_user = User.objects.create_user(**self.user_attributes)
+        self.user_profile = UserProfile.objects.get(user_id=self.new_user.id)
+
+    def test_it_should_not_validate_if_status_is_blank(self):
+        serializer = UserProfileSerializer(instance=self.user_profile, data={
+            "status": '',
+            "role": 'VOLUNTEER'
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['status']))
+
+    def test_it_should_not_validate_if_role_is_blank(self):
+        serializer = UserProfileSerializer(instance=self.user_profile, data={
+            "status": 'PENDING',
+            "role": ''
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['role']))
+
+    def test_it_should_not_validate_if_status_invalid(self):
+        serializer = UserProfileSerializer(instance=self.user_profile, data={
+            "status": 'OBSOLETE',
+            "role": UserProfile.LEADER
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['status']))
+
+    def test_it_should_not_validate_if_role_invalid(self):
+        serializer = UserProfileSerializer(instance=self.user_profile, data={
+            "status": UserProfile.INACTIVE,
+            "role": "MANAGER"
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['role']))
+
+    def test_it_should_save_userprofile_when_valid(self):
+        serializer = UserProfileSerializer(instance=self.user_profile, data={
+            "status": UserProfile.PENDING,
+            "role": UserProfile.VOLUNTEER
+        })
+        self.assertTrue(serializer.is_valid())
+        self.assertEquals(serializer.errors, {})
+        serializer.save()
+
+        self.user_profile.refresh_from_db()
+        self.assertEqual(self.user_profile.status, UserProfile.PENDING)
+        self.assertEqual(self.user_profile.role, UserProfile.VOLUNTEER)
+
+
+class TestRegistrationTokenSerializer(TestCase):
+    def setUp(self):
+        self.user_attributes = {
+            "email": 'Martha@example.com',
+            "username": 'Martha@example.com',
+            "password": "passsword2"
+        }
+        self.new_user = User.objects.create_user(**self.user_attributes)
+        self.registration_token = RegistrationToken.objects.get(user_id=self.new_user.id)
+
+    def test_it_should_not_validate_if_token_is_blank(self):
+        serializer = RegistrationTokenSerializer(instance=self.registration_token, data={
+            "token": '',
+            "used": False
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['token']))
+
+    def test_it_should_not_validate_if_used_is_blank(self):
+        serializer = RegistrationTokenSerializer(instance=self.registration_token, data={
+            "token": "#%6token%#",
+            "used": ''
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['used']))
+
+    def test_it_should_not_validate_if_used_invalid(self):
+        serializer = RegistrationTokenSerializer(instance=self.registration_token, data={
+            "token": "#%6token%",
+            "used": "Yesss"
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['used']))
+
+    def test_it_should_not_validate_if_token_invalid(self):
+        serializer = RegistrationTokenSerializer(instance=self.registration_token, data={
+            "token": True,
+            "used":  False
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['token']))
+
+    def test_it_should_save_registration_token_when_valid(self):
+        serializer = RegistrationTokenSerializer(instance=self.registration_token, data={
+            "token": "#$%deftoken#",
+            "used": False
+        })
+        self.assertTrue(serializer.is_valid())
+        self.assertEquals(serializer.errors, {})
+        serializer.save()
+
+        self.registration_token.refresh_from_db()
+        self.assertEqual(self.registration_token.token, "#$%deftoken#")
+        self.assertEqual(self.registration_token.used, False)
+
+
+class TestAddMemberSerializer(TestCase):
+
+    def test_it_should_not_validate_if_email_is_blank(self):
+        serializer = AddMemberSerializer(data={
+            "email": '',
+            "role": 'LEADER'
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['email']))
+
+    def test_it_should_not_validate_if_role_is_blank(self):
+        serializer = AddMemberSerializer(data={
+            "email": 'jane@jane.com',
+            "role": ''
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['role']))
+
+    def test_it_should_not_validate_if_email_is_invalid(self):
+        serializer = AddMemberSerializer(data={
+            "email": "newUser'semail@$@example.com",
+            "role": UserProfile.DIRECTOR
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['email']))
+
+    def test_it_should_not_validate_if_role_invalid(self):
+        serializer = AddMemberSerializer(data={
+            'email': 'newUser@example.com',
+            "role": 'PRESIDENT'
+        })
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['role']))
+
+    def test_it_should_validate_when_valid_data(self):
+        serializer = AddMemberSerializer(data={
+            "email": 'newUser@example.com',
+            "role": UserProfile.VOLUNTEER
+        })
+        self.assertTrue(serializer.is_valid())
+        self.assertEquals(serializer.errors, {})
+
+
+class AddMemberViewTestCase(APITestCase):
+    NO_ERRORS = 'No Errors'
+
+    # test add member fails with blank email
+    def test_add_member_fails_with_blank_email(self):
+        data = {"email": '',
+                "role": 'VOLUNTEER',
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['email']))
+
+    # test add member fails with blank role
+    def test_add_member_fails_with_blank_role(self):
+        data = {"email": "WWCodeSV@gmail.com",
+                "role": '',
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
+
+    # test add member fails with invalid role
+    def test_add_member_fails_with_invalid_role(self):
+        data = {"email": "WWCodeSV@gmail.com",
+                "role": "MANAGER"
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
+
+    # test add member fails with invalid email
+    def test_add_member_fails_with_invalid_email(self):
+        data = {"email": "abc@235",
+                "role": UserProfile.LEADER
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('email', json.loads(response.content)['error'])
+
+    # test add member saves with valid data
+    def test_add_member_saves_with_valid_data(self):
+        data = {"email": "WWCodeSV@gmail.com",
+                "role": UserProfile.DIRECTOR
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})

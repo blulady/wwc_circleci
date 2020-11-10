@@ -189,4 +189,4 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
 }
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://wwcode-chapter-tools.com']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://wwcode-chtools-fe.herokuapp.com']

@@ -26,6 +26,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
         if not value:
             raise serializers.ValidationError("First name should not be empty or None")
+        if len(value)>50:
+            raise serializers.ValidationError("First name should not be more than 50 characters long")
         return value
 
     def validate_last_name(self, value):
@@ -34,6 +36,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
         if not value:
             raise serializers.ValidationError("Last name should not be empty or None")
+        if len(value)>50:
+            raise serializers.ValidationError("Last name should not be more than 50 characters long")
         return value
 
     def validate_password(self, value):

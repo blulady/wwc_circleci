@@ -9,6 +9,8 @@ from api.helper_functions import generate_random_password
 from uuid import uuid4
 from django.db import transaction
 from rest_framework.permissions import AllowAny
+from django.conf import settings
+from api.helper_functions import send_email_helper
 import logging
 
 
@@ -17,21 +19,23 @@ logger = logging.getLogger('django')
 
 class AddMemberView(GenericAPIView):
     """
-    Takes email, role and creates a new user in  pending status.
+    Takes email,role,message and creates a new user in pending status.
+    Sends email notification with the registration link to the new user.
 
     """
 
     ERROR_UPDATING_REGISTRATION_TOKEN = 'Error updating registration token'
     ERROR_CREATING_MEMBER_USER = 'Error creating member user'
     ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
+    ERROR_SENDING_EMAIL_NOTIFICATION = 'Error sending email notification to the member user'
     NO_ERRORS = 'No Errors'
 
     permission_classes = [AllowAny]
     serializer_class = AddMemberSerializer
 
     post_response_schema = {
-        status.HTTP_201_CREATED: openapi.Response(
-            description="Member user successfully created",
+        status.HTTP_200_OK: openapi.Response(
+            description="Member User created and email sent successfully",
             examples={
                 "application/json": {
                     'error': NO_ERRORS
@@ -54,6 +58,14 @@ class AddMemberView(GenericAPIView):
                 }
             }
         ),
+        status.HTTP_502_BAD_GATEWAY: openapi.Response(
+            description="Bad Gateway",
+            examples={
+                "application/json": {
+                    'error': ERROR_SENDING_EMAIL_NOTIFICATION
+                }
+            }
+        ),
     }
 
     @swagger_auto_schema(responses=post_response_schema)
@@ -64,8 +76,10 @@ class AddMemberView(GenericAPIView):
         logger.debug(f'AddMemberView: {request.data}')
         email = request.data.get('email')
         role = request.data.get('role')
+        message = request.data.get('message')
+
         try:
-            serializer_member = AddMemberSerializer(data={'email': email, 'role': role})
+            serializer_member = AddMemberSerializer(data={'email': email, 'role': role, 'message': message})
             if not serializer_member.is_valid():
                 return Response({'error': serializer_member.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,10 +123,23 @@ class AddMemberView(GenericAPIView):
             else:
                 error = serializer_user.errors
                 res_status = status.HTTP_400_BAD_REQUEST
+
+            # If user created successfully with no errors, then send email notification to the new member user
+            if (error == self.NO_ERRORS and res_status == status.HTTP_201_CREATED):
+                message_sent = self.send_email_notification(email, rand_token, message)
+                if message_sent:
+                    logger.info('AddMemberView: Member User created and email sent successfully')
+                    res_status = status.HTTP_200_OK
+                    error = self.NO_ERRORS
+                else:
+                    res_status = status.HTTP_502_BAD_GATEWAY
+                    error = self.ERROR_SENDING_EMAIL_NOTIFICATION
+
         except Exception as e:
             error = self.ERROR_CREATING_MEMBER_USER
             logger.error(f'AddMemberView: {error}: {e}')
             res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+
         return Response({'error': error}, status=res_status)
 
     def update_registration_token(self, user_id, registration_token):
@@ -148,3 +175,11 @@ class AddMemberView(GenericAPIView):
         except UserProfile.DoesNotExist as e:
             logger.error(f'AddMemberView:Error updating user profile : {e}')
             return False
+
+    def send_email_notification(self, email, token, message):
+        context_data = {"user": email,
+                        "registration_link": settings.FRONTEND_APP_URL+"/register?email="+email+"&token="+token,
+                        "optional_message": message
+                        }
+        return send_email_helper(
+            email, 'Invitation to Join Chapter Portal, Action Required', 'new_member_email.html', context_data)

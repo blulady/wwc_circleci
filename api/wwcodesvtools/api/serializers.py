@@ -26,7 +26,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
         if not value:
             raise serializers.ValidationError("First name should not be empty or None")
-        if len(value)>50:
+        if len(value) > 50:
             raise serializers.ValidationError("First name should not be more than 50 characters long")
         return value
 
@@ -36,7 +36,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
         if not value:
             raise serializers.ValidationError("Last name should not be empty or None")
-        if len(value)>50:
+        if len(value) > 50:
             raise serializers.ValidationError("Last name should not be more than 50 characters long")
         return value
 
@@ -114,6 +114,7 @@ class RegistrationTokenSerializer(serializers.ModelSerializer):
 class AddMemberSerializer(serializers.Serializer):
     email = serializers.EmailField()
     role = serializers.CharField(max_length=20)
+    message = serializers.CharField(max_length=2000, allow_blank=True)
 
     def validate_role(self, value):
         valid_roles = [UserProfile.DIRECTOR, UserProfile.LEADER, UserProfile.VOLUNTEER]

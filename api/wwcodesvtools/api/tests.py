@@ -293,7 +293,8 @@ class TestAddMemberSerializer(TestCase):
     def test_it_should_not_validate_if_email_is_blank(self):
         serializer = AddMemberSerializer(data={
             "email": '',
-            "role": 'LEADER'
+            "role": 'LEADER',
+            "message": 'test message'
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['email']))
@@ -301,7 +302,8 @@ class TestAddMemberSerializer(TestCase):
     def test_it_should_not_validate_if_role_is_blank(self):
         serializer = AddMemberSerializer(data={
             "email": 'jane@jane.com',
-            "role": ''
+            "role": '',
+            "message": 'test message'
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['role']))
@@ -309,7 +311,8 @@ class TestAddMemberSerializer(TestCase):
     def test_it_should_not_validate_if_email_is_invalid(self):
         serializer = AddMemberSerializer(data={
             "email": "newUser'semail@$@example.com",
-            "role": UserProfile.DIRECTOR
+            "role": UserProfile.DIRECTOR,
+            "message": ""
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['email']))
@@ -317,15 +320,26 @@ class TestAddMemberSerializer(TestCase):
     def test_it_should_not_validate_if_role_invalid(self):
         serializer = AddMemberSerializer(data={
             'email': 'newUser@example.com',
-            "role": 'PRESIDENT'
+            "role": 'PRESIDENT',
+            "message": "test message"
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['role']))
 
+    def test_it_should_validate_if_message_is_blank(self):
+        serializer = AddMemberSerializer(data={
+            "email": 'newMember@example.com',
+            "role": UserProfile.LEADER,
+            "message": ""
+        })
+        self.assertTrue(serializer.is_valid())
+        self.assertEquals(serializer.errors, {})
+
     def test_it_should_validate_when_valid_data(self):
         serializer = AddMemberSerializer(data={
             "email": 'newUser@example.com',
-            "role": UserProfile.VOLUNTEER
+            "role": UserProfile.VOLUNTEER,
+            "message": "optional message"
         })
         self.assertTrue(serializer.is_valid())
         self.assertEquals(serializer.errors, {})
@@ -338,6 +352,7 @@ class AddMemberViewTestCase(APITestCase):
     def test_add_member_fails_with_blank_email(self):
         data = {"email": '',
                 "role": 'VOLUNTEER',
+                "message": "optional message"
                 }
         response = self.client.post("/api/add_member/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -347,6 +362,7 @@ class AddMemberViewTestCase(APITestCase):
     def test_add_member_fails_with_blank_role(self):
         data = {"email": "WWCodeSV@gmail.com",
                 "role": '',
+                "message": "optional message"
                 }
         response = self.client.post("/api/add_member/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -355,7 +371,8 @@ class AddMemberViewTestCase(APITestCase):
     # test add member fails with invalid role
     def test_add_member_fails_with_invalid_role(self):
         data = {"email": "WWCodeSV@gmail.com",
-                "role": "MANAGER"
+                "role": "MANAGER",
+                "message": "optional message"
                 }
         response = self.client.post("/api/add_member/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -364,7 +381,8 @@ class AddMemberViewTestCase(APITestCase):
     # test add member fails with invalid email
     def test_add_member_fails_with_invalid_email(self):
         data = {"email": "abc@235",
-                "role": UserProfile.LEADER
+                "role": UserProfile.LEADER,
+                "message": "optional message"
                 }
         response = self.client.post("/api/add_member/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -373,10 +391,21 @@ class AddMemberViewTestCase(APITestCase):
     # test add member saves with valid data
     def test_add_member_saves_with_valid_data(self):
         data = {"email": "WWCodeSV@gmail.com",
-                "role": UserProfile.DIRECTOR
+                "role": UserProfile.DIRECTOR,
+                "message": "optional message"
                 }
         response = self.client.post("/api/add_member/", data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
+
+    # test add member saves with blank message
+    def test_add_member_saves_with_blank_message(self):
+        data = {"email": "volunteersv@gmail.com",
+                "role": UserProfile.VOLUNTEER,
+                "message": ""
+                }
+        response = self.client.post("/api/add_member/", data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
 
 

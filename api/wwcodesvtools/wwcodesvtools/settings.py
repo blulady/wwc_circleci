@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import environ
 from datetime import timedelta
-
+import django_heroku
 
 env = environ.Env()
 # reading .env file
@@ -138,19 +138,19 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
-#Logging Information
+# Logging Information
 LOGGING = {
     'version': 1,
     # Version of logging
     'disable_existing_loggers': False,
-    #disable logging 
+    # Disable logging
     # Handlers #############################################################
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': 'wwcodesv-debug.log',
-            'formatter':'simpleFormat',
+            'formatter': 'simpleFormat',
         },
         'console': {
             'class': 'logging.StreamHandler',
@@ -159,12 +159,12 @@ LOGGING = {
     # Loggers ####################################################################
     'loggers': {
         'django': {
-            'handlers': ['file','console'],
+            'handlers': ['file', 'console'],
             'level': 'INFO',
         },
     },
     # Formatters ####################################################################
-    'formatters':{
+    'formatters': {
         'simpleFormat': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
@@ -174,7 +174,6 @@ LOGGING = {
 }
 
 # Configure Django App for Heroku.
-import django_heroku
 django_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
 
@@ -182,6 +181,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 SIMPLE_JWT = {

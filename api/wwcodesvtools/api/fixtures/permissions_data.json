@@ -1,0 +1,92 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$f5fq17uNciMC$FKdSUeZGpxQoAZJdWiHQHPvMvMW8VlM/Z9LsLriGevA=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "UserDirector@example.com",
+            "first_name": "User FirstName",
+            "last_name": "User LastName",
+            "email": "UserDirector@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-11-06T23:30:11.291Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$W6Z1x0VtG65h$nuN7olqoQxPD6a3YKA361fnkQmtM6rO9jPVcK9PRurI=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "UserVolunteer@example.com",
+            "first_name": "User FirstName",
+            "last_name": "User LastName",
+            "email": "UserVolunteer@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-11-06T23:30:15.059Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 1,
+        "fields": {
+            "user": [
+                "UserDirector@example.com"
+            ],
+            "token": "17ac964d2a1f40a3b6bb06fcdf65f4e9",
+            "used": true,
+            "created_at": "2020-11-06T23:30:11.301Z",
+            "updated_at": "2020-11-06T23:30:49.619Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 2,
+        "fields": {
+            "user": [
+                "UserVolunteer@example.com"
+            ],
+            "token": "7e7b78fc9b95418798c31abcf202d51e",
+            "used": true,
+            "created_at": "2020-11-06T23:30:15.064Z",
+            "updated_at": "2020-11-06T23:31:02.052Z"
+        }
+    }
+    ,
+    {
+        "model": "api.userprofile",
+        "pk": 1,
+        "fields": {
+            "user": [
+                "UserDirector@example.com"
+            ],
+            "status": "ACTIVE",
+            "role": "DIRECTOR",
+            "created_at": "2020-11-06T23:30:11.297Z",
+            "updated_at": "2020-11-06T23:30:49.616Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 2,
+        "fields": {
+            "user": [
+                "UserVolunteer@example.com"
+            ],
+            "status": "ACTIVE",
+            "role": "VOLUNTEER",
+            "created_at": "2020-11-06T23:30:15.062Z",
+            "updated_at": "2020-11-06T23:31:02.049Z"
+        }
+    }
+    ]
+ 

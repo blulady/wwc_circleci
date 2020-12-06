@@ -6,6 +6,7 @@ from api.serializers import UserRegistrationSerializer
 from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.permissions import AllowAny
 import logging
 
 
@@ -28,6 +29,7 @@ class UserRegistrationView(GenericAPIView):
         EXPECTED_KEY_NOT_PRESENT_IN_REQUEST: status.HTTP_400_BAD_REQUEST
     }
 
+    permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     post_response_schema = {

@@ -8,6 +8,7 @@ from drf_yasg import openapi
 from api.helper_functions import generate_random_password
 from uuid import uuid4
 from django.db import transaction
+from rest_framework.permissions import AllowAny
 import logging
 
 
@@ -25,6 +26,7 @@ class AddMemberView(GenericAPIView):
     ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
     NO_ERRORS = 'No Errors'
 
+    permission_classes = [AllowAny]
     serializer_class = AddMemberSerializer
 
     post_response_schema = {

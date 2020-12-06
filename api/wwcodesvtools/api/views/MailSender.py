@@ -5,6 +5,8 @@ from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from api.helper_functions import send_email_helper
+from rest_framework.permissions import IsAuthenticated
+from api.permissions import CanSendEmail
 import logging
 
 
@@ -15,6 +17,7 @@ class MailSender(GenericAPIView):
     """
     Takes an email and sends email using a sample html template.
     """
+    permission_classes = [IsAuthenticated & CanSendEmail]
     serializer_class = MailSenderSerializer
 
     post_response_schema = {

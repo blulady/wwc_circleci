@@ -442,3 +442,73 @@ class TestCanSendEmailPermission(TransactionTestCase):
         response = self.client.post("/api/send_email_example/", data, **bearer)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
+
+
+class TestGetMembersView(TransactionTestCase):
+    reset_sequences = True
+    fixtures = ['get_members_data.json']
+
+    def get_token(self, username, password):
+        s = TokenObtainPairSerializer(data={
+            TokenObtainPairSerializer.username_field: self.username,
+            'password': self.password,
+        })
+        self.assertTrue(s.is_valid())
+        return s.validated_data['access']
+
+    # Testing get members with role = DIRECTOR
+    # 'PENDING' status members and 'email' field are in the response
+    def test_get_members_role_director(self):
+        self.username = 'UserDirector@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_members/", **bearer)
+        responseLength = len(response.data)
+        self.assertEqual(responseLength, 4)
+        self.assertEqual(json.loads(response.content)[0]['email'], 'UserLeaderPending@example.com')
+        self.assertEqual(json.loads(response.content)[0]['first_name'], 'new')
+        self.assertEqual(json.loads(response.content)[0]['last_name'], 'user')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'PENDING')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2020-12-14T20:26:55.902000Z')
+        for i in range(responseLength):
+            self.assertIsNotNone(json.loads(response.content)[i]['email'])
+
+    # Testing get members with role = VOLUNTEER
+    # 'PENDING' status members and 'email' field not in the response
+    def test_get_members_role_volunteer(self):
+        self.username = 'UserVolunteer@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_members/", **bearer)
+        responseLength = len(response.data)
+        self.assertEqual(responseLength, 3)
+        self.assertEqual(json.loads(response.content)[0]['first_name'], 'User FirstName')
+        self.assertEqual(json.loads(response.content)[0]['last_name'], 'User LastName')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2020-12-14T20:13:39.660000Z')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'ACTIVE')
+        for i in range(responseLength):
+            self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
+            self.assertNotEqual(json.loads(response.content)[i]['userprofile']['status'], 'PENDING')
+
+    # Testing get members with role = LEADER
+    # 'PENDING' status members and 'email' field not in the response
+    def test_get_members_role_leader(self):
+        self.username = 'UserLeader@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_members/", **bearer)
+        responseLength = len(response.data)
+        self.assertEqual(responseLength, 3)
+        self.assertEqual(json.loads(response.content)[0]['first_name'], 'User FirstName')
+        self.assertEqual(json.loads(response.content)[0]['last_name'], 'User LastName')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2020-12-14T20:13:39.660000Z')
+        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'ACTIVE')
+        for i in range(responseLength):
+            self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
+            self.assertNotEqual(json.loads(response.content)[i]['userprofile']['status'], 'PENDING')

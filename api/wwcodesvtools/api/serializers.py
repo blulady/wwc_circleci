@@ -132,3 +132,19 @@ class AddMemberSerializer(serializers.Serializer):
         if len(value) > 150:
             raise serializers.ValidationError("Email should be less than 150 characters")
         return value
+
+
+class GetMemberForDirectorSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer()
+
+    class Meta(object):
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'userprofile', 'date_joined']
+
+
+class GetMemberSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSerializer()
+
+    class Meta(object):
+        model = User
+        fields = ['first_name', 'last_name', 'userprofile', 'date_joined']

@@ -1,0 +1,179 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$NZbWUD7ZKZP5$TGPzNofSNtaJkz//LYa3voDCWcaiVsvx4bkO7CrkZ4E=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "UserDirector@example.com",
+            "first_name": "User FirstName",
+            "last_name": "User LastName",
+            "email": "UserDirector@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-12-14T20:13:19.823Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$GLQwGPp2w2DM$ZxAIaiDr9iLO40SuSjyQX9ATnT1zk3NG0Lx87gXLnNk=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "UserVolunteer@example.com",
+            "first_name": "User FirstName",
+            "last_name": "User LastName",
+            "email": "UserVolunteer@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-12-14T20:13:30.451Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$UlSBIPx85qny$d3nXuEfrMs5j25IvaNqxGtokVy7b6PZ4hD5/V6vniPs=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "UserLeader@example.com",
+            "first_name": "User FirstName",
+            "last_name": "User LastName",
+            "email": "UserLeader@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-12-14T20:13:39.660Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$lSo7CXQoobLo$BDbjtFM98/Lfvt8p0UPdRnZXE8KJllAH52ccx/wVrmw=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "UserLeaderPending@example.com",
+            "first_name": "new",
+            "last_name": "user",
+            "email": "UserLeaderPending@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-12-14T20:26:55.902Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 1,
+        "fields": {
+            "user": [
+                "UserDirector@example.com"
+            ],
+            "token": "2391854154a54d6684f00f467f7a2cfd",
+            "used": true,
+            "created_at": "2020-12-14T20:13:19.830Z",
+            "updated_at": "2020-12-14T20:15:56.978Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 2,
+        "fields": {
+            "user": [
+                "UserVolunteer@example.com"
+            ],
+            "token": "deb351d88f7b4c0aba33c1277ba2e381",
+            "used": true,
+            "created_at": "2020-12-14T20:13:30.456Z",
+            "updated_at": "2020-12-14T20:16:02.851Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 3,
+        "fields": {
+            "user": [
+                "UserLeader@example.com"
+            ],
+            "token": "7119fab710a147d6917d0723234c48ab",
+            "used": true,
+            "created_at": "2020-12-14T20:13:39.663Z",
+            "updated_at": "2020-12-14T20:26:17.233Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 4,
+        "fields": {
+            "user": [
+                "UserLeaderPending@example.com"
+            ],
+            "token": "22b2ec50beb54ba1a5c4e902d86b1575",
+            "used": false,
+            "created_at": "2020-12-14T20:26:55.904Z",
+            "updated_at": "2020-12-14T20:26:56.038Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 1,
+        "fields": {
+            "user": [
+                "UserDirector@example.com"
+            ],
+            "status": "ACTIVE",
+            "role": "DIRECTOR",
+            "created_at": "2020-12-14T20:13:19.828Z",
+            "updated_at": "2020-12-14T20:15:56.976Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 2,
+        "fields": {
+            "user": [
+                "UserVolunteer@example.com"
+            ],
+            "status": "ACTIVE",
+            "role": "VOLUNTEER",
+            "created_at": "2020-12-14T20:13:30.453Z",
+            "updated_at": "2020-12-14T20:16:02.849Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 3,
+        "fields": {
+            "user": [
+                "UserLeader@example.com"
+            ],
+            "status": "ACTIVE",
+            "role": "LEADER",
+            "created_at": "2020-12-14T20:13:39.662Z",
+            "updated_at": "2020-12-14T20:26:17.231Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 4,
+        "fields": {
+            "user": [
+                "UserLeaderPending@example.com"
+            ],
+            "status": "PENDING",
+            "role": "LEADER",
+            "created_at": "2020-12-14T20:26:55.903Z",
+            "updated_at": "2020-12-14T20:26:56.035Z"
+        }
+    }
+    ]
+    

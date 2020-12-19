@@ -163,7 +163,7 @@ class AddMemberView(GenericAPIView):
             data = {
                 "status": UserProfile.PENDING,
                 "role": role}
-            logger.error(f'row {user_row.user_id} : {user_row.role}  : {user_row.status}')
+            logger.debug(f'row {user_row.user_id} : {user_row.role}  : {user_row.status}')
             if user_row:
                 serializer_profile = UserProfileSerializer(user_row, data=data)
                 if serializer_profile.is_valid():

@@ -12,13 +12,13 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     environment:
         DEBUG: True
-        SECRET_KEY: '))yt4hmt-$lmjqhw4=@d+rr1*s@9y^jr&oge3u1-bm)@2(q%t2'
+        SECRET_KEY: SECRET_KEY
         EMAIL_BACKEND: 'django.core.mail.backends.smtp.EmailBackend'
         EMAIL_HOST: 'smtp.gmail.com'
         EMAIL_USE_TLS: True
         EMAIL_PORT: 587
         EMAIL_HOST_USER: 'WWCodeSV@gmail.com'
-        EMAIL_HOST_PASSWORD: 'password'
+        EMAIL_HOST_PASSWORD: EMAIL_HOST_PASSWORD
         FRONTEND_APP_URL: 'https://wwcode-chtools-fe.herokuapp.com'
         DATABASES['default']['ENGINE']: django.db.backends.postgresql
         DATABASES['default']['NAME']: postgres_test

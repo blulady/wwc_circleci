@@ -139,7 +139,7 @@ class GetMemberForDirectorSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = User
-        fields = ['first_name', 'last_name', 'email', 'userprofile', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'email', 'userprofile', 'date_joined']
 
 
 class GetMemberSerializer(serializers.ModelSerializer):
@@ -147,4 +147,4 @@ class GetMemberSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = User
-        fields = ['first_name', 'last_name', 'userprofile', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'userprofile', 'date_joined']

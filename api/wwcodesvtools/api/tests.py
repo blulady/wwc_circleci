@@ -466,6 +466,7 @@ class TestGetMembersView(TransactionTestCase):
         response = self.client.get("/api/get_members/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 4)
+        self.assertEqual(json.loads(response.content)[0]['id'], 4)
         self.assertEqual(json.loads(response.content)[0]['email'], 'UserLeaderPending@example.com')
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'new')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'user')
@@ -485,6 +486,7 @@ class TestGetMembersView(TransactionTestCase):
         response = self.client.get("/api/get_members/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
+        self.assertEqual(json.loads(response.content)[0]['id'], 3)
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'User FirstName')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'User LastName')
         self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
@@ -504,6 +506,7 @@ class TestGetMembersView(TransactionTestCase):
         response = self.client.get("/api/get_members/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
+        self.assertEqual(json.loads(response.content)[0]['id'], 3)
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'User FirstName')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'User LastName')
         self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
@@ -512,3 +515,52 @@ class TestGetMembersView(TransactionTestCase):
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
             self.assertNotEqual(json.loads(response.content)[i]['userprofile']['status'], 'PENDING')
+
+
+class TestGetMemberInfoView(TransactionTestCase):
+    reset_sequences = True
+    fixtures = ['get_members_data.json']
+
+    def get_token(self, username, password):
+        s = TokenObtainPairSerializer(data={
+            TokenObtainPairSerializer.username_field: self.username,
+            'password': self.password,
+        })
+        self.assertTrue(s.is_valid())
+        return s.validated_data['access']
+
+    # Testing get member info with role = DIRECTOR
+    def test_get_member_info_for_director(self):
+        self.username = 'UserDirector@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_member_info/1", **bearer)
+        self.assertEqual(json.loads(response.content)['id'], 1)
+        self.assertEqual(json.loads(response.content)['email'], 'UserDirector@example.com')
+        self.assertEqual(json.loads(response.content)['first_name'], 'User FirstName')
+        self.assertEqual(json.loads(response.content)['last_name'], 'User LastName')
+        self.assertEqual(json.loads(response.content)['userprofile']['status'], 'ACTIVE')
+        self.assertEqual(json.loads(response.content)['userprofile']['role'], 'DIRECTOR')
+        self.assertEqual(json.loads(response.content)['date_joined'], '2020-12-14T20:13:19.823000Z')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    # Testing get member info with role = LEADER
+    def test_get_member_info_for_leader(self):
+        self.username = 'UserLeader@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_member_info/1", **bearer)
+        self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    # Testing get member info with role = VOLUNTEER
+    def test_get_member_info_for_volunteer(self):
+        self.username = 'UserVolunteer@example.com'
+        self.password = 'Password1@'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/get_member_info/2", **bearer)
+        self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

@@ -7,6 +7,8 @@ from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import AllowAny
+from datetime import datetime, timedelta
+from django.conf import settings
 import logging
 
 
@@ -20,13 +22,15 @@ class UserRegistrationView(GenericAPIView):
     TOKE_NOT_FOUND_ERROR_MESSAGE = 'Invalid token. Token does not exist in our system.'
     INTERNAL_SERVER_ERROR_MESSAGE = 'Something went wrong : {0}'
     EXPECTED_KEY_NOT_PRESENT_IN_REQUEST = 'Invalid Request. Key not present in request : {0}'
+    USER_TOKEN_EXPIRED_ERROR_MESSAGE = 'Expired token. Unable to register the user'
     ERROR_STATUS = {
         USER_NOT_FOUND_ERROR_MESSAGE: status.HTTP_404_NOT_FOUND,
         USER_ALREADY_ACTIVE_ERROR_MESSAGE: status.HTTP_400_BAD_REQUEST,
         USER_TOKEN_MISMATCH_ERROR_MESSAGE: status.HTTP_400_BAD_REQUEST,
         TOKE_NOT_FOUND_ERROR_MESSAGE: status.HTTP_404_NOT_FOUND,
         INTERNAL_SERVER_ERROR_MESSAGE: status.HTTP_500_INTERNAL_SERVER_ERROR,
-        EXPECTED_KEY_NOT_PRESENT_IN_REQUEST: status.HTTP_400_BAD_REQUEST
+        EXPECTED_KEY_NOT_PRESENT_IN_REQUEST: status.HTTP_400_BAD_REQUEST,
+        USER_TOKEN_EXPIRED_ERROR_MESSAGE: status.HTTP_400_BAD_REQUEST
     }
 
     permission_classes = [AllowAny]
@@ -83,6 +87,11 @@ class UserRegistrationView(GenericAPIView):
         user = user_queryset.first()
         if not user.userprofile.is_pending():
             return self.__build_error_result(self.USER_ALREADY_ACTIVE_ERROR_MESSAGE)
+        # check for valid unexpired registration token
+        token_datetime = datetime.strptime(request_token[-14:], '%Y%m%d%H%M%S')
+        now_datetime = datetime.now()
+        if not (now_datetime - timedelta(seconds=settings.REGISTRATION_LINK_EXPIRATION) <= token_datetime):
+            return self.__build_error_result(self.USER_TOKEN_EXPIRED_ERROR_MESSAGE)
         token_qs = RegistrationToken.objects.filter(token=request_token, used=False)
         if token_qs.exists():
             token = token_qs.first()

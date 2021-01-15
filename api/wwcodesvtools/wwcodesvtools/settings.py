@@ -193,3 +193,6 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://wwcode-chtools-fe.herokuapp.com']
 
 FRONTEND_APP_URL = env('FRONTEND_APP_URL')
+
+# Default: 259200 (3 days or 72 hrs, in seconds)
+REGISTRATION_LINK_EXPIRATION = 259200

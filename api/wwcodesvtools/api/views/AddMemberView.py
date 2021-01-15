@@ -11,6 +11,7 @@ from django.db import transaction
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 from api.helper_functions import send_email_helper
+from datetime import datetime
 import logging
 
 
@@ -90,12 +91,10 @@ class AddMemberView(GenericAPIView):
                 "last_name": "user",
                 "password": generate_random_password(8)
             }
-            # generate random token as a 32-character hexadecimal string.
-            rand_token = uuid4().hex
-            logger.debug(f'AddMemberView: token : {rand_token}')
-            registration_token = {
-                "token": rand_token,
-            }
+            # generate random token as a 32-character hexadecimal string and timestamp
+            timenow = datetime.now().strftime('%Y%m%d%H%M%S')
+            registration_token = str(uuid4().hex) + timenow
+            logger.debug(f'AddMemberView: token : {registration_token}')
             # create member user in the db
             # this will create rows in the user,userprofile and registrationToken tables
             # and update the role,status and role
@@ -126,7 +125,7 @@ class AddMemberView(GenericAPIView):
 
             # If user created successfully with no errors, then send email notification to the new member user
             if (error == self.NO_ERRORS and res_status == status.HTTP_201_CREATED):
-                message_sent = self.send_email_notification(email, rand_token, message)
+                message_sent = self.send_email_notification(email, registration_token, message)
                 if message_sent:
                     logger.info('AddMemberView: Member User created and email sent successfully')
                     res_status = status.HTTP_200_OK
@@ -146,7 +145,7 @@ class AddMemberView(GenericAPIView):
         try:
             reg_token_row = RegistrationToken.objects.get(user_id=user_id)
             if reg_token_row:
-                serializer_token = RegistrationTokenSerializer(reg_token_row, data=registration_token)
+                serializer_token = RegistrationTokenSerializer(reg_token_row, data={'token': registration_token})
                 if serializer_token.is_valid():
                     serializer_token.save()
                     return True

@@ -192,6 +192,10 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://wwcode-chtools-fe.herokuapp.com']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 FRONTEND_APP_URL = env('FRONTEND_APP_URL')
 
 # Default: 259200 (3 days or 72 hrs, in seconds)

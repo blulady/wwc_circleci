@@ -3,15 +3,16 @@ from api.views.UserRegistrationView import UserRegistrationView
 from api.views.MailSender import MailSender
 from api.views.AddMemberView import AddMemberView
 from api.views.GetMembersView import GetMembersView, GetMemberInfoView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.utils import swagger_auto_schema
 from .swagger import login_response as resp
+from api.views.CustomTokenObtainPairView import CustomTokenObtainPairView
 
 decorated_login_view = \
     swagger_auto_schema(
         method='post',
         responses=resp.response
-    )(TokenObtainPairView.as_view())
+    )(CustomTokenObtainPairView.as_view())
 
 urlpatterns = [
     path("registration/", UserRegistrationView.as_view()),

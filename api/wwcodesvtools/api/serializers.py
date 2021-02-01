@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import RegistrationToken, UserProfile
+from rest_framework import exceptions
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import re
 
 
@@ -148,3 +150,18 @@ class GetMemberSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
         fields = ['id', 'first_name', 'last_name', 'userprofile', 'date_joined']
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+        user_profile = UserProfile.objects.get(user_id=self.user.id)
+        if user_profile.status == 'PENDING':
+            error_message = "Not an active user, status is pending"
+            raise exceptions.AuthenticationFailed(error_message)
+        data.update({'id': self.user.id})
+        data.update({'email': self.user.email})
+        data.update({'first_name': self.user.first_name})
+        data.update({'last_name': self.user.last_name})
+        data.update({'role': user_profile.role})
+        return data

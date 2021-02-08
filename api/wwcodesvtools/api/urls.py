@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.utils import swagger_auto_schema
 from .swagger import login_response as resp
 from api.views.CustomTokenObtainPairView import CustomTokenObtainPairView
+from api.views.LogoutView import LogoutView
 
 decorated_login_view = \
     swagger_auto_schema(
@@ -19,6 +20,7 @@ urlpatterns = [
     path("send_email_example/", MailSender.as_view()),
     path("login", decorated_login_view),
     path("login/refresh", TokenRefreshView.as_view()),
+    path('logout/', LogoutView.as_view()),
     path("add_member/", AddMemberView.as_view()),
     path("get_members/", GetMembersView.as_view()),
     path('get_member_info/<int:id>', GetMemberInfoView.as_view()),

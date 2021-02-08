@@ -186,3 +186,13 @@ def post(self, request):
     ...
 ```
 * To check out the documentation, open `/redoc/` or `/swagger/`
+
+### How to use test APIs using swagger
+
+For endpoints that need authentication and authorisation,
+* Go to /swagger/ to access the API documentation.
+* Click on Django Login button, login using the username and password. Copy the access token.
+* Click on Authorize button. Paste "Bearer <token>" in the Value text box. This will add an authorisation key which 
+will have the "Bearer <token>" as the value in the request header.
+* You will be authorised at this point. You will see the lock icons closed as an indicator. 
+* Click on each request and click on "Try it out" to send requests to the API.

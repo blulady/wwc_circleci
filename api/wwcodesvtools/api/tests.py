@@ -408,7 +408,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": 'VOLUNTEER',
                 "message": "optional message"
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['email']))
 
@@ -418,7 +418,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": '',
                 "message": "optional message"
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
 
@@ -428,7 +428,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": "MANAGER",
                 "message": "optional message"
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
 
@@ -438,7 +438,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.LEADER,
                 "message": "optional message"
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('email', json.loads(response.content)['error'])
 
@@ -448,7 +448,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.DIRECTOR,
                 "message": "optional message"
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
 
@@ -458,7 +458,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.VOLUNTEER,
                 "message": ""
                 }
-        response = self.client.post("/api/add_member/", data)
+        response = self.client.post("/api/user/create/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
 
@@ -517,7 +517,7 @@ class TestGetMembersView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_members/", **bearer)
+        response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 4)
         self.assertEqual(json.loads(response.content)[0]['id'], 4)
@@ -537,7 +537,7 @@ class TestGetMembersView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_members/", **bearer)
+        response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
         self.assertEqual(json.loads(response.content)[0]['id'], 3)
@@ -557,7 +557,7 @@ class TestGetMembersView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_members/", **bearer)
+        response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
         self.assertEqual(json.loads(response.content)[0]['id'], 3)
@@ -589,7 +589,7 @@ class TestGetMemberInfoView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_member_info/1", **bearer)
+        response = self.client.get("/api/user/1", **bearer)
         self.assertEqual(json.loads(response.content)['id'], 1)
         self.assertEqual(json.loads(response.content)['email'], 'UserDirector@example.com')
         self.assertEqual(json.loads(response.content)['first_name'], 'User FirstName')
@@ -605,7 +605,7 @@ class TestGetMemberInfoView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_member_info/1", **bearer)
+        response = self.client.get("/api/user/1", **bearer)
         self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -615,7 +615,7 @@ class TestGetMemberInfoView(TransactionTestCase):
         self.password = 'Password1@'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/get_member_info/2", **bearer)
+        response = self.client.get("/api/user/2", **bearer)
         self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 

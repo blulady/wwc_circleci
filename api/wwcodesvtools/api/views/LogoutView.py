@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from api.serializers import LogoutSerializer
 import logging
 
 
@@ -17,6 +18,7 @@ class LogoutView(GenericAPIView):
     - adds the refresh tokens belonging to the user to the black list.
     """
     permission_classes = [IsAuthenticated]
+    serializer_class = LogoutSerializer
 
     post_response_schema = {
         status.HTTP_205_RESET_CONTENT: openapi.Response(

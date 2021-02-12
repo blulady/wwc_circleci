@@ -16,12 +16,12 @@ decorated_login_view = \
     )(CustomTokenObtainPairView.as_view())
 
 urlpatterns = [
-    path("registration/", UserRegistrationView.as_view()),
+    path("user/activate/", UserRegistrationView.as_view()),
     path("send_email_example/", MailSender.as_view()),
     path("login", decorated_login_view),
     path("login/refresh", TokenRefreshView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path("add_member/", AddMemberView.as_view()),
-    path("get_members/", GetMembersView.as_view()),
-    path('get_member_info/<int:id>', GetMemberInfoView.as_view()),
+    path("user/create/", AddMemberView.as_view()),
+    path("users/", GetMembersView.as_view()),
+    path('user/<int:id>', GetMemberInfoView.as_view()),
 ]

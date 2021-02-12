@@ -165,3 +165,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'last_name': self.user.last_name})
         data.update({'role': user_profile.role})
         return data
+
+
+class LogoutSerializer(serializers.Serializer):
+    username = serializers.CharField()

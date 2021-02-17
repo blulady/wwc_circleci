@@ -1,0 +1,122 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$AwccKehXI3ue$LHSqx0Y+vPUaXwIbotARgorzZoBhLBo4E0lORdgyaZM=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "volunteer@example.com",
+            "first_name": "VolunteerFN",
+            "last_name": "VolunteerLN",
+            "email": "volunteer@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2021-02-14T01:46:00.053Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$1P6nFxXZggXv$epWLUTzYxAXp/aISISNVJ067+v7BF/kadtoDMeKbyI8=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "leader@example.com",
+            "first_name": "LeaderFN",
+            "last_name": "LeaderLN",
+            "email": "leader@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2021-02-14T01:48:40.632Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$KPPFGPmhHMQD$5cVlj5rzt7AeCoBF+AqOyiMvhibmgopqR5GMZj5kjUM=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "director@example.com",
+            "first_name": "DirectorFN",
+            "last_name": "DirectorLN",
+            "email": "director@example.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2021-02-14T01:53:40.555Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "status": "ACTIVE",
+            "role": "VOLUNTEER",
+            "created_at": "2021-02-14T01:46:00.054Z",
+            "updated_at": "2021-02-14T01:48:26.611Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "status": "ACTIVE",
+            "role": "LEADER",
+            "created_at": "2021-02-14T01:48:40.634Z",
+            "updated_at": "2021-02-14T01:49:10.962Z"
+        }
+    },
+    {
+        "model": "api.userprofile",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "status": "ACTIVE",
+            "role": "DIRECTOR",
+            "created_at": "2021-02-14T01:53:40.556Z",
+            "updated_at": "2021-02-14T01:54:24.500Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "token": "72922854673041c49c45e80fb8971c4620210214014600",
+            "used": true,
+            "created_at": "2021-02-14T01:46:00.055Z",
+            "updated_at": "2021-02-14T01:48:26.614Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "token": "810b46c4e60f4458900f5a321080aa4720210214014840",
+            "used": true,
+            "created_at": "2021-02-14T01:48:40.636Z",
+            "updated_at": "2021-02-14T01:49:10.965Z"
+        }
+    },
+    {
+        "model": "api.registrationtoken",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "token": "f007efa0342a4330bc790f23ac70a7b620210214015340",
+            "used": true,
+            "created_at": "2021-02-14T01:53:40.557Z",
+            "updated_at": "2021-02-14T01:54:24.503Z"
+        }
+    }
+]

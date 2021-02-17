@@ -22,6 +22,14 @@ class CanGetMemberInfo(permissions.BasePermission):
         return has_director_permission(request, view)
 
 
+class CanAddMember(permissions.BasePermission):
+    """
+    Check if user can add member.
+    """
+    def has_permission(self, request, view):
+        return has_director_permission(request, view)
+
+
 def has_director_permission(request, view):
     """
     Check if logged in user has DIRECTOR role or IsSuperUser

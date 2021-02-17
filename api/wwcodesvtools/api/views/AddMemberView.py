@@ -8,9 +8,10 @@ from drf_yasg import openapi
 from api.helper_functions import generate_random_password
 from uuid import uuid4
 from django.db import transaction
-from rest_framework.permissions import AllowAny
 from django.conf import settings
 from api.helper_functions import send_email_helper
+from api.permissions import CanAddMember
+from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 import logging
 
@@ -29,9 +30,9 @@ class AddMemberView(GenericAPIView):
     ERROR_CREATING_MEMBER_USER = 'Error creating member user'
     ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
     ERROR_SENDING_EMAIL_NOTIFICATION = 'Error sending email notification to the member user'
-    NO_ERRORS = 'No Errors'
+    USER_CREATED_SUCCESSFULLY = 'User Created Succesfully'
 
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated & CanAddMember]
     serializer_class = AddMemberSerializer
 
     post_response_schema = {
@@ -39,7 +40,8 @@ class AddMemberView(GenericAPIView):
             description="Member User created and email sent successfully",
             examples={
                 "application/json": {
-                    'error': NO_ERRORS
+                    'result': USER_CREATED_SUCCESSFULLY,
+                    'token': "0148f55a1f404363bf27dd8ebc9443c920210210220436"
                 }
             }
         ),
@@ -97,7 +99,7 @@ class AddMemberView(GenericAPIView):
             logger.debug(f'AddMemberView: token : {registration_token}')
             # create member user in the db
             # this will create rows in the user,userprofile and registrationToken tables
-            # and update the role,status and role
+            # and update the role,status and registration_token
             serializer_user = UserSerializer(data=member_user)
             if serializer_user.is_valid():
                 # creating txn savepoint
@@ -108,7 +110,6 @@ class AddMemberView(GenericAPIView):
                 if res_profile_status and res_token_status:
                     # all well,commit data to the db
                     transaction.savepoint_commit(sid)
-                    error = self.NO_ERRORS
                     logger.info('AddMemberView: User data inserted successfully')
                     res_status = status.HTTP_201_CREATED
                 else:
@@ -124,12 +125,11 @@ class AddMemberView(GenericAPIView):
                 res_status = status.HTTP_400_BAD_REQUEST
 
             # If user created successfully with no errors, then send email notification to the new member user
-            if (error == self.NO_ERRORS and res_status == status.HTTP_201_CREATED):
+            if (error is None and res_status == status.HTTP_201_CREATED):
                 message_sent = self.send_email_notification(email, registration_token, message)
                 if message_sent:
                     logger.info('AddMemberView: Member User created and email sent successfully')
                     res_status = status.HTTP_200_OK
-                    error = self.NO_ERRORS
                 else:
                     res_status = status.HTTP_502_BAD_GATEWAY
                     error = self.ERROR_SENDING_EMAIL_NOTIFICATION
@@ -139,6 +139,8 @@ class AddMemberView(GenericAPIView):
             logger.error(f'AddMemberView: {error}: {e}')
             res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
+        if (error is None and res_status == status.HTTP_200_OK):
+            return Response({'result': self.USER_CREATED_SUCCESSFULLY, 'token': registration_token}, status=res_status)
         return Response({'error': error}, status=res_status)
 
     def update_registration_token(self, user_id, registration_token):

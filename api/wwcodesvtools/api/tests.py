@@ -9,7 +9,6 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from .helper_functions import send_email_helper
 from .models import UserProfile, User, RegistrationToken
 from rest_framework import status
-from rest_framework.test import APITestCase
 from .serializers import UserSerializer, RegistrationTokenSerializer, UserProfileSerializer, AddMemberSerializer, CustomTokenObtainPairSerializer
 
 
@@ -399,8 +398,24 @@ class TestAddMemberSerializer(TestCase):
         self.assertEquals(serializer.errors, {})
 
 
-class AddMemberViewTestCase(APITestCase):
-    NO_ERRORS = 'No Errors'
+class AddMemberViewTestCase(TransactionTestCase):
+    reset_sequences = True
+    fixtures = ['users_data.json']
+    EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
+
+    def setUp(self):
+        self.username = 'director@example.com'
+        self.password = 'Password123'
+        self.access_token = self.get_token(self.username, self.password)
+        self.bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(self.access_token)}
+
+    def get_token(self, username, password):
+        s = TokenObtainPairSerializer(data={
+            TokenObtainPairSerializer.username_field: self.username,
+            'password': self.password,
+        })
+        self.assertTrue(s.is_valid())
+        return s.validated_data['access']
 
     # test add member fails with blank email
     def test_add_member_fails_with_blank_email(self):
@@ -408,7 +423,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": 'VOLUNTEER',
                 "message": "optional message"
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['email']))
 
@@ -418,7 +433,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": '',
                 "message": "optional message"
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
 
@@ -428,7 +443,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": "MANAGER",
                 "message": "optional message"
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(set(json.loads(response.content)['error'].keys()), set(['role']))
 
@@ -438,7 +453,7 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.LEADER,
                 "message": "optional message"
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('email', json.loads(response.content)['error'])
 
@@ -448,9 +463,9 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.DIRECTOR,
                 "message": "optional message"
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
+        self.assertIn('token', json.loads(response.content))
 
     # test add member saves with blank message
     def test_add_member_saves_with_blank_message(self):
@@ -458,9 +473,37 @@ class AddMemberViewTestCase(APITestCase):
                 "role": UserProfile.VOLUNTEER,
                 "message": ""
                 }
-        response = self.client.post("/api/user/create/", data)
+        response = self.client.post("/api/user/create/", data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content), {'error': self.NO_ERRORS})
+        self.assertIn('token', json.loads(response.content))
+
+    # test can add member permissions with role = VOLUNTEER
+    def test_can_add_member_with_no_permission_for_volunteer(self):
+        self.username = 'volunteer@example.com'
+        self.password = 'Password123'
+        data = {"email": "volunteersv@gmail.com",
+                "role": UserProfile.LEADER,
+                "message": ""
+                }
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.post("/api/user/create/", data, **bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
+
+    # test can add member permission with role = LEADER
+    def test_can_add_member_with_no_permission_for_leader(self):
+        self.username = 'leader@example.com'
+        self.password = 'Password123'
+        data = {"email": "someonev@gmail.com",
+                "role": UserProfile.VOLUNTEER,
+                "message": "Hello"
+                }
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.post("/api/user/create/", data, **bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
 
 
 class TestCanSendEmailPermission(TransactionTestCase):
@@ -622,7 +665,7 @@ class TestGetMemberInfoView(TransactionTestCase):
 
 class TestLogoutView(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json']
+    fixtures = ['users_data.json']
 
     def get_token(self, username, password):
         s = CustomTokenObtainPairSerializer(data={
@@ -633,8 +676,8 @@ class TestLogoutView(TransactionTestCase):
         return s.validated_data
 
     def test_refresh_token_is_blacklisted_after_logout(self):
-        self.username = 'UserVolunteer@example.com'
-        self.password = 'Password1@'
+        self.username = 'volunteer@example.com'
+        self.password = 'Password123'
         token_data = self.get_token(self.username, self.password)
         access_token = token_data['access']
         refresh_token = token_data['refresh']

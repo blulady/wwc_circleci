@@ -25,8 +25,8 @@ class LogoutView(APIView):
                 "application/json": {}
             }
         ),
-        status.HTTP_400_BAD_REQUEST: openapi.Response(
-            description="Bad Request",
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response(
+            description="Internal Server Error",
             examples={
                 "application/json": {
                     'error': 'Error Logging out'
@@ -44,4 +44,4 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             logger.error(f'LogoutView:Error logging out  : {e}')
-            return Response({'error': 'Error Logging out'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Error Logging out'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

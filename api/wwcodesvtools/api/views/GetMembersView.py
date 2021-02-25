@@ -5,12 +5,15 @@ from api.serializers import GetMemberForDirectorSerializer, GetMemberSerializer
 from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
 from rest_framework.filters import OrderingFilter
+import logging
+
+
+logger = logging.getLogger('django')
 
 
 class GetMembersView(ListAPIView):
     """
     Returns a list of all members.
-
     Ordering by first_name, last_name or date_joined
     ------------------------------------------------
     You may also specify reverse orderings by prefixing the field name with '-', like so:

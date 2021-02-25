@@ -196,3 +196,12 @@ For endpoints that need authentication and authorisation,
 will have the "Bearer <token>" as the value in the request header.
 * You will be authorised at this point. You will see the lock icons closed as an indicator. 
 * Click on each request and click on "Try it out" to send requests to the API.
+
+### How to create first few intial users in the local database
+* Run below command
+
+$ docker-compose exec web bash
+./manage.py loaddata api/fixtures/users_data.json
+
+This will create 3 users in the local db, one for each role (DIRECTOR, LEADER, VOLUNTEER) with 'Password123'
+director@example.com , leader@example.com, volunteer@example.com.

@@ -567,8 +567,8 @@ class TestGetMembersView(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[0]['email'], 'leaderPendingStatus@example.com')
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'Caroline')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'Miller')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'PENDING')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['status'], 'PENDING')
+        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
         self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:51.160000Z')
         for i in range(responseLength):
             self.assertIsNotNone(json.loads(response.content)[i]['email'])
@@ -586,12 +586,12 @@ class TestGetMembersView(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[0]['id'], 3)
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'Bruno')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
         self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'ACTIVE')
+        self.assertEqual(json.loads(response.content)[0]['status'], 'ACTIVE')
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
-            self.assertNotEqual(json.loads(response.content)[i]['userprofile']['status'], 'PENDING')
+            self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
 
     # Testing get members with role = LEADER
     # 'PENDING' status members and 'email' field not in the response
@@ -606,12 +606,12 @@ class TestGetMembersView(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[0]['id'], 3)
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'Bruno')
         self.assertEqual(json.loads(response.content)[0]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
         self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[0]['userprofile']['status'], 'ACTIVE')
+        self.assertEqual(json.loads(response.content)[0]['status'], 'ACTIVE')
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
-            self.assertNotEqual(json.loads(response.content)[i]['userprofile']['status'], 'PENDING')
+            self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
 
 
 class TestGetMemberInfoView(TransactionTestCase):
@@ -637,8 +637,8 @@ class TestGetMemberInfoView(TransactionTestCase):
         self.assertEqual(json.loads(response.content)['email'], 'director@example.com')
         self.assertEqual(json.loads(response.content)['first_name'], 'John')
         self.assertEqual(json.loads(response.content)['last_name'], 'Smith')
-        self.assertEqual(json.loads(response.content)['userprofile']['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['userprofile']['role'], 'DIRECTOR')
+        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
+        self.assertEqual(json.loads(response.content)['role'], 'DIRECTOR')
         self.assertEqual(json.loads(response.content)['date_joined'], '2021-02-19T01:55:01.810000Z')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -790,3 +790,57 @@ class TestGetMembersOrdering(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:29.756000Z')
         self.assertEqual(json.loads(response.content)[1]['date_joined'], '2021-02-19T01:56:06.115000Z')
         self.assertEqual(json.loads(response.content)[2]['date_joined'], '2021-02-19T01:55:01.810000Z')
+
+
+class TestDeleteMembers(TransactionTestCase):
+    reset_sequences = True
+    fixtures = ['get_members_data.json']
+    EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
+
+    def get_token(self, username, password):
+        s = TokenObtainPairSerializer(data={
+            TokenObtainPairSerializer.username_field: self.username,
+            'password': self.password,
+        })
+        self.assertTrue(s.is_valid())
+        return s.validated_data['access']
+
+    # test  can delete member with role =DIRECTOR
+    def test_can_delete_member(self):
+        self.username = 'director@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/user/3", **bearer)
+        self.assertEqual(json.loads(response.content)['id'], 3)
+        self.assertEqual(json.loads(response.content)['email'], 'leader@example.com')
+        self.assertEqual(json.loads(response.content)['first_name'], 'Bruno')
+        self.assertEqual(json.loads(response.content)['last_name'], 'Clark')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.delete("/api/user/delete/3", **bearer)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content), {"result": "User deleted successfully"})
+        response = self.client.get("/api/user/3", **bearer)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(json.loads(response.content), {"detail": "Not found."})
+
+    # test cannot delete member permission with role = LEADER
+    def test_can_delete_member_with_no_permission_for_leader(self):
+        self.username = 'leader@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.delete("/api/user/delete/3", **bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
+
+    # test cannot delete member permission with role = VOLUNTEER
+    def test_can_delete_member_with_no_permission_for_volunteer(self):
+        self.username = 'volunteer@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.delete("/api/user/delete/3", **bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})

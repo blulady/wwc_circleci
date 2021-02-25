@@ -137,19 +137,33 @@ class AddMemberSerializer(serializers.Serializer):
 
 
 class GetMemberForDirectorSerializer(serializers.ModelSerializer):
-    userprofile = UserProfileSerializer()
+    status = serializers.SerializerMethodField('get_status')
+    role = serializers.SerializerMethodField('get_role')
 
     class Meta(object):
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'userprofile', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'email', 'status', 'role', 'date_joined']
+
+    def get_status(self, obj):
+        return obj.userprofile.status
+
+    def get_role(self, obj):
+        return obj.userprofile.role
 
 
 class GetMemberSerializer(serializers.ModelSerializer):
-    userprofile = UserProfileSerializer()
+    status = serializers.SerializerMethodField('get_status')
+    role = serializers.SerializerMethodField('get_role')
 
     class Meta(object):
         model = User
-        fields = ['id', 'first_name', 'last_name', 'userprofile', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'status', 'role', 'date_joined']
+
+    def get_status(self, obj):
+        return obj.userprofile.status
+
+    def get_role(self, obj):
+        return obj.userprofile.role
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

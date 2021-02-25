@@ -8,6 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .swagger import login_response as resp
 from api.views.CustomTokenObtainPairView import CustomTokenObtainPairView
 from api.views.LogoutView import LogoutView
+from api.views.DeleteMemberView import DeleteMemberView
 
 decorated_login_view = \
     swagger_auto_schema(
@@ -24,4 +25,5 @@ urlpatterns = [
     path("user/create/", AddMemberView.as_view()),
     path("users/", GetMembersView.as_view()),
     path('user/<int:id>', GetMemberInfoView.as_view()),
+    path('user/delete/<int:id>', DeleteMemberView.as_view()),
 ]

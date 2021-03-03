@@ -9,7 +9,11 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from .helper_functions import send_email_helper
 from .models import UserProfile, User, RegistrationToken
 from rest_framework import status
-from .serializers import UserSerializer, RegistrationTokenSerializer, UserProfileSerializer, AddMemberSerializer, CustomTokenObtainPairSerializer
+from api.serializers.UserSerializer import UserSerializer
+from api.serializers.RegistrationTokenSerializer import RegistrationTokenSerializer
+from api.serializers.UserProfileSerializer import UserProfileSerializer
+from api.serializers.AddMemberSerializer import AddMemberSerializer
+from api.serializers.CustomTokenObtainPairSerializer import CustomTokenObtainPairSerializer
 
 
 class UserProfileTests(TestCase):

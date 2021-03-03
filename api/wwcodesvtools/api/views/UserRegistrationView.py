@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 from api.models import RegistrationToken
-from api.serializers import UserRegistrationSerializer, UserActivationSerializer
+from api.serializers.UserRegistrationSerializer import UserRegistrationSerializer
+from api.serializers.UserActivationSerializer import UserActivationSerializer
 from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi

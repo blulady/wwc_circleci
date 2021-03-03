@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from api.serializers import ResetPasswordEmailRequestSerializer
+from api.serializers.ResetPasswordEmailRequestSerializer import ResetPasswordEmailRequestSerializer
 from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi

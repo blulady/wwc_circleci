@@ -3,6 +3,7 @@ from api.views.UserRegistrationView import UserRegistrationView
 from api.views.MailSender import MailSender
 from api.views.AddMemberView import AddMemberView
 from api.views.GetMembersView import GetMembersView, GetMemberInfoView
+from api.views.RequestPasswordResetView import RequestPasswordResetView
 from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.utils import swagger_auto_schema
 from .swagger import login_response as resp
@@ -25,5 +26,6 @@ urlpatterns = [
     path("user/create/", AddMemberView.as_view()),
     path("users/", GetMembersView.as_view()),
     path('user/<int:id>', GetMemberInfoView.as_view()),
-    path('user/delete/<int:id>', DeleteMemberView.as_view()),
+    path('user/reset_password/request/', RequestPasswordResetView.as_view()),
+    path('user/delete/<int:id>', DeleteMemberView.as_view())
 ]

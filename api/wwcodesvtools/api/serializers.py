@@ -187,3 +187,17 @@ class UserActivationSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=50)
     password = serializers.CharField(max_length=50)
     token = serializers.CharField(max_length=150)
+
+
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=150)
+
+    class Meta:
+        fields = ['email']
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        user_queryset = User.objects.filter(email=email).exists()
+        if not user_queryset:
+            raise serializers.ValidationError({'error': 'Email does not exist'})
+        return email

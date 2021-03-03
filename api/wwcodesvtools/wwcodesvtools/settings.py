@@ -204,6 +204,9 @@ FRONTEND_APP_URL = env('FRONTEND_APP_URL')
 # Default: 259200 (3 days or 72 hrs, in seconds)
 REGISTRATION_LINK_EXPIRATION = 259200
 
+# Password reset token is valid for (86400 is 24 hours)
+PASSWORD_RESET_TIMEOUT = 86400
+
 SWAGGER_SETTINGS = {
     'LOGIN_URL': '/api/login',
     'SECURITY_DEFINITIONS': {

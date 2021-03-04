@@ -7,13 +7,14 @@ from rest_framework_simplejwt.serializers import TokenObtainSerializer, TokenObt
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from .helper_functions import send_email_helper
-from .models import UserProfile, User, RegistrationToken
+from .models import UserProfile, User, RegistrationToken, Team, User_Team
 from rest_framework import status
 from api.serializers.UserSerializer import UserSerializer
 from api.serializers.RegistrationTokenSerializer import RegistrationTokenSerializer
 from api.serializers.UserProfileSerializer import UserProfileSerializer
 from api.serializers.AddMemberSerializer import AddMemberSerializer
 from api.serializers.CustomTokenObtainPairSerializer import CustomTokenObtainPairSerializer
+from django.db import IntegrityError
 
 
 class UserProfileTests(TestCase):
@@ -881,3 +882,64 @@ class RequestPasswordResetViewTestCase(TransactionTestCase):
         response = self.client.post("/api/user/reset_password/request/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', json.loads(response.content))
+
+
+# Testing Team model seed data
+class TestTeamModelSeedData(TestCase):
+
+    def test_team_seed_data(self):
+        teams = Team.objects.values_list('name', flat=True)
+        teams = list(teams)
+        self.assertEqual(len(teams), 7)
+        self.assertEqual(teams[0], 'Event Volunteers')
+        self.assertEqual(teams[1], 'Hackathon Volunteers')
+        self.assertEqual(teams[2], 'Host Management')
+        self.assertEqual(teams[3], 'Partnership Management')
+        self.assertEqual(teams[4], 'Social Media')
+        self.assertEqual(teams[5], 'Tech Event Volunteers')
+        self.assertEqual(teams[6], 'Volunteer Management')
+
+
+# Testing UserTeam constraint and many to many relationship for User and Team
+class TestUserTeamModel(TransactionTestCase):
+    reset_sequences = True
+    fixtures = ['users_data.json', 'teams_data.json']
+
+    # Testing unique constraint user team
+    def test_unique_constraint(self):
+        user1 = User.objects.get(email="director@example.com")
+        team1 = Team.objects.get(name='Host Management')
+        userteam1 = User_Team(user=user1, team=team1)
+        userteam1.save()
+        userteam2 = User_Team(user=user1, team=team1)
+        self.assertRaises(IntegrityError, lambda: userteam2.save())
+
+    # Testing a User can belong to many teams
+    def test_user_can_belong_to_many_teams(self):
+        user1 = User.objects.get(email="director@example.com")
+        team1 = Team.objects.get(name='Host Management')
+        team2 = Team.objects.get(name='Tech Event Volunteers')
+        team3 = Team.objects.get(name='Partnership Management')
+        team4 = Team.objects.get(name='Social Media')
+        User_Team.objects.bulk_create([
+            User_Team(user=user1, team=team1),
+            User_Team(user=user1, team=team2),
+            User_Team(user=user1, team=team3),
+            User_Team(user=user1, team=team4),
+        ])
+        user_teams = User_Team.objects.all()
+        self.assertEqual(user_teams.count(), 4)
+
+    # Testing a Team can have multiple Users
+    def test_team_can_have_many_users(self):
+        user1 = User.objects.get(email="director@example.com")
+        user2 = User.objects.get(email="leader@example.com")
+        user3 = User.objects.get(email="volunteer@example.com")
+        team1 = Team.objects.get(name='Hackathon Volunteers')
+        User_Team.objects.bulk_create([
+            User_Team(user=user1, team=team1),
+            User_Team(user=user2, team=team1),
+            User_Team(user=user3, team=team1),
+        ])
+        user_teams = User_Team.objects.all()
+        self.assertEqual(user_teams.count(), 3)

@@ -72,12 +72,12 @@ class EditMemberView(GenericAPIView):
             for field in updatable_fields:
                 if field in request.data:
                     data[field] = request.data[field]
-            return self.update_user_profile(id, data)
+            return self.edit_user_profile(id, data)
         except Exception as e:
             logger.error(f'EditMemberView:Error editing the User: {e}')
             return Response({'error': 'Error Editing the User'}, status=status.HTTP_403_FORBIDDEN)
 
-    def update_user_profile(self, user_id, data):
+    def edit_user_profile(self, user_id, data):
         try:
             user_row = UserProfile.objects.get(user_id=user_id)
             logger.debug(

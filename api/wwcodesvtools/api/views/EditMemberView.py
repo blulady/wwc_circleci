@@ -74,10 +74,10 @@ class EditMemberView(GenericAPIView):
                     data[field] = request.data[field]
             if self.edit_user_profile(id, data):
                 return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
-            else :
+            else:
                 error = "User's role or status entered is empty or incorrect."
                 res_status = status.HTTP_403_FORBIDDEN
-                return  Response({'error': error}, status=res_status)
+                return Response({'error': error}, status=res_status)
 
         except Exception as e:
             logger.error(f'EditMemberView:Error editing the User: {e}')
@@ -92,12 +92,11 @@ class EditMemberView(GenericAPIView):
                 serializer_profile = EditMemberSerializer(user_row, data=data)
                 if serializer_profile.is_valid():
                     serializer_profile.save()
-                    return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
+                    return True
                 else:
-                    
                     logger.error(
                         f'EditMemberView:Error updating user profile : {serializer_profile.errors}')
-                    return  False
+                    return False
         except UserProfile.DoesNotExist as e:
             logger.error(f'EditMemberView:Error updating user profile : {e}')
             return False

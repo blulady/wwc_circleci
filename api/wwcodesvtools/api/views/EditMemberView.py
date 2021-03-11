@@ -48,19 +48,11 @@ class EditMemberView(GenericAPIView):
                 }
             }
         ),
-        status.HTTP_204_NO_CONTENT: openapi.Response(
-            description="No Content Was Given",
-            examples={
-                "application/json": {
-                    'result': 'No Content Was Given'
-                }
-            }
-        ),
         status.HTTP_403_FORBIDDEN: openapi.Response(
-            description="User's role or status incorrect.",
+            description="User's role or status entered is empty or incorrect.",
             examples={
                 "application/json": {
-                    'error': "User's role or status incorrect."
+                    'error': "User's role or status entered is empty or incorrect."
                 }
             }
         ),
@@ -80,12 +72,7 @@ class EditMemberView(GenericAPIView):
             for field in updatable_fields:
                 if field in request.data:
                     data[field] = request.data[field]
-
-            # if not bool(data):
-            #     return Response({'result': 'User was not edited because no fields were given for the update'}, status=status.HTTP_204_NO_CONTENT)
-
             return self.update_user_profile(id, data)
-            # return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f'EditMemberView:Error editing the User: {e}')
             return Response({'error': 'Error Editing the User'}, status=status.HTTP_403_FORBIDDEN)
@@ -101,11 +88,11 @@ class EditMemberView(GenericAPIView):
                     serializer_profile.save()
                     return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
                 else:
-                    error = serializer_profile.errors
+                    error = "User's role or status entered is empty or incorrect."
                     res_status = status.HTTP_403_FORBIDDEN
                     logger.error(
                         f'EditMemberView:Error updating user profile : {serializer_profile.errors}')
-                    return  Response({'error': "User's role or status incorrect."}, status=res_status)
+                    return  Response({'error': error}, status=res_status)
         except UserProfile.DoesNotExist as e:
             logger.error(f'EditMemberView:Error updating user profile : {e}')
             return Response({'error': 'User entered does not exist'}, status=status.HTTP_404_NOT_FOUND)

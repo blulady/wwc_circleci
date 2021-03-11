@@ -426,30 +426,124 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertTrue(s.is_valid())
         return s.validated_data['access']
 
-    def test_edit_member_before_change(self):
+    def check_member_before_change(self, data):
         # Before change
-        response = self.client.get("/api/user/3", **self.bearer)
+        endpoint = "/api/user/" + str(data['user_id'])
+        response = self.client.get(endpoint, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content)['id'], 3)
+        self.assertEqual(json.loads(response.content)['id'], data['user_id'])
         self.assertEqual(json.loads(response.content)[
-                         'email'], 'leader@example.com')
-        self.assertEqual(json.loads(response.content)['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'LEADER')
+                         'email'], data['email'])
+        self.assertEqual(json.loads(response.content)[
+                         'first_name'], data['first_name'])
+        self.assertEqual(json.loads(response.content)[
+                         'last_name'], data['last_name'])
+        self.assertEqual(json.loads(response.content)[
+                         'status'], data['user_status'])
+        self.assertEqual(json.loads(response.content)['role'], data['role'])
+    
+    def check_member_after_change(self, user_data):
+        endpoint = "/api/user/" + str(user_data['user_id'])
+        response = self.client.get(endpoint, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content)
+                         ['id'], user_data["user_id"])
+        self.assertEqual(json.loads(response.content)[
+                         'email'], user_data["email"])
+        self.assertEqual(json.loads(response.content)[
+                         'first_name'], user_data["first_name"])
+        self.assertEqual(json.loads(response.content)[
+                         'last_name'], user_data["last_name"])
+        self.assertEqual(json.loads(response.content)[
+                         'status'], user_data["user_status"])
+        self.assertEqual(json.loads(response.content)['role'], user_data["role"])
 
-    def test_edit_member_peding_status(self):
-        pass
+    def test_edit_member_pending_status(self):
+        # before change
+        user_data = {
+            'user_id': 4,
+            'email':  'leaderPendingStatus@example.com',
+            'first_name': 'Caroline',
+            'last_name': 'Miller',
+            'user_status': UserProfile.PENDING,
+            'role': UserProfile.LEADER
+        }
+
+        self.check_member_before_change(data=user_data)
+
+        # making change
+        data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
+        endpoint = "/api/user/edit/" + str(user_data["user_id"])
+        response = self.client.post(endpoint, data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {
+                         'error': 'User can not be edited because her status is pending.'})
+        # after change
+        self.check_member_after_change(user_data)
 
     def test_edit_member_by_nondirector(self):
         pass
 
-    def test_edit_member_other_role(self):
-        pass
+    def test_edit_role_member_notallowed_role(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
+        # before change
+        self.check_member_before_change(data=user_data)
+
+        # making change
+        data = {"role": "SOMEROLE", "status": UserProfile.INACTIVE}
+        response = self.client.post("/api/user/edit/3", data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        # self.assertEqual(json.loads(response.content), {
+        #         'error': {'role': ['"SOMEROLE" is not a valid choice.']}})
+        self.assertEqual(json.loads(response.content), {
+                'error': "User's role or status incorrect."})
+
+        # after change
+        self.check_member_after_change(user_data)
+
+
+    def test_edit_status_member_notallowed_status(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
+        # before change
+        self.check_member_before_change(data=user_data)
+
+        # making change
+        data = {"role": UserProfile.VOLUNTEER, "status": "SOMESTATUS"}
+        response = self.client.post("/api/user/edit/3", data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        # self.assertEqual(json.loads(response.content), {
+        #         'error': {'status': ['"SOMESTATUS" is not a valid choice.']}})
+        self.assertEqual(json.loads(response.content), {
+                'error': "User's role or status incorrect."})
+
+        # after change
+        self.check_member_after_change(user_data)
 
     def test_edit_member(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
         # before change
-        self.test_edit_member_before_change()
+        self.check_member_before_change(data=user_data)
 
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
@@ -459,16 +553,9 @@ class EditMemberViewTestCase(TransactionTestCase):
                          'result': self.EXPECTED_MESSAGE})
 
         # after change
-        response = self.client.get("/api/user/3", **self.bearer)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content)['id'], 3)
-        self.assertEqual(json.loads(response.content)[
-                         'email'], 'leader@example.com')
-        self.assertEqual(json.loads(response.content)['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)['status'], 'INACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'VOLUNTEER')
-
+        user_data['role'] = UserProfile.VOLUNTEER
+        user_data['user_status'] = UserProfile.INACTIVE
+        self.check_member_after_change(user_data)
 
 class AddMemberViewTestCase(TransactionTestCase):
     reset_sequences = True

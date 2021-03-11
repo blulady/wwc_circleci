@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from api.permissions import CanEditMember
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView
@@ -9,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import logging
 from api.models import UserProfile
-from api.serializers.UserProfileSerializer import UserProfileSerializer
+from api.serializers.EditMemberSerializer import EditMemberSerializer
 from django.db import transaction
 
 logger = logging.getLogger('django')
@@ -55,6 +56,14 @@ class EditMemberView(GenericAPIView):
                 }
             }
         ),
+        status.HTTP_403_FORBIDDEN: openapi.Response(
+            description="User's role or status incorrect.",
+            examples={
+                "application/json": {
+                    'error': "User's role or status incorrect."
+                }
+            }
+        ),
     }
 
     @swagger_auto_schema(responses=post_response_schema)
@@ -64,7 +73,7 @@ class EditMemberView(GenericAPIView):
         try:
             user_row = UserProfile.objects.get(user_id=id)
             if user_row.status == UserProfile.PENDING:
-                return Response({'result': 'User can not be edited because her status is pending.'}, status=status.HTTP_403_FORBIDDEN)
+                return Response({'error': 'User can not be edited because her status is pending.'}, status=status.HTTP_403_FORBIDDEN)
 
             data = {}
             updatable_fields = ['role', 'status']
@@ -72,14 +81,14 @@ class EditMemberView(GenericAPIView):
                 if field in request.data:
                     data[field] = request.data[field]
 
-            if not bool(data):
-                return Response({'result': 'User was not edited because no fields were given for the update'}, status=status.HTTP_204_NO_CONTENT)
+            # if not bool(data):
+            #     return Response({'result': 'User was not edited because no fields were given for the update'}, status=status.HTTP_204_NO_CONTENT)
 
-            self.update_user_profile(id, data)
-            return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
+            return self.update_user_profile(id, data)
+            # return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f'EditMemberView:Error editing the User: {e}')
-            return Response({'error': 'Error Editing the User'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': 'Error Editing the User'}, status=status.HTTP_403_FORBIDDEN)
 
     def update_user_profile(self, user_id, data):
         try:
@@ -87,14 +96,16 @@ class EditMemberView(GenericAPIView):
             logger.debug(
                 f'row {user_row.user_id} : {user_row.role}  : {user_row.status}')
             if user_row:
-                serializer_profile = UserProfileSerializer(user_row, data=data)
+                serializer_profile = EditMemberSerializer(user_row, data=data)
                 if serializer_profile.is_valid():
                     serializer_profile.save()
-                    return True
+                    return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
                 else:
+                    error = serializer_profile.errors
+                    res_status = status.HTTP_403_FORBIDDEN
                     logger.error(
                         f'EditMemberView:Error updating user profile : {serializer_profile.errors}')
-                    return False
+                    return  Response({'error': "User's role or status incorrect."}, status=res_status)
         except UserProfile.DoesNotExist as e:
             logger.error(f'EditMemberView:Error updating user profile : {e}')
-            return False
+            return Response({'error': 'User entered does not exist'}, status=status.HTTP_404_NOT_FOUND)

@@ -459,27 +459,22 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)
                          ['role'], user_data["role"])
     
-    # def test_empty_input(self):
-    #     user_data = {
-    #         'user_id': 3,
-    #         'email':  'leader@example.com',
-    #         'first_name': 'Bruno',
-    #         'last_name': 'Clark',
-    #         'user_status': UserProfile.ACTIVE,
-    #         'role': UserProfile.LEADER
-    #     }
-    #     # before change
-    #     self.check_member_before_change(data=user_data)
+    def test_edit_member_nonexistant_id(self):
+        user_data = {
+            'user_id': 404,
+            'email':  'leaderPendingStatus@example.com',
+            'first_name': 'Caroline',
+            'last_name': 'Miller',
+            'user_status': UserProfile.PENDING,
+            'role': UserProfile.LEADER
+        }
 
-    #     # making change
-    #     data = {"role": "", "status": ""}
-    #     response = self.client.post("/api/user/edit/3", data, **self.bearer)
-    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-    #     self.assertEqual(json.loads(response.content), {
-    #         'error': "User's role or status entered is empty or incorrect."})
-
-    #     # after change
-    #     self.check_member_after_change(user_data)
+        # making change
+        data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
+        endpoint = "/api/user/edit/" + str(user_data["user_id"])
+        response = self.client.post(endpoint, data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(json.loads(response.content), {"detail":"Not found."})
 
     def test_edit_member_pending_status(self):
         # before change
@@ -532,53 +527,73 @@ class EditMemberViewTestCase(TransactionTestCase):
         # after change
         self.check_member_after_change(user_data)
 
-    # def test_edit_role_member_notallowed_role(self):
-    #     user_data = {
-    #         'user_id': 3,
-    #         'email':  'leader@example.com',
-    #         'first_name': 'Bruno',
-    #         'last_name': 'Clark',
-    #         'user_status': UserProfile.ACTIVE,
-    #         'role': UserProfile.LEADER
-    #     }
-    #     # before change
-    #     self.check_member_before_change(data=user_data)
 
-    #     # making change
-    #     data = {"role": "SOMEROLE", "status": UserProfile.INACTIVE}
-    #     response = self.client.post("/api/user/edit/3", data, **self.bearer)
-    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-    #     # self.assertEqual(json.loads(response.content), {
-    #     #         'error': {'role': ['"SOMEROLE" is not a valid choice.']}})
-    #     self.assertEqual(json.loads(response.content), {
-    #         'error': "User's role or status entered is empty or incorrect."})
+    def test_edit_role_member_notallowed_role(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
+        # before change
+        self.check_member_before_change(data=user_data)
 
-    #     # after change
-    #     self.check_member_after_change(user_data)
+        # making change
+        data = {"role": "SOMEROLE", "status": UserProfile.INACTIVE}
+        response = self.client.post("/api/user/edit/3", data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {
+            'error': "User's role or status entered is empty or incorrect."})
 
-    # def test_edit_status_member_notallowed_status(self):
-    #     user_data = {
-    #         'user_id': 3,
-    #         'email':  'leader@example.com',
-    #         'first_name': 'Bruno',
-    #         'last_name': 'Clark',
-    #         'user_status': UserProfile.ACTIVE,
-    #         'role': UserProfile.LEADER
-    #     }
-    #     # before change
-    #     self.check_member_before_change(data=user_data)
+        # after change
+        self.check_member_after_change(user_data)
 
-    #     # making change
-    #     data = {"role": UserProfile.VOLUNTEER, "status": "SOMESTATUS"}
-    #     response = self.client.post("/api/user/edit/3", data, **self.bearer)
-    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-    #     # self.assertEqual(json.loads(response.content), {
-    #     #         'error': {'status': ['"SOMESTATUS" is not a valid choice.']}})
-    #     self.assertEqual(json.loads(response.content), {
-    #         'error': "User's role or status entered is empty or incorrect."})
+    def test_edit_status_member_notallowed_status(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
+        # before change
+        self.check_member_before_change(data=user_data)
 
-    #     # after change
-    #     self.check_member_after_change(user_data)
+        # making change
+        data = {"role": UserProfile.VOLUNTEER, "status": "SOMESTATUS"}
+        response = self.client.post("/api/user/edit/3", data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {
+            'error': "User's role or status entered is empty or incorrect."})
+
+        # after change
+        self.check_member_after_change(user_data)
+
+
+    def test_empty_input(self):
+        user_data = {
+            'user_id': 3,
+            'email':  'leader@example.com',
+            'first_name': 'Bruno',
+            'last_name': 'Clark',
+            'user_status': UserProfile.ACTIVE,
+            'role': UserProfile.LEADER
+        }
+        # before change
+        self.check_member_before_change(data=user_data)
+
+        # making change
+        data = {"role": "", "status": ""}
+        response = self.client.post("/api/user/edit/3", data, **self.bearer)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(json.loads(response.content), {
+            'error': "User's role or status entered is empty or incorrect."})
+
+        # after change
+        self.check_member_after_change(user_data)
 
     def test_edit_member(self):
         user_data = {

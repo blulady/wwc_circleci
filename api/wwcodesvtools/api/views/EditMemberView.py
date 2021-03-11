@@ -11,6 +11,7 @@ from drf_yasg import openapi
 import logging
 from api.models import UserProfile
 from api.serializers.EditMemberSerializer import EditMemberSerializer
+from api.serializers.UserProfileSerializer import UserProfileSerializer
 from django.db import transaction
 
 logger = logging.getLogger('django')
@@ -22,6 +23,9 @@ class EditMemberView(GenericAPIView):
 
     """
     permission_classes = [IsAuthenticated & CanEditMember]
+
+    ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
+    ERROR_INVALID_INPUT_ROLE_STATUS = "User's role or status entered is empty or incorrect."
 
     post_response_schema = {
         status.HTTP_200_OK: openapi.Response(
@@ -63,7 +67,7 @@ class EditMemberView(GenericAPIView):
     def post(self, request, id):
         user = get_object_or_404(User, id=id)
         try:
-            user_row = UserProfile.objects.get(user_id=id)
+            user_row = UserProfile.objects.get(id=id)
             if user_row.status == UserProfile.PENDING:
                 return Response({'error': 'User can not be edited because her status is pending.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -72,16 +76,37 @@ class EditMemberView(GenericAPIView):
             for field in updatable_fields:
                 if field in request.data:
                     data[field] = request.data[field]
-            if self.edit_user_profile(id, data):
-                return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
+
+            serializer_role_status = EditMemberSerializer(id, data=data)
+            if serializer_role_status.is_valid():
+                # creating txn savepoint
+                sid = transaction.savepoint()
+                res_profile_status_role = self.edit_user_profile(id, data)
+                if res_profile_status_role:
+                    # all well,commit data to the db
+                    transaction.savepoint_commit(sid)
+                    logger.info(
+                        'EditMemberView: User data edited successfully')
+                    res_status = status.HTTP_200_OK
+                    error = None
+                else:
+                    if not res_profile_status_role:
+                        error = self.ERROR_UPDATING_USER_PROFILE
+                    # something went wrong, don't commit data to db,rollback txn
+                    transaction.savepoint_rollback(sid)
+                    res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             else:
-                error = "User's role or status entered is empty or incorrect."
+                error = self.ERROR_INVALID_INPUT_ROLE_STATUS
                 res_status = status.HTTP_403_FORBIDDEN
-                return Response({'error': error}, status=res_status)
 
         except Exception as e:
-            logger.error(f'EditMemberView:Error editing the User: {e}')
-            return Response({'error': 'Error Editing the User'}, status=status.HTTP_403_FORBIDDEN)
+            error = self.ERROR_UPDATING_USER_PROFILE
+            logger.error(f'EditMemberView: {error}: {e}')
+            res_status = status.HTTP_403_FORBIDDEN
+
+        if (error is None and res_status == status.HTTP_200_OK):
+            return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)
+        return Response({'error': error}, status=res_status)
 
     def edit_user_profile(self, user_id, data):
         try:
@@ -89,14 +114,14 @@ class EditMemberView(GenericAPIView):
             logger.debug(
                 f'row {user_row.user_id} : {user_row.role}  : {user_row.status}')
             if user_row:
-                serializer_profile = EditMemberSerializer(user_row, data=data)
+                serializer_profile = UserProfileSerializer(user_row, data=data)
                 if serializer_profile.is_valid():
                     serializer_profile.save()
                     return True
                 else:
                     logger.error(
-                        f'EditMemberView:Error updating user profile : {serializer_profile.errors}')
+                        f'AddMemberView:Error updating user profile : {serializer_profile.errors}')
                     return False
         except UserProfile.DoesNotExist as e:
-            logger.error(f'EditMemberView:Error updating user profile : {e}')
+            logger.error(f'AddMemberView:Error updating user profile : {e}')
             return False

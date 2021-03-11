@@ -8,12 +8,6 @@ class EditMemberSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('status', 'role')
 
-    def update(self, instance, validated_data):
-        instance.status = validated_data.get('status', instance.status)
-        instance.role = validated_data.get('role', instance.role)
-        instance.save()
-        return instance
-
     def validate_role(self, value):
         valid_roles = [UserProfile.DIRECTOR, UserProfile.LEADER, UserProfile.VOLUNTEER]
         if value not in valid_roles:

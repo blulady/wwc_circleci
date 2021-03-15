@@ -1,4 +1,3 @@
-import re
 from rest_framework import serializers
 from api.models import UserProfile
 
@@ -13,7 +12,7 @@ class EditMemberSerializer(serializers.ModelSerializer):
         if value not in valid_roles:
             raise serializers.ValidationError("Invalid Role: accepted values are 'VOLUNTEER','LEADER','DIRECTOR'")
         return value
-    
+
     def validate_status(self, value):
         valid_status = [UserProfile.ACTIVE, UserProfile.INACTIVE]
         if value not in valid_status:

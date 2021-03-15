@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from rest_framework import exceptions as drf_exceptions
 from rest_framework_simplejwt.serializers import TokenObtainSerializer, TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
-from ..models import UserProfile, User, RegistrationToken, Team, User_Team
+from ..models import UserProfile
 from rest_framework import status
 
 

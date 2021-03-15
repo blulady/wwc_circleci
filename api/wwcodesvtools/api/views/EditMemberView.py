@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
 from api.permissions import CanEditMember
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView
@@ -64,7 +63,7 @@ class EditMemberView(GenericAPIView):
     @swagger_auto_schema(responses=post_response_schema)
     @transaction.atomic
     def post(self, request, id):
-        user = get_object_or_404(User, id=id)
+        get_object_or_404(User, id=id)
         try:
             user_row = UserProfile.objects.get(id=id)
             if user_row.status == UserProfile.PENDING:

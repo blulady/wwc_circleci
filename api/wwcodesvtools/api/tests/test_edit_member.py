@@ -1,13 +1,8 @@
 import json
-from unittest.mock import MagicMock
-from django.test import TestCase, override_settings, TransactionTestCase
-from django.db import IntegrityError
-from rest_framework import exceptions as drf_exceptions
-from rest_framework_simplejwt.serializers import TokenObtainSerializer, TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from django.test import TransactionTestCase
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ..models import UserProfile
 from rest_framework import status
-
 
 
 class EditMemberViewTestCase(TransactionTestCase):
@@ -62,7 +57,7 @@ class EditMemberViewTestCase(TransactionTestCase):
                          'status'], user_data["user_status"])
         self.assertEqual(json.loads(response.content)
                          ['role'], user_data["role"])
-    
+
     def test_edit_member_nonexistant_id(self):
         user_data = {
             'user_id': 404,
@@ -78,7 +73,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         endpoint = "/api/user/edit/" + str(user_data["user_id"])
         response = self.client.post(endpoint, data, **self.bearer)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(json.loads(response.content), {"detail":"Not found."})
+        self.assertEqual(json.loads(response.content), {"detail": "Not found."})
 
     def test_edit_member_pending_status(self):
         # before change
@@ -131,7 +126,6 @@ class EditMemberViewTestCase(TransactionTestCase):
         # after change
         self.check_member_after_change(user_data)
 
-
     def test_edit_role_member_notallowed_role(self):
         user_data = {
             'user_id': 3,
@@ -175,7 +169,6 @@ class EditMemberViewTestCase(TransactionTestCase):
 
         # after change
         self.check_member_after_change(user_data)
-
 
     def test_empty_input(self):
         user_data = {

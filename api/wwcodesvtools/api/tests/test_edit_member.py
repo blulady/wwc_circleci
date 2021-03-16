@@ -25,7 +25,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertTrue(s.is_valid())
         return s.validated_data['access']
 
-    def check_member_before_change(self, data):
+    def check_member_before_after_change(self, data):
         # Before change
         endpoint = "/api/user/" + str(data['user_id'])
         response = self.client.get(endpoint, **self.bearer)
@@ -40,23 +40,6 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[
                          'status'], data['user_status'])
         self.assertEqual(json.loads(response.content)['role'], data['role'])
-
-    def check_member_after_change(self, user_data):
-        endpoint = "/api/user/" + str(user_data['user_id'])
-        response = self.client.get(endpoint, **self.bearer)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content)
-                         ['id'], user_data["user_id"])
-        self.assertEqual(json.loads(response.content)[
-                         'email'], user_data["email"])
-        self.assertEqual(json.loads(response.content)[
-                         'first_name'], user_data["first_name"])
-        self.assertEqual(json.loads(response.content)[
-                         'last_name'], user_data["last_name"])
-        self.assertEqual(json.loads(response.content)[
-                         'status'], user_data["user_status"])
-        self.assertEqual(json.loads(response.content)
-                         ['role'], user_data["role"])
 
     def test_edit_member_nonexistant_id(self):
         user_data = {
@@ -86,7 +69,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
 
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
@@ -96,7 +79,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content), {
                          'error': 'User can not be edited because her status is pending.'})
         # after change
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)
 
     def test_edit_member_by_nondirector(self):
         username = 'leader@example.com'
@@ -114,7 +97,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
 
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
@@ -124,7 +107,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content), {
                          'detail': 'You do not have permission to perform this action.'})
         # after change
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)
 
     def test_edit_role_member_notallowed_role(self):
         user_data = {
@@ -136,7 +119,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
         # before change
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": "SOMEROLE", "status": UserProfile.INACTIVE}
@@ -146,7 +129,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'error': "User's role or status entered is empty or incorrect."})
 
         # after change
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)
 
     def test_edit_status_member_notallowed_status(self):
         user_data = {
@@ -158,7 +141,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
         # before change
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": "SOMESTATUS"}
@@ -168,7 +151,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'error': "User's role or status entered is empty or incorrect."})
 
         # after change
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)
 
     def test_empty_input(self):
         user_data = {
@@ -180,7 +163,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
         # before change
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": "", "status": ""}
@@ -190,7 +173,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'error': "User's role or status entered is empty or incorrect."})
 
         # after change
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)
 
     def test_edit_member(self):
         user_data = {
@@ -202,7 +185,7 @@ class EditMemberViewTestCase(TransactionTestCase):
             'role': UserProfile.LEADER
         }
         # before change
-        self.check_member_before_change(data=user_data)
+        self.check_member_before_after_change(data=user_data)
 
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": UserProfile.INACTIVE}
@@ -214,4 +197,4 @@ class EditMemberViewTestCase(TransactionTestCase):
         # after change
         user_data['role'] = UserProfile.VOLUNTEER
         user_data['user_status'] = UserProfile.INACTIVE
-        self.check_member_after_change(user_data)
+        self.check_member_before_after_change(user_data)

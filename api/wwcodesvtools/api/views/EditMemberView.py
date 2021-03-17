@@ -11,7 +11,6 @@ import logging
 from api.models import UserProfile
 from api.serializers.EditMemberSerializer import EditMemberSerializer
 from api.serializers.UserProfileSerializer import UserProfileSerializer
-from django.db import transaction
 
 logger = logging.getLogger('django')
 

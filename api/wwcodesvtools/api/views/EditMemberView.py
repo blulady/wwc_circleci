@@ -62,7 +62,6 @@ class EditMemberView(GenericAPIView):
     }
 
     @swagger_auto_schema(responses=post_response_schema)
-    @transaction.atomic
     def post(self, request, id):
         get_object_or_404(User, id=id)
         try:
@@ -74,12 +73,9 @@ class EditMemberView(GenericAPIView):
 
             serializer_role_status = EditMemberSerializer(id, data=data)
             if serializer_role_status.is_valid():
-                # creating txn savepoint
-                sid = transaction.savepoint()
                 res_profile_status_role = self.edit_user_profile(id, data)
                 if res_profile_status_role:
                     # all well,commit data to the db
-                    transaction.savepoint_commit(sid)
                     logger.info(
                         'EditMemberView: User data edited successfully')
                     res_status = status.HTTP_200_OK
@@ -87,8 +83,6 @@ class EditMemberView(GenericAPIView):
                 else:
                     if not res_profile_status_role:
                         error = self.ERROR_UPDATING_USER_PROFILE
-                    # something went wrong, don't commit data to db,rollback txn
-                    transaction.savepoint_rollback(sid)
                     res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             else:
                 error = self.ERROR_INVALID_INPUT_ROLE_STATUS

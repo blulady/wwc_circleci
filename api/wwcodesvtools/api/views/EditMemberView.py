@@ -51,6 +51,14 @@ class EditMemberView(GenericAPIView):
             }
         ),
         status.HTTP_403_FORBIDDEN: openapi.Response(
+            description="User can not be edited because her status is pending.",
+            examples={
+                "application/json": {
+                    'error': "User can not be edited because her status is pending."
+                }
+            }
+        ),
+        status.HTTP_400_BAD_REQUEST: openapi.Response(
             description="User's role or status entered is empty or incorrect.",
             examples={
                 "application/json": {

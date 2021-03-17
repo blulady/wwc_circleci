@@ -109,8 +109,8 @@ class EditMemberView(GenericAPIView):
                     return True
                 else:
                     logger.error(
-                        f'AddMemberView:Error updating user profile : {serializer_profile.errors}')
+                        f'EditMemberView:Error updating user profile : {serializer_profile.errors}')
                     return False
         except UserProfile.DoesNotExist as e:
-            logger.error(f'AddMemberView:Error updating user profile : {e}')
+            logger.error(f'EditMemberView:Error updating user profile : {e}')
             return False

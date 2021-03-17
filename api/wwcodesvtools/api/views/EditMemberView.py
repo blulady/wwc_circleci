@@ -18,9 +18,10 @@ logger = logging.getLogger('django')
 
 class EditMemberView(GenericAPIView):
     """
-    Edits the User and its related information from the database
+    Edits the User Role and Status
     """
     permission_classes = [IsAuthenticated & CanEditMember]
+    serializer_class = EditMemberSerializer
 
     ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
     ERROR_INVALID_INPUT_ROLE_STATUS = "User's role or status entered is empty or incorrect."
@@ -95,12 +96,12 @@ class EditMemberView(GenericAPIView):
                     res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             else:
                 error = self.ERROR_INVALID_INPUT_ROLE_STATUS
-                res_status = status.HTTP_403_FORBIDDEN
+                res_status = status.HTTP_400_BAD_REQUEST
 
         except Exception as e:
             error = self.ERROR_UPDATING_USER_PROFILE
             logger.error(f'EditMemberView: {error}: {e}')
-            res_status = status.HTTP_403_FORBIDDEN
+            res_status = status.HTTP_400_BAD_REQUEST
 
         if (error is None and res_status == status.HTTP_200_OK):
             return Response({'result': 'User edited successfully'}, status=status.HTTP_200_OK)

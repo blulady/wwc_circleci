@@ -124,7 +124,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         # making change
         data = {"role": "SOMEROLE", "status": UserProfile.INACTIVE}
         response = self.client.post("/api/user/edit/3", data, **self.bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(response.content), {
             'error': "User's role or status entered is empty or incorrect."})
 
@@ -146,7 +146,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         # making change
         data = {"role": UserProfile.VOLUNTEER, "status": "SOMESTATUS"}
         response = self.client.post("/api/user/edit/3", data, **self.bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(response.content), {
             'error': "User's role or status entered is empty or incorrect."})
 
@@ -168,7 +168,7 @@ class EditMemberViewTestCase(TransactionTestCase):
         # making change
         data = {"role": "", "status": ""}
         response = self.client.post("/api/user/edit/3", data, **self.bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(response.content), {
             'error': "User's role or status entered is empty or incorrect."})
 

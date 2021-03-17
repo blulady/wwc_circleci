@@ -70,11 +70,7 @@ class EditMemberView(GenericAPIView):
             if user_row.status == UserProfile.PENDING:
                 return Response({'error': 'User can not be edited because her status is pending.'}, status=status.HTTP_403_FORBIDDEN)
 
-            data = {}
-            updatable_fields = ['role', 'status']
-            for field in updatable_fields:
-                if field in request.data:
-                    data[field] = request.data[field]
+            data = {'role': request.data['role'], 'status': request.data['status']}
 
             serializer_role_status = EditMemberSerializer(id, data=data)
             if serializer_role_status.is_valid():

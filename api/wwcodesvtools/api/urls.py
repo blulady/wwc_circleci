@@ -2,6 +2,7 @@ from django.urls import path
 from api.views.UserRegistrationView import UserRegistrationView
 from api.views.MailSender import MailSender
 from api.views.AddMemberView import AddMemberView
+from api.views.EditMemberView import EditMemberView
 from api.views.GetMembersView import GetMembersView, GetMemberInfoView
 from api.views.RequestPasswordResetView import RequestPasswordResetView
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -27,5 +28,6 @@ urlpatterns = [
     path("users/", GetMembersView.as_view()),
     path('user/<int:id>', GetMemberInfoView.as_view()),
     path('user/reset_password/request/', RequestPasswordResetView.as_view()),
-    path('user/delete/<int:id>', DeleteMemberView.as_view())
+    path('user/delete/<int:id>', DeleteMemberView.as_view()),
+    path("user/edit/<int:id>", EditMemberView.as_view())
 ]

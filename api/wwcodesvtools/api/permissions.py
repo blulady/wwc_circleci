@@ -10,6 +10,7 @@ class CanSendEmail(permissions.BasePermission):
     """
     Check if user can send email.
     """
+
     def has_permission(self, request, view):
         return has_director_permission(request, view)
 
@@ -18,6 +19,7 @@ class CanGetMemberInfo(permissions.BasePermission):
     """
     Check if user can get member infomation.
     """
+
     def has_permission(self, request, view):
         return has_director_permission(request, view)
 
@@ -26,6 +28,7 @@ class CanAddMember(permissions.BasePermission):
     """
     Check if user can add member.
     """
+
     def has_permission(self, request, view):
         return has_director_permission(request, view)
 
@@ -34,6 +37,16 @@ class CanDeleteMember(permissions.BasePermission):
     """
     Check if user can add member.
     """
+
+    def has_permission(self, request, view):
+        return has_director_permission(request, view)
+
+
+class CanEditMember(permissions.BasePermission):
+    """
+    Check if user can edit member.
+    """
+
     def has_permission(self, request, view):
         return has_director_permission(request, view)
 

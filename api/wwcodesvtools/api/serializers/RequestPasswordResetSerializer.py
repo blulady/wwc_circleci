@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 
-class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+class RequestPasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=150)
 
     class Meta:

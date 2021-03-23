@@ -6,6 +6,7 @@ from rest_framework import status
 class RequestPasswordResetViewTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json']
+    EXPECTED_MESSAGE = "We have sent you a link to reset your password"
 
     # test request reset password fails with blank email
     def test_request_reset_password_fails_with_blank_email(self):
@@ -33,4 +34,4 @@ class RequestPasswordResetViewTestCase(TransactionTestCase):
         data = {"email": "volunteer@example.com"}
         response = self.client.post("/api/user/reset_password/request/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('token', json.loads(response.content))
+        self.assertEqual(json.loads(response.content), {'success': self.EXPECTED_MESSAGE})

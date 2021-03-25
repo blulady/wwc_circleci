@@ -1,4 +1,13 @@
-Title: User story title #number: <<Title of the bug - should be precise of what the problem is and where it is >>
+
+
+| Name             | About                                                   | Title                | Labels              | Assignees |
+| ---------------- | ------------------------------------------------------- |----------------------|---------------------|-----------|
+| Defect Template  | Use this template for creating a defect                 | [Defect Name]        |                     |           |
+
+
+  
+  
+  Title: User story title #number: <<Title of the bug - should be precise of what the problem is and where it is >>
   
   Details:
   

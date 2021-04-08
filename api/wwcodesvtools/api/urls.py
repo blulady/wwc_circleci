@@ -12,6 +12,7 @@ from .swagger import login_response as resp
 from api.views.CustomTokenObtainPairView import CustomTokenObtainPairView
 from api.views.LogoutView import LogoutView
 from api.views.DeleteMemberView import DeleteMemberView
+from api.views.GetTeamsView import GetTeamsView
 
 decorated_login_view = \
     swagger_auto_schema(
@@ -31,5 +32,6 @@ urlpatterns = [
     path('user/reset_password/request/', RequestPasswordResetView.as_view()),
     path('user/reset_password/confirm/', SetNewPasswordView.as_view()),
     path('user/delete/<int:id>', DeleteMemberView.as_view()),
-    path("user/edit/<int:id>", EditMemberView.as_view())
+    path("user/edit/<int:id>", EditMemberView.as_view()),
+    path('teams/', GetTeamsView.as_view())
 ]

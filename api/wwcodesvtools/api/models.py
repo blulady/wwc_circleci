@@ -58,12 +58,24 @@ class Team(models.Model):
         return self.name
 
 
+class Role(models.Model):
+    VOLUNTEER = 'VOLUNTEER'
+    LEADER = 'LEADER'
+    DIRECTOR = 'DIRECTOR'
+    name = models.CharField(max_length=20)
+    users = models.ManyToManyField(User, through='User_Team')
+
+    def __str__(self):
+        return self.name
+
+
 class User_Team(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, default=1)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user_id', 'team_id'], name='unique user_team')
+                fields=['user_id', 'team_id', 'role_id'], name='unique user_team')
         ]

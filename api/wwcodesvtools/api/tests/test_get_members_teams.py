@@ -5,7 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class TestGetMembersTeams(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json']
+    fixtures = ['get_members_data.json', 'roles_data.json']
 
     def setUp(self):
         self.username = 'director@example.com'

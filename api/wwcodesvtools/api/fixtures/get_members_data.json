@@ -229,7 +229,8 @@
     "pk": 1,
     "fields": {
         "user": 3,
-        "team": 1
+        "team": 1,
+        "role": 2
     }
 },
 {
@@ -237,7 +238,8 @@
     "pk": 2,
     "fields": {
         "user": 3,
-        "team": 7
+        "team": 7,
+        "role": 2
     }
 },
 {
@@ -245,7 +247,8 @@
     "pk": 3,
     "fields": {
         "user": 2,
-        "team": 4
+        "team": 4,
+        "role": 1
     }
 },
 {
@@ -253,7 +256,8 @@
     "pk": 4,
     "fields": {
         "user": 2,
-        "team": 5
+        "team": 5,
+        "role": 1
     }
 },
 {
@@ -261,7 +265,8 @@
     "pk": 5,
     "fields": {
         "user": 2,
-        "team": 3
+        "team": 3,
+        "role": 1
     }
 }
 ]

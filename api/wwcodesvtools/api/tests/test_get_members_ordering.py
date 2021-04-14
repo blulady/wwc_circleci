@@ -5,7 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class GetMembersOrderingTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json']
+    fixtures = ['get_members_data.json', 'roles_data.json']
 
     def get_token(self, username, password):
         s = TokenObtainPairSerializer(data={

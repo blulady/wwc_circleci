@@ -7,7 +7,7 @@ from rest_framework import status
 
 class EditMemberViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json']
+    fixtures = ['get_members_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = 'User edited successfully'
 
     def setUp(self):

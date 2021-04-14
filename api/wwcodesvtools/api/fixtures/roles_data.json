@@ -1,0 +1,23 @@
+[
+{
+    "model": "api.role",
+    "pk": 1,
+    "fields": {
+        "name": "VOLUNTEER"
+    }
+},
+{
+    "model": "api.role",
+    "pk": 2,
+    "fields": {
+        "name": "LEADER"
+    }
+},
+{
+    "model": "api.role",
+    "pk": 3,
+    "fields": {
+        "name": "DIRECTOR"
+    }
+}
+]

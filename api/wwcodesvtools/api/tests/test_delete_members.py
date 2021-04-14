@@ -6,7 +6,7 @@ from rest_framework import status
 
 class DeleteMembersTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json']
+    fixtures = ['get_members_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def get_token(self, username, password):

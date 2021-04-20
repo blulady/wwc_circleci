@@ -5,6 +5,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from ..models import UserProfile, User, RegistrationToken
 from api.serializers.UserProfileSerializer import UserProfileSerializer
 from api.serializers.CustomTokenObtainPairSerializer import CustomTokenObtainPairSerializer
+from django.conf import settings
 
 
 class AuthCustomTokenObtainPairSerializerTestCase(TestCase):
@@ -41,12 +42,16 @@ class AuthCustomTokenObtainPairSerializerTestCase(TestCase):
         self.assertIn('access', s.validated_data)
         self.assertIn('refresh', s.validated_data)
         self.assertIn('id', s.validated_data)
+        self.assertIn('access_expiry_in_sec', s.validated_data)
+        self.assertIn('refresh_expiry_in_sec', s.validated_data)
         self.assertEquals(s.validated_data['email'], 'Mark_Doe@example.com')
         self.assertEquals(s.validated_data['first_name'], 'Mark')
         self.assertEquals(s.validated_data['last_name'], 'Doe')
         self.assertEqual(s.validated_data['role'], UserProfile.VOLUNTEER)
         AccessToken(s.validated_data['access'])
         RefreshToken(s.validated_data['refresh'])
+        self.assertEquals(s.validated_data['access_expiry_in_sec'], (settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']))
+        self.assertEquals(s.validated_data['refresh_expiry_in_sec'], (settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']))
 
     def test_it_should_raise_if_user_status_not_active(self):
         self.user_profile.status = 'PENDING'

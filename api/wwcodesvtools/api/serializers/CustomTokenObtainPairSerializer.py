@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from api.models import UserProfile
 from rest_framework import exceptions
+from django.conf import settings
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -15,4 +16,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'first_name': self.user.first_name})
         data.update({'last_name': self.user.last_name})
         data.update({'role': user_profile.role})
+        data.update({'access_expiry_in_sec': (settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'])})
+        data.update({'refresh_expiry_in_sec': (settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'])})
         return data

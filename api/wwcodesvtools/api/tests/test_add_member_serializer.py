@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import UserProfile
+from ..models import Role
 from api.serializers.AddMemberSerializer import AddMemberSerializer
 
 
@@ -8,7 +8,7 @@ class AddMemberSerializerTestCase(TestCase):
     def test_it_should_not_validate_if_email_is_blank(self):
         serializer = AddMemberSerializer(data={
             "email": '',
-            "role": 'LEADER',
+            "role": Role.LEADER,
             "message": 'test message'
         })
         self.assertFalse(serializer.is_valid())
@@ -26,7 +26,7 @@ class AddMemberSerializerTestCase(TestCase):
     def test_it_should_not_validate_if_email_is_invalid(self):
         serializer = AddMemberSerializer(data={
             "email": "newUser'semail@$@example.com",
-            "role": UserProfile.DIRECTOR,
+            "role": Role.DIRECTOR,
             "message": ""
         })
         self.assertFalse(serializer.is_valid())
@@ -44,7 +44,7 @@ class AddMemberSerializerTestCase(TestCase):
     def test_it_should_validate_if_message_is_blank(self):
         serializer = AddMemberSerializer(data={
             "email": 'newMember@example.com',
-            "role": UserProfile.LEADER,
+            "role": Role.LEADER,
             "message": ""
         })
         self.assertTrue(serializer.is_valid())
@@ -53,7 +53,7 @@ class AddMemberSerializerTestCase(TestCase):
     def test_it_should_validate_when_valid_data(self):
         serializer = AddMemberSerializer(data={
             "email": 'newUser@example.com',
-            "role": UserProfile.VOLUNTEER,
+            "role": Role.VOLUNTEER,
             "message": "optional message"
         })
         self.assertTrue(serializer.is_valid())

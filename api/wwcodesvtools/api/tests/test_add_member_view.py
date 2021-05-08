@@ -2,13 +2,13 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from ..models import UserProfile
+from ..models import Role
 from rest_framework import status
 
 
 class AddMemberViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json']
+    fixtures = ['users_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def setUp(self):
@@ -28,7 +28,7 @@ class AddMemberViewTestCase(TransactionTestCase):
     # test add member fails with blank email
     def test_add_member_fails_with_blank_email(self):
         data = {"email": '',
-                "role": 'VOLUNTEER',
+                "role": Role.VOLUNTEER,
                 "message": "optional message"
                 }
         response = self.client.post("/api/user/create/", data, **self.bearer)
@@ -58,7 +58,7 @@ class AddMemberViewTestCase(TransactionTestCase):
     # test add member fails with invalid email
     def test_add_member_fails_with_invalid_email(self):
         data = {"email": "abc@235",
-                "role": UserProfile.LEADER,
+                "role": Role.LEADER,
                 "message": "optional message"
                 }
         response = self.client.post("/api/user/create/", data, **self.bearer)
@@ -68,7 +68,7 @@ class AddMemberViewTestCase(TransactionTestCase):
     # test add member saves with valid data
     def test_add_member_saves_with_valid_data(self):
         data = {"email": "WWCodeSV@gmail.com",
-                "role": UserProfile.DIRECTOR,
+                "role": Role.DIRECTOR,
                 "message": "optional message"
                 }
         response = self.client.post("/api/user/create/", data, **self.bearer)
@@ -78,7 +78,7 @@ class AddMemberViewTestCase(TransactionTestCase):
     # test add member saves with blank message
     def test_add_member_saves_with_blank_message(self):
         data = {"email": "volunteersv@gmail.com",
-                "role": UserProfile.VOLUNTEER,
+                "role": Role.LEADER,
                 "message": ""
                 }
         response = self.client.post("/api/user/create/", data, **self.bearer)
@@ -90,7 +90,7 @@ class AddMemberViewTestCase(TransactionTestCase):
         self.username = 'volunteer@example.com'
         self.password = 'Password123'
         data = {"email": "volunteersv@gmail.com",
-                "role": UserProfile.LEADER,
+                "role": Role.LEADER,
                 "message": ""
                 }
         access_token = self.get_token(self.username, self.password)
@@ -104,7 +104,7 @@ class AddMemberViewTestCase(TransactionTestCase):
         self.username = 'leader@example.com'
         self.password = 'Password123'
         data = {"email": "someonev@gmail.com",
-                "role": UserProfile.VOLUNTEER,
+                "role": Role.VOLUNTEER,
                 "message": "Hello"
                 }
         access_token = self.get_token(self.username, self.password)

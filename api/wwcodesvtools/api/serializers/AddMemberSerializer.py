@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import UserProfile
+from api.models import Role
 import re
 
 
@@ -9,7 +9,7 @@ class AddMemberSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=2000, allow_blank=True)
 
     def validate_role(self, value):
-        valid_roles = [UserProfile.DIRECTOR, UserProfile.LEADER, UserProfile.VOLUNTEER]
+        valid_roles = [Role.DIRECTOR, Role.LEADER, Role.VOLUNTEER]
         if value not in valid_roles:
             raise serializers.ValidationError("Invalid Role: accepted values are 'VOLUNTEER','LEADER','DIRECTOR'")
         return value

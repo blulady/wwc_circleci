@@ -90,3 +90,17 @@ class UserTeamModelTestCase(TransactionTestCase):
         ])
         user_teams = User_Team.objects.all()
         self.assertEqual(user_teams.count(), 3)
+
+    # Testing a user with different roles and without a team
+    def test_user_with_roles_without_team(self):
+        user1 = User.objects.get(email="director@example.com")
+        role1 = Role.objects.get(name=Role.DIRECTOR)
+        role2 = Role.objects.get(name=Role.LEADER)
+        role3 = Role.objects.get(name=Role.VOLUNTEER)
+        User_Team.objects.bulk_create([
+            User_Team(user=user1, team=None, role=role1),
+            User_Team(user=user1, team=None, role=role2),
+            User_Team(user=user1, team=None, role=role3),
+        ])
+        user_teams = User_Team.objects.all()
+        self.assertEqual(user_teams.count(), 3)

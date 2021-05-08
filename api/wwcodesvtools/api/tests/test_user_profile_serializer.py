@@ -16,40 +16,21 @@ class UserProfileSerializerTestCase(TestCase):
 
     def test_it_should_not_validate_if_status_is_blank(self):
         serializer = UserProfileSerializer(instance=self.user_profile, data={
-            "status": '',
-            "role": 'VOLUNTEER'
+            "status": ''
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['status']))
-
-    def test_it_should_not_validate_if_role_is_blank(self):
-        serializer = UserProfileSerializer(instance=self.user_profile, data={
-            "status": 'PENDING',
-            "role": ''
-        })
-        self.assertFalse(serializer.is_valid())
-        self.assertEqual(set(serializer.errors.keys()), set(['role']))
 
     def test_it_should_not_validate_if_status_invalid(self):
         serializer = UserProfileSerializer(instance=self.user_profile, data={
-            "status": 'OBSOLETE',
-            "role": UserProfile.LEADER
+            "status": 'OBSOLETE'
         })
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['status']))
 
-    def test_it_should_not_validate_if_role_invalid(self):
-        serializer = UserProfileSerializer(instance=self.user_profile, data={
-            "status": UserProfile.INACTIVE,
-            "role": "MANAGER"
-        })
-        self.assertFalse(serializer.is_valid())
-        self.assertEqual(set(serializer.errors.keys()), set(['role']))
-
     def test_it_should_save_userprofile_when_valid(self):
         serializer = UserProfileSerializer(instance=self.user_profile, data={
-            "status": UserProfile.PENDING,
-            "role": UserProfile.VOLUNTEER
+            "status": UserProfile.PENDING
         })
         self.assertTrue(serializer.is_valid())
         self.assertEquals(serializer.errors, {})
@@ -57,4 +38,3 @@ class UserProfileSerializerTestCase(TestCase):
 
         self.user_profile.refresh_from_db()
         self.assertEqual(self.user_profile.status, UserProfile.PENDING)
-        self.assertEqual(self.user_profile.role, UserProfile.VOLUNTEER)

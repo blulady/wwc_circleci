@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from api.models import UserProfile, RegistrationToken
+from api.models import UserProfile, RegistrationToken, User_Team, Role
 from api.serializers.UserSerializer import UserSerializer
 from api.serializers.RegistrationTokenSerializer import RegistrationTokenSerializer
 from api.serializers.AddMemberSerializer import AddMemberSerializer
@@ -30,6 +30,7 @@ class AddMemberView(GenericAPIView):
     """
 
     ERROR_UPDATING_REGISTRATION_TOKEN = 'Error updating registration token'
+    ERROR_CREATING_USERTEAM_ROLE = 'Error creating user team role'
     ERROR_CREATING_MEMBER_USER = 'Error creating member user'
     ERROR_UPDATING_USER_PROFILE = 'Error updating user profile'
     ERROR_SENDING_EMAIL_NOTIFICATION = 'Error sending email notification to the member user'
@@ -101,16 +102,17 @@ class AddMemberView(GenericAPIView):
             registration_token = str(uuid4().hex) + timenow
             logger.debug(f'AddMemberView: token : {registration_token}')
             # create member user in the db
-            # this will create rows in the user,userprofile and registrationToken tables
-            # and update the role,status and registration_token
+            # this will create rows in the user,userprofile, registrationToken and update the status and registration_token.
+            # it will also create a new record in user_team table for the new user.
             serializer_user = UserSerializer(data=member_user)
             if serializer_user.is_valid():
                 # creating txn savepoint
                 sid = transaction.savepoint()
                 user_obj = serializer_user.save()
-                res_profile_status = self.update_user_profile(user_obj.id, role)
+                res_profile_status = self.update_user_profile(user_obj.id)
                 res_token_status = self.update_registration_token(user_obj.id, registration_token)
-                if res_profile_status and res_token_status:
+                res_role_status = self.create_user_team_role(user_obj, role)
+                if res_profile_status and res_token_status and res_role_status:
                     # all well,commit data to the db
                     transaction.savepoint_commit(sid)
                     logger.info('AddMemberView: User data inserted successfully')
@@ -120,6 +122,8 @@ class AddMemberView(GenericAPIView):
                         error = self.ERROR_UPDATING_USER_PROFILE
                     if not res_token_status:
                         error = self.ERROR_UPDATING_REGISTRATION_TOKEN
+                    if not res_role_status:
+                        error = self.ERROR_CREATING_USERTEAM_ROLE
                     # something went wrong, don't commit data to db,rollback txn
                     transaction.savepoint_rollback(sid)
                     res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -161,13 +165,12 @@ class AddMemberView(GenericAPIView):
             logger.error(f'AddMemberMember:Error updating registration_token : {e}')
             return False
 
-    def update_user_profile(self, user_id, role):
+    def update_user_profile(self, user_id):
         try:
             user_row = UserProfile.objects.get(user_id=user_id)
             data = {
-                "status": UserProfile.PENDING,
-                "role": role}
-            logger.debug(f'row {user_row.user_id} : {user_row.role}  : {user_row.status}')
+                "status": UserProfile.PENDING}
+            logger.debug(f'row {user_row.user_id} : {user_row.status}')
             if user_row:
                 serializer_profile = UserProfileSerializer(user_row, data=data)
                 if serializer_profile.is_valid():
@@ -178,6 +181,16 @@ class AddMemberView(GenericAPIView):
                     return False
         except UserProfile.DoesNotExist as e:
             logger.error(f'AddMemberView:Error updating user profile : {e}')
+            return False
+
+    def create_user_team_role(self, user_obj, role):
+        try:
+            role_row = Role.objects.get(name=role)
+            userteam_row = User_Team(user=user_obj, role=role_row)
+            userteam_row.save()
+            return True
+        except Exception as e:
+            logger.error(f'AddMemberView:Error creating user team role : {e}')
             return False
 
     def send_email_notification(self, email, token, message):

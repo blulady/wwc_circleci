@@ -18,7 +18,7 @@ class UserProfile(models.Model):
                               choices=((PENDING, PENDING),
                                        (ACTIVE, ACTIVE), (INACTIVE, INACTIVE))
                               )
-    role = models.CharField(max_length=20,
+    role = models.CharField(null=True, blank=True, max_length=20,
                             choices=((VOLUNTEER, VOLUNTEER),
                                      (LEADER, LEADER), (DIRECTOR, DIRECTOR))
                             )

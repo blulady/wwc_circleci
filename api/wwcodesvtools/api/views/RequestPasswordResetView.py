@@ -10,6 +10,8 @@ from rest_framework import status
 from django.conf import settings
 from drf_yasg import openapi
 import logging
+from django.utils.http import urlencode
+
 
 logger = logging.getLogger('django')
 
@@ -100,7 +102,11 @@ class RequestPasswordResetView(GenericAPIView):
         return Response({'error': error}, status=res_status)
 
     def send_email_notification(self, email, first_name, last_name, token):
+        # password_reset_confirm = settings.FRONTEND_APP_URL + "/password/reset?" + urlencode({'email': email, 'token': token})
+
+        password_reset_confirm = f'{settings.FRONTEND_APP_URL}/password/reset?{urlencode({"email": email, "token": token})}'
+        logger.debug(f'RequestPasswordResetView: password_reset_confirm: {password_reset_confirm}')
         context_data = {"user": f'{first_name} {last_name}',
-                        "password_reset_confirm": f'{settings.FRONTEND_APP_URL}/password/reset?email={email}&token={token}'
+                        "password_reset_confirm": password_reset_confirm
                         }
         return send_email_helper(email, 'Password Reset Requested', 'request_reset_password.html', context_data)

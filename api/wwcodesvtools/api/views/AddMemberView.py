@@ -17,6 +17,7 @@ from api.permissions import CanAddMember
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 import logging
+from django.utils.http import urlencode
 
 
 logger = logging.getLogger('django')
@@ -194,8 +195,10 @@ class AddMemberView(GenericAPIView):
             return False
 
     def send_email_notification(self, email, token, message):
+        registration_link = f'{settings.FRONTEND_APP_URL}/register?{urlencode({"email": email, "token": token})}'
+        logger.debug(f'AddMemberView: registrationt link {registration_link}')
         context_data = {"user": email,
-                        "registration_link": settings.FRONTEND_APP_URL+"/register?email="+email+"&token="+token,
+                        "registration_link": registration_link,
                         "optional_message": message
                         }
         return send_email_helper(

@@ -1,9 +1,14 @@
 
 import json
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, override_settings
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ..models import Role
 from rest_framework import status
+from django.conf import settings
+from django.core import mail
+from django.utils.http import urlencode
+from django.utils.html import escape
+from ..helper_functions import send_email_helper
 
 
 class AddMemberViewTestCase(TransactionTestCase):
@@ -112,3 +117,38 @@ class AddMemberViewTestCase(TransactionTestCase):
         response = self.client.post("/api/user/create/", data, **bearer)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
+
+    # Test the registration link in the registration notification email message
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_registration_notification_email_link(self):
+        email = "Ja-ne++Do-e@example.com"
+        token = "7b4152bbf09444cdbe97ce574b88634c20210219015501"
+        optional_message = "Testing registration link"
+        registration_link = f'{settings.FRONTEND_APP_URL}/register?{urlencode({"email": email, "token": token})}'
+        context_data = {"user": email,
+                        "registration_link": registration_link,
+                        "optional_message": optional_message
+                        }
+        send_email_helper(
+            email, 'Invitation to Join Chapter Portal, Action Required', 'new_member_email.html', context_data)
+
+        expected_encoded_email_param = "email=Ja-ne%2B%2BDo-e%40example.com"
+        expected_encoded_token_param = "token=7b4152bbf09444cdbe97ce574b88634c20210219015501"
+        expected_host_api_endpoint = "https://wwcode-chtools-fe.herokuapp.com/register?"
+
+        # Verify that one email message has been sent.
+        self.assertEquals(len(mail.outbox), 1)
+        # Verify that the "subject" of the first message is correct.
+        self.assertEquals(mail.outbox[0].subject, 'Invitation to Join Chapter Portal, Action Required')
+        # Verify that the "to" of the first message is correct.
+        self.assertEquals(mail.outbox[0].to, ['Ja-ne++Do-e@example.com'])
+        # Verify the user registration url in the email html message body
+        self.assertIn(escape(registration_link), mail.outbox[0].body)
+        # verify the encoded email param
+        self.assertIn(expected_encoded_email_param, mail.outbox[0].body)
+        # verify the encoded token param
+        self.assertIn(expected_encoded_token_param, mail.outbox[0].body)
+        # verify the host api_endpoint
+        self.assertIn(expected_host_api_endpoint, mail.outbox[0].body)
+        # verify the optional message
+        self.assertIn(optional_message, mail.outbox[0].body)

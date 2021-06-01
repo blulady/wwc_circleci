@@ -203,5 +203,38 @@ will have the "Bearer <token>" as the value in the request header.
 $ docker-compose exec web bash
 ./manage.py loaddata api/fixtures/users_data.json
 
-This will create 3 users in the local db, one for each role (DIRECTOR, LEADER, VOLUNTEER) with 'Password123'
-director@example.com , leader@example.com, volunteer@example.com.
+This will create the below users in the local db with 'Password123'
+```
+            user_name            | first_name | last_name 
+---------------------------------+------------+-----------
+ director@example.com            | John       | Smith
+ volunteer@example.com           | Alice      | Robinson
+ leader@example.com              | Bruno      | Clark
+ leaderPendingStatus@example.com | Caroline   | Miller
+ brendajackson@example.com       | Brenda     | Jackson
+ sophiefisher@example.com        | Sophie     | Fisher
+ alexanderbrown@example.com      | Alexander  | Brown
+ jackross@example.com            | Jack       | Ross
+ sophiebutler@example.com        | Sophie     | Butler
+```
+
+
+Here are the users details with roles and teams:
+```
+ user_id |            user_name            |    FN     |    LN    | role_name | status  |       team_name        
+---------+---------------------------------+-----------+----------+-----------+---------+------------------------
+       1 | director@example.com            | John      | Smith    | DIRECTOR  | ACTIVE  | Social Media
+       2 | volunteer@example.com           | Alice     | Robinson | VOLUNTEER | ACTIVE  | Partnership Management
+       2 | volunteer@example.com           | Alice     | Robinson | VOLUNTEER | ACTIVE  | Social Media
+       2 | volunteer@example.com           | Alice     | Robinson | VOLUNTEER | ACTIVE  | Host Management
+       3 | leader@example.com              | Bruno     | Clark    | LEADER    | ACTIVE  | Event Volunteers
+       3 | leader@example.com              | Bruno     | Clark    | LEADER    | ACTIVE  | Volunteer Management
+       4 | leaderPendingStatus@example.com | Caroline  | Miller   | LEADER    | PENDING | 
+       5 | brendajackson@example.com       | Brenda    | Jackson  | DIRECTOR  | ACTIVE  | 
+       6 | sophiefisher@example.com        | Sophie    | Fisher   | VOLUNTEER | ACTIVE  | Hackathon Volunteers
+       6 | sophiefisher@example.com        | Sophie    | Fisher   | LEADER    | ACTIVE  | Tech Event Volunteers
+       7 | alexanderbrown@example.com      | Alexander | Brown    | LEADER    | ACTIVE  | 
+       8 | jackross@example.com            | Jack      | Ross     | LEADER    | PENDING | 
+       9 | sophiebutler@example.com        | Sophie    | Butler   | DIRECTOR  | ACTIVE  | Partnership Management
+       9 | sophiebutler@example.com        | Sophie    | Butler   | LEADER    | ACTIVE  | Event Volunteers
+```

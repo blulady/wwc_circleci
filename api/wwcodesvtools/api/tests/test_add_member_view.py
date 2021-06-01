@@ -13,7 +13,7 @@ from ..helper_functions import send_email_helper
 
 class AddMemberViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json', 'roles_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def setUp(self):

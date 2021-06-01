@@ -6,16 +6,16 @@ from ..models import RegistrationToken, UserProfile
 
 class UserRegistrationViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     CONTENT_TYPE_APPLICATION_JSON = "application/json"
 
     def setUp(self):
         self.registration_request_data = {
-            "email": "user_registration@example.com",
-            "first_name": "test_NewUser_first_name",
-            "last_name": "test_NewUser_lastname",
-            "password": "test_Passw0rd",
-            "token": "f007efa0342a4330bc790f23ac70a7b620220214015340",
+            "email": "leaderPendingStatus@example.com",
+            "first_name": "Caroline",
+            "last_name": "Miller",
+            "password": "Password123",
+            "token": "938d60469dc74cceae396f2c963f105520500219015651",
         }
 
     def __send_request(self, data):
@@ -119,7 +119,7 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         Test to verify that a POST request with valid new user and mismatched valid token
         returns error response
         """
-        self.registration_request_data["token"] = "randoma0342a4330bc790f23ac70a7b620220214015340"
+        self.registration_request_data["token"] = "8b7bd00fffa742ed836539f0acce6ce920220525000234"
         expected_error = "Invalid token. Token in request does not match the token generated for this user."
         resp = self.__send_request(self.registration_request_data)
         self.__perform_response_assertions(resp, status.HTTP_400_BAD_REQUEST, expected_error)

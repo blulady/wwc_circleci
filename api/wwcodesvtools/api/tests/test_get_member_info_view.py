@@ -6,7 +6,7 @@ from rest_framework import status
 
 class GetMemberInfoViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json', 'roles_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
 
     def get_token(self, username, password):
         s = TokenObtainPairSerializer(data={

@@ -5,7 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class GetMembersViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['get_members_data.json', 'roles_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
 
     def get_token(self, username, password):
         s = TokenObtainPairSerializer(data={
@@ -24,14 +24,14 @@ class GetMembersViewTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
-        self.assertEqual(responseLength, 4)
-        self.assertEqual(json.loads(response.content)[0]['id'], 4)
-        self.assertEqual(json.loads(response.content)[0]['email'], 'leaderPendingStatus@example.com')
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Caroline')
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Miller')
-        self.assertEqual(json.loads(response.content)[0]['status'], 'PENDING')
-        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:51.160000Z')
+        self.assertEqual(responseLength, 9)
+        self.assertEqual(json.loads(response.content)[5]['id'], 4)
+        self.assertEqual(json.loads(response.content)[5]['email'], 'leaderPendingStatus@example.com')
+        self.assertEqual(json.loads(response.content)[5]['first_name'], 'Caroline')
+        self.assertEqual(json.loads(response.content)[5]['last_name'], 'Miller')
+        self.assertEqual(json.loads(response.content)[5]['status'], 'PENDING')
+        self.assertEqual(json.loads(response.content)[5]['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[5]['date_joined'], '2021-02-19T01:56:51.160000Z')
         for i in range(responseLength):
             self.assertIsNotNone(json.loads(response.content)[i]['email'])
 
@@ -44,13 +44,13 @@ class GetMembersViewTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
-        self.assertEqual(responseLength, 3)
-        self.assertEqual(json.loads(response.content)[0]['id'], 3)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[0]['status'], 'ACTIVE')
+        self.assertEqual(responseLength, 7)
+        self.assertEqual(json.loads(response.content)[4]['id'], 3)
+        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Bruno')
+        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Clark')
+        self.assertEqual(json.loads(response.content)[4]['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-02-19T01:56:29.756000Z')
+        self.assertEqual(json.loads(response.content)[4]['status'], 'ACTIVE')
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
             self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
@@ -64,13 +64,13 @@ class GetMembersViewTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
         responseLength = len(response.data)
-        self.assertEqual(responseLength, 3)
-        self.assertEqual(json.loads(response.content)[0]['id'], 3)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[0]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[0]['status'], 'ACTIVE')
+        self.assertEqual(responseLength, 7)
+        self.assertEqual(json.loads(response.content)[4]['id'], 3)
+        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Bruno')
+        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Clark')
+        self.assertEqual(json.loads(response.content)[4]['role'], 'LEADER')
+        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-02-19T01:56:29.756000Z')
+        self.assertEqual(json.loads(response.content)[4]['status'], 'ACTIVE')
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
             self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')

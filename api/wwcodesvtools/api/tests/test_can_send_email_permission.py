@@ -6,7 +6,7 @@ from rest_framework import status
 
 class CanSendEmailPermissionTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['permissions_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def get_token(self, username, password):
@@ -19,8 +19,8 @@ class CanSendEmailPermissionTestCase(TransactionTestCase):
 
     # Testing can send email permissions wit valid data -> role = DIRECTOR
     def test_can_send_email_with_permission(self):
-        self.username = 'UserDirector@example.com'
-        self.password = 'Password1@'
+        self.username = 'director@example.com'
+        self.password = 'Password123'
         data = {"email": 'WWCodeSV@gmail.com'}
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
@@ -29,8 +29,8 @@ class CanSendEmailPermissionTestCase(TransactionTestCase):
 
     # Testing can send email permissions with invalid data -> role = VOLUNTEER
     def test_can_send_email_with_no_permission(self):
-        self.username = 'UserVolunteer@example.com'
-        self.password = 'Password1@'
+        self.username = 'volunteer@example.com'
+        self.password = 'Password123'
         data = {"email": 'WWCodeSV@gmail.com'}
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}

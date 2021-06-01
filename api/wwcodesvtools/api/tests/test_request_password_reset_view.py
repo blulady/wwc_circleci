@@ -10,7 +10,7 @@ from ..helper_functions import send_email_helper
 
 class RequestPasswordResetViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     EXPECTED_MESSAGE = "We have sent you a link to reset your password"
 
     # test request reset password fails with blank email

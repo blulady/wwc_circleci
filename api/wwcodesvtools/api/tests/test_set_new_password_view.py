@@ -9,7 +9,7 @@ from rest_framework import exceptions as drf_exceptions
 
 class SetNewPasswordViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     CONTENT_TYPE_APPLICATION_JSON = "application/json"
 
     def setUp(self):

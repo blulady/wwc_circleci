@@ -6,7 +6,7 @@ from api.serializers.CustomTokenObtainPairSerializer import CustomTokenObtainPai
 
 class LogoutViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
 
     def get_token(self, username, password):
         s = CustomTokenObtainPairSerializer(data={

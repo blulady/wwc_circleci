@@ -6,5 +6,4 @@ class UserProfileFilter(django_filters.FilterSet):
 
     class Meta:
         model = User
-        fields = ['userprofile__role','userprofile__status',]
-
+        fields = ['userprofile__role', 'userprofile__status']

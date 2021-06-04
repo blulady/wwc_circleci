@@ -7,8 +7,6 @@ from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from datetime import date
-from dateutil.relativedelta import relativedelta
 from .filters import UserProfileFilter
 import logging
 

@@ -7,7 +7,7 @@ from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import UserProfileFilter
+from api.filters import UserProfileFilter
 import logging
 
 
@@ -27,7 +27,7 @@ class GetMembersView(ListAPIView):
     ------------------------------------------------
 
     You may also filter results based on user role and user status like so:
-    http//example.com/api/users/?role=volunteer&status=pending
+    http//example.com/api/users/?userprofile__role=DIRECTOR&userprofile__status=ACTIVE
     """
     permission_classes = [IsAuthenticated]
     filter_backends = [OrderingFilter, DjangoFilterBackend]

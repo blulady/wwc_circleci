@@ -30,6 +30,18 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[0]['status'], 'ACTIVE')
 
     # Testing get members filtering with role = LEADER
+    # status = PENDING for a non-director user
+    # Users with PENDING status should not be shown for a non-director 
+    def test_get_members_filtering_with_role_and_status(self):
+        self.username = 'volunteer@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/users/?userprofile__role=LEADER&userprofile__status=PENDING", **bearer)
+        responseLength = len(response.data)
+        self.assertEqual(responseLength, 0)
+
+    # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
         self.username = 'director@example.com'
         self.password = 'Password123'

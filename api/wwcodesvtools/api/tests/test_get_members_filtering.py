@@ -31,8 +31,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Testing get members filtering with role = LEADER
     # status = PENDING for a non-director user
-    # Users with PENDING status should not be shown for a non-director 
-    def test_get_members_filtering_with_role_and_status(self):
+    # Users with PENDING status should not be shown for a non-director
+    def test_get_members_filtering_with_non_director_role_and_status(self):
         self.username = 'volunteer@example.com'
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)

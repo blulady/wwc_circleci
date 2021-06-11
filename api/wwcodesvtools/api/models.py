@@ -79,3 +79,6 @@ class User_Team(models.Model):
             models.UniqueConstraint(
                 fields=['user_id', 'team_id', 'role_id'], name='unique user_team')
         ]
+
+    def highest_role(user_id):
+        return User_Team.objects.filter(user=user_id).order_by('-role_id').values('role__name')[0]['role__name']

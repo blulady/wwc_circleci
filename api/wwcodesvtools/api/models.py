@@ -62,6 +62,8 @@ class Role(models.Model):
     VOLUNTEER = 'VOLUNTEER'
     LEADER = 'LEADER'
     DIRECTOR = 'DIRECTOR'
+    VALID_ROLES = [VOLUNTEER, LEADER, DIRECTOR]
+
     name = models.CharField(max_length=20)
     users = models.ManyToManyField(User, through='User_Team')
 

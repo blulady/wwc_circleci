@@ -20,11 +20,10 @@ class GetMembersView(ListAPIView):
     You may also specify reverse orderings by prefixing the field name with '-', like so:
     http//example.com/api/users/?ordering=first_name
     http//example.com/api/users/?ordering=-first_name
-
-    Returns a list of members. 
-    Search by any number of characters in first_name or last_name 
+    Returns a list of members.
+    Search by any number of characters in first_name or last_name
     -------------------------------------------------------------
-    http//example.com/api/users/?search=first_name 
+    http//example.com/api/users/?search=first_name
     http//example.com/api/users/?search=last_name
     """
     permission_classes = [IsAuthenticated]

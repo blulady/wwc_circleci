@@ -63,12 +63,11 @@ class GetMembersSearchTestCase(TransactionTestCase):
     def test_get_members_search_by_multiple_names_for_volunteer_role(self):
         self.username = 'volunteer@example.com'
         self.password = 'Password123'
-
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?search=br", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Alexander')
+        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Brown')
         self.assertEqual(json.loads(response.content)[1]['first_name'], 'Brenda')
         self.assertEqual(json.loads(response.content)[2]['first_name'], 'Bruno')

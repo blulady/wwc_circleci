@@ -34,9 +34,8 @@ class GetMembersSearchTestCase(TransactionTestCase):
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
         self.assertEqual(json.loads(response.content)[0]['first_name'], 'Alexander')
-        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Brenda')        
+        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Brenda')
         self.assertEqual(json.loads(response.content)[2]['first_name'], 'Bruno')
-
 
     # Testing get members searching with role = DIRECTOR, first_name/last_name = mil
     def test_get_members_search_by_last_name_for_director_role(self):

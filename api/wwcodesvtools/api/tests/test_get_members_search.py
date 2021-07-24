@@ -62,11 +62,13 @@ class GetMembersSearchTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?search=sop", **bearer)
         responseLength = len(response.data)
+        members = json.loads(response.content)
+        number_of_members = set([])
         self.assertEqual(responseLength, 2)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[0]['id'], 9)
-        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[1]['id'], 6)
+        for mem in members:
+            self.assertEqual(mem['first_name'], 'Sophie')
+            number_of_members.add(mem['id'])
+        self.assertEqual(len(number_of_members), 2)
 
     # Testing get members searching with role = VOLUNTEER, first_name/last_name = br
     def test_member_search_returns_matches_for_firstname_and_lastname_for_volunteer_role(self):

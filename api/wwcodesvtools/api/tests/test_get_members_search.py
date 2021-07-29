@@ -34,12 +34,12 @@ class GetMembersSearchTestCase(TransactionTestCase):
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
         members = json.loads(response.content)
-        name_of_members = set([])
-        expected_result = set(['Brown', 'Brenda', 'Bruno'])
+        name_of_members = set()
+        expected_members = set(['Brown', 'Brenda', 'Bruno'])
         for mem in members:
             name_of_members.add(mem['first_name'])
             name_of_members.add(mem['last_name'])
-        self.assertEqual(expected_result.issubset(name_of_members), True)
+        self.assertEqual(expected_members.issubset(name_of_members), True)
 
     # Testing get members searching with role = DIRECTOR, first_name/last_name = mil
     def test_get_members_search_by_last_name_for_director_role(self):
@@ -67,12 +67,12 @@ class GetMembersSearchTestCase(TransactionTestCase):
         response = self.client.get("/api/users/?search=sop", **bearer)
         responseLength = len(response.data)
         members = json.loads(response.content)
-        number_of_members = set([])
+        unique_members = set()
         self.assertEqual(responseLength, 2)
-        for mem in members:
-            self.assertEqual(mem['first_name'], 'Sophie')
-            number_of_members.add(mem['id'])
-        self.assertEqual(len(number_of_members), 2)
+        for member in members:
+            self.assertEqual(member['first_name'], 'Sophie')
+            unique_members.add(member['id'])
+        self.assertEqual(len(unique_members), len(members))
 
     # Testing get members searching with role = VOLUNTEER, first_name/last_name = br
     def test_member_search_returns_matches_for_firstname_and_lastname_for_volunteer_role(self):
@@ -84,9 +84,9 @@ class GetMembersSearchTestCase(TransactionTestCase):
         responseLength = len(response.data)
         self.assertEqual(responseLength, 3)
         members = json.loads(response.content)
-        name_of_members = set([])
-        expected_result = set(['Brown', 'Brenda', 'Bruno'])
+        name_of_members = set()
+        expected_members = set(['Brown', 'Brenda', 'Bruno'])
         for mem in members:
             name_of_members.add(mem['first_name'])
             name_of_members.add(mem['last_name'])
-        self.assertEqual(expected_result.issubset(name_of_members), True)
+        self.assertEqual(expected_members.issubset(name_of_members), True)

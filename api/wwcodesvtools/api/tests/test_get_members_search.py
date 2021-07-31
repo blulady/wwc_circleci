@@ -1,4 +1,5 @@
 import json
+import re
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -36,10 +37,16 @@ class GetMembersSearchTestCase(TransactionTestCase):
         members = json.loads(response.content)
         name_of_members = set()
         expected_members = set(['Brown', 'Brenda', 'Bruno'])
-        for mem in members:
-            name_of_members.add(mem['first_name'])
-            name_of_members.add(mem['last_name'])
-        self.assertEqual(expected_members.issubset(name_of_members), True)
+        for member in members:
+            member_start_with_first_name_check = re.search('^Br', member['first_name'])
+            member_start_with_last_name_check = re.search('^Br', member['last_name'])
+            if(member_start_with_first_name_check is not None):
+                name_of_members.add(member['first_name'])
+            elif(member_start_with_last_name_check is not None):
+                name_of_members.add(member['last_name'])
+        print("here is the result")
+        print(expected_members-name_of_members)
+        self.assertEqual(expected_members-name_of_members, set())
 
     # Testing get members searching with role = DIRECTOR, first_name/last_name = mil
     def test_get_members_search_by_last_name_for_director_role(self):
@@ -86,7 +93,11 @@ class GetMembersSearchTestCase(TransactionTestCase):
         members = json.loads(response.content)
         name_of_members = set()
         expected_members = set(['Brown', 'Brenda', 'Bruno'])
-        for mem in members:
-            name_of_members.add(mem['first_name'])
-            name_of_members.add(mem['last_name'])
-        self.assertEqual(expected_members.issubset(name_of_members), True)
+        for member in members:
+            member_start_with_first_name_check = re.search('^Br', member['first_name'])
+            member_start_with_last_name_check = re.search('^Br', member['last_name'])
+            if(member_start_with_first_name_check is not None):
+                name_of_members.add(member['first_name'])
+            elif(member_start_with_last_name_check is not None):
+                name_of_members.add(member['last_name'])
+        self.assertEqual(expected_members-name_of_members, set())

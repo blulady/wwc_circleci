@@ -18,7 +18,7 @@ def send_email_helper(to_email, subject, template_file, context_data):
     if subject and html_file.exists() and to_email and isinstance(context_data, dict):
         try:
             validate_email(to_email)
-            from_email = settings.EMAIL_HOST_USER
+            from_email = settings.EMAIL_SENDER
             message = get_template(template_file).render(context_data)
             msg = EmailMessage(subject, message, from_email, [to_email])
             msg.content_subtype = "html"

@@ -44,9 +44,7 @@ class GetMembersSearchTestCase(TransactionTestCase):
                 name_of_members.add(member['first_name'])
             elif(member_start_with_last_name_check is not None):
                 name_of_members.add(member['last_name'])
-        print("here is the result")
-        print(expected_members-name_of_members)
-        self.assertEqual(expected_members-name_of_members, set())
+        self.assertSetEqual(expected_members, name_of_members)
 
     # Testing get members searching with role = DIRECTOR, first_name/last_name = mil
     def test_get_members_search_by_last_name_for_director_role(self):
@@ -100,4 +98,4 @@ class GetMembersSearchTestCase(TransactionTestCase):
                 name_of_members.add(member['first_name'])
             elif(member_start_with_last_name_check is not None):
                 name_of_members.add(member['last_name'])
-        self.assertEqual(expected_members-name_of_members, set())
+        self.assertSetEqual(expected_members, name_of_members)

@@ -3,6 +3,9 @@ from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ..models import UserProfile, Role
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AND
+from api.permissions import CanEditMember
+from ..views.EditMemberView import EditMemberView
 
 
 class EditMemberViewTestCase(TransactionTestCase):
@@ -10,7 +13,6 @@ class EditMemberViewTestCase(TransactionTestCase):
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     ERROR_EDITING_USER = 'Error editing user'
     USER_EDITED_SUCCESSFULLY = 'User edited successfully'
-    NO_PERMISSION_TO_EDIT = {'detail': 'You do not have permission to perform this action.'}
 
     def setUp(self):
         self.access_token = self.get_token('director@example.com', 'Password123')
@@ -173,27 +175,9 @@ class EditMemberViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)['teams'], [{}])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # test cannot edit member with login user role Leader
-    def test_edit_member_no_permission_leader(self):
-        username = 'leader@example.com'
-        password = 'Password123'
-        access_token = self.get_token(username, password)
-        bearer = {
-            'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-
-        data = {"role": Role.VOLUNTEER, "status": UserProfile.INACTIVE, "teams": []}
-        response = self.post_request(4, data, bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), self.NO_PERMISSION_TO_EDIT)
-
-    # test cannot edit member with login user role Volunteer
-    def test_edit_member_no_permission_volunteer(self):
-        username = 'volunteer@example.com'
-        password = 'Password123'
-        access_token = self.get_token(username, password)
-        bearer = {
-            'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        data = {"role": Role.LEADER, "status": UserProfile.ACTIVE, "teams": []}
-        response = self.post_request(2, data, bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), self.NO_PERMISSION_TO_EDIT)
+    def test_edit_member_view_permissions(self):
+        view_permissions = EditMemberView().permission_classes
+        # DRF Permissions OperandHolder Dictionary
+        expected_permissions = {'operator_class': AND, 'op1_class': IsAuthenticated, 'op2_class': CanEditMember}
+        self.assertEqual(len(view_permissions), 1)
+        self.assertDictEqual(view_permissions[0].__dict__, expected_permissions)

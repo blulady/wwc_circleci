@@ -6,6 +6,8 @@ from django.core import mail
 from django.utils.http import urlencode
 from django.utils.html import escape
 from ..helper_functions import send_email_helper
+from rest_framework.permissions import AllowAny
+from ..views.RequestPasswordResetView import RequestPasswordResetView
 
 
 class RequestPasswordResetViewTestCase(TransactionTestCase):
@@ -72,3 +74,8 @@ class RequestPasswordResetViewTestCase(TransactionTestCase):
         self.assertIn(expected_encoded_token_param, mail.outbox[0].body)
         # verify the host api_endpoint
         self.assertIn(expected_host_api_endpoint, mail.outbox[0].body)
+
+    def test_request_password_reset_view_permissions(self):
+        view_permissions = RequestPasswordResetView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], AllowAny)

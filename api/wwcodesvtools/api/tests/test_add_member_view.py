@@ -9,12 +9,14 @@ from django.core import mail
 from django.utils.http import urlencode
 from django.utils.html import escape
 from ..helper_functions import send_email_helper
+from rest_framework.permissions import IsAuthenticated, AND
+from api.permissions import CanAddMember
+from ..views.AddMemberView import AddMemberView
 
 
 class AddMemberViewTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
-    EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def setUp(self):
         self.username = 'director@example.com'
@@ -90,34 +92,6 @@ class AddMemberViewTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', json.loads(response.content))
 
-    # test can add member permissions with role = VOLUNTEER
-    def test_can_add_member_with_no_permission_for_volunteer(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        data = {"email": "volunteersv@gmail.com",
-                "role": Role.LEADER,
-                "message": ""
-                }
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.post("/api/user/create/", data, **bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
-
-    # test can add member permission with role = LEADER
-    def test_can_add_member_with_no_permission_for_leader(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        data = {"email": "someonev@gmail.com",
-                "role": Role.VOLUNTEER,
-                "message": "Hello"
-                }
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.post("/api/user/create/", data, **bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
-
     # Test the registration link in the registration notification email message
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_registration_notification_email_link(self):
@@ -152,3 +126,10 @@ class AddMemberViewTestCase(TransactionTestCase):
         self.assertIn(expected_host_api_endpoint, mail.outbox[0].body)
         # verify the optional message
         self.assertIn(optional_message, mail.outbox[0].body)
+
+    def test_add_member_view_permissions(self):
+        view_permissions = AddMemberView().permission_classes
+        # DRF Permissions OperandHolder Dictionary
+        expected_permissions = {'operator_class': AND, 'op1_class': IsAuthenticated, 'op2_class': CanAddMember}
+        self.assertEqual(len(view_permissions), 1)
+        self.assertDictEqual(view_permissions[0].__dict__, expected_permissions)

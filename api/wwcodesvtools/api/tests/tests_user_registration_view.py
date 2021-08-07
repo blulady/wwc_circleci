@@ -2,6 +2,8 @@ from django.test import TransactionTestCase
 from django.contrib.auth.models import User
 from rest_framework import status
 from ..models import RegistrationToken, UserProfile
+from rest_framework.permissions import AllowAny
+from ..views.UserRegistrationView import UserRegistrationView
 
 
 class UserRegistrationViewTestCase(TransactionTestCase):
@@ -144,3 +146,8 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         expected_error = "Email does not exist in our invites system. You need to be invited to be able to register."
         resp = self.__send_request(self.registration_request_data)
         self.__perform_response_assertions(resp, status.HTTP_404_NOT_FOUND, expected_error)
+
+    def test_user_registration_view_permissions(self):
+        view_permissions = UserRegistrationView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], AllowAny)

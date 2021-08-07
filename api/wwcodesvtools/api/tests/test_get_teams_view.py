@@ -1,6 +1,8 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
+from ..views.GetTeamsView import GetTeamsView
 
 
 class GetTeamsViewTestCase(TransactionTestCase):
@@ -36,3 +38,8 @@ class GetTeamsViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[5]['name'], 'Tech Event Volunteers')
         self.assertEqual(json.loads(response.content)[6]['id'], 7)
         self.assertEqual(json.loads(response.content)[6]['name'], 'Volunteer Management')
+
+    def test_get_teams_view_permissions(self):
+        view_permissions = GetTeamsView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], IsAuthenticated)

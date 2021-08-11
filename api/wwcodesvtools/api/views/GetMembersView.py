@@ -6,6 +6,7 @@ from api.serializers.GetMemberSerializer import GetMemberSerializer
 from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
 from rest_framework.filters import OrderingFilter, SearchFilter
+from datetime import date
 import logging
 
 
@@ -33,10 +34,18 @@ class GetMembersView(ListAPIView):
     search_fields = ['^first_name', '^last_name']
 
     def get_queryset(self):
-        if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
-            queryset = User.objects.all()
-        else:
+        queryset = User.objects.all()
+        status = self.request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(userprofile__status=status)
+        if not is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
             queryset = User.objects.exclude(userprofile__status='PENDING')
+        date_filter = self.request.query_params.get('added_date')
+        if date_filter:
+            time_joined = {'3months' : todays_date - timedelta(weeks=12),
+                           '6months' : todays_date - timedelta(weeks=24),
+                           'current_year' : date(todays_date.year, 1, 1)}
+        todays_date = date.today()
         return queryset
 
     def get_serializer_class(self):

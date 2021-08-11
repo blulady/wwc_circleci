@@ -2,6 +2,9 @@ import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AND
+from api.permissions import CanGetMemberInfo
+from ..views.GetMembersView import GetMemberInfoView
 
 
 class GetMemberInfoViewTestCase(TransactionTestCase):
@@ -32,22 +35,9 @@ class GetMemberInfoViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)['date_joined'], '2021-02-19T01:55:01.810000Z')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # Testing get member info with role = LEADER
-    def test_get_member_info_for_leader(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/1", **bearer)
-        self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    # Testing get member info with role = VOLUNTEER
-    def test_get_member_info_for_volunteer(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/2", **bearer)
-        self.assertIn('You do not have permission to perform this action.', json.loads(response.content)['detail'])
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    def test_get_member_info_view_permissions(self):
+        view_permissions = GetMemberInfoView().permission_classes
+        # DRF Permissions OperandHolder Dictionary
+        expected_permissions = {'operator_class': AND, 'op1_class': IsAuthenticated, 'op2_class': CanGetMemberInfo}
+        self.assertEqual(len(view_permissions), 1)
+        self.assertDictEqual(view_permissions[0].__dict__, expected_permissions)

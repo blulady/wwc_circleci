@@ -2,12 +2,14 @@ import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AND
+from api.permissions import CanDeleteMember
+from ..views.DeleteMemberView import DeleteMemberView
 
 
 class DeleteMembersTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
-    EXPECTED_MESSAGE = 'You do not have permission to perform this action.'
 
     def get_token(self, username, password):
         s = TokenObtainPairSerializer(data={
@@ -37,22 +39,9 @@ class DeleteMembersTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(json.loads(response.content), {"detail": "Not found."})
 
-    # test cannot delete member permission with role = LEADER
-    def test_can_delete_member_with_no_permission_for_leader(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.delete("/api/user/delete/3", **bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
-
-    # test cannot delete member permission with role = VOLUNTEER
-    def test_can_delete_member_with_no_permission_for_volunteer(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.delete("/api/user/delete/3", **bearer)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(json.loads(response.content), {'detail': self.EXPECTED_MESSAGE})
+    def test_delete_member_view_permissions(self):
+        view_permissions = DeleteMemberView().permission_classes
+        # DRF Permissions OperandHolder Dictionary
+        expected_permissions = {'operator_class': AND, 'op1_class': IsAuthenticated, 'op2_class': CanDeleteMember}
+        self.assertEqual(len(view_permissions), 1)
+        self.assertDictEqual(view_permissions[0].__dict__, expected_permissions)

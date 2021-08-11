@@ -1,6 +1,8 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
+from ..views.GetMembersView import GetMembersView
 
 
 class GetMembersViewTestCase(TransactionTestCase):
@@ -74,3 +76,8 @@ class GetMembersViewTestCase(TransactionTestCase):
         for i in range(responseLength):
             self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
             self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
+
+    def test_get_members_view_permissions(self):
+        view_permissions = GetMembersView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], IsAuthenticated)

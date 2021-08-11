@@ -2,6 +2,8 @@ import json
 from django.test import TransactionTestCase
 from rest_framework import status
 from api.serializers.CustomTokenObtainPairSerializer import CustomTokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
+from ..views.LogoutView import LogoutView
 
 
 class LogoutViewTestCase(TransactionTestCase):
@@ -32,3 +34,8 @@ class LogoutViewTestCase(TransactionTestCase):
         self.assertEqual(refresh_response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(json.loads(refresh_response.content)['detail'], "Token is blacklisted")
         self.assertEqual(json.loads(refresh_response.content)['code'], "token_not_valid")
+
+    def test_logout_view_permissions(self):
+        view_permissions = LogoutView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], IsAuthenticated)

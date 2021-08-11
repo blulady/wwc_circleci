@@ -62,6 +62,8 @@ class Role(models.Model):
     VOLUNTEER = 'VOLUNTEER'
     LEADER = 'LEADER'
     DIRECTOR = 'DIRECTOR'
+    VALID_ROLES = [VOLUNTEER, LEADER, DIRECTOR]
+
     name = models.CharField(max_length=20)
     users = models.ManyToManyField(User, through='User_Team')
 
@@ -79,3 +81,6 @@ class User_Team(models.Model):
             models.UniqueConstraint(
                 fields=['user_id', 'team_id', 'role_id'], name='unique user_team')
         ]
+
+    def highest_role(user_id):
+        return User_Team.objects.filter(user=user_id).order_by('-role_id').values('role__name')[0]['role__name']

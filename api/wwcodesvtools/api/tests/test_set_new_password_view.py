@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import exceptions as drf_exceptions
+from rest_framework.permissions import AllowAny
+from ..views.SetNewPasswordView import SetNewPasswordView
 
 
 class SetNewPasswordViewTestCase(TransactionTestCase):
@@ -159,3 +161,8 @@ class SetNewPasswordViewTestCase(TransactionTestCase):
         resp = self.__send_request(self.set_new_password_request_data)
         self.assertIs(resp.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(json.loads(resp.content), {'error': expected_error})
+
+    def test_set_new_password_view_permissions(self):
+        view_permissions = SetNewPasswordView().permission_classes
+        self.assertEqual(len(view_permissions), 1)
+        self.assertEqual(view_permissions[0], AllowAny)

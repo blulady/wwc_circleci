@@ -1,9 +1,5 @@
 from rest_framework import permissions
-from .models import UserProfile
-import logging
-
-
-logger = logging.getLogger('django')
+from .helper_functions import is_director_or_superuser
 
 
 class CanSendEmail(permissions.BasePermission):
@@ -12,7 +8,7 @@ class CanSendEmail(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return has_director_permission(request, view)
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)
 
 
 class CanGetMemberInfo(permissions.BasePermission):
@@ -21,7 +17,7 @@ class CanGetMemberInfo(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return has_director_permission(request, view)
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)
 
 
 class CanAddMember(permissions.BasePermission):
@@ -30,7 +26,7 @@ class CanAddMember(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return has_director_permission(request, view)
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)
 
 
 class CanDeleteMember(permissions.BasePermission):
@@ -39,7 +35,7 @@ class CanDeleteMember(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return has_director_permission(request, view)
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)
 
 
 class CanEditMember(permissions.BasePermission):
@@ -48,18 +44,4 @@ class CanEditMember(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return has_director_permission(request, view)
-
-
-def has_director_permission(request, view):
-    """
-    Check if logged in user has DIRECTOR role or IsSuperUser
-    """
-    try:
-        user_profile = UserProfile.objects.get(user_id=request.user.id)
-        if request.user.is_superuser or user_profile.role == UserProfile.DIRECTOR:
-            return True
-        return False
-    except UserProfile.DoesNotExist as e:
-        logger.error(f'has_director_permission: Error user not found : {e}')
-        return False
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)

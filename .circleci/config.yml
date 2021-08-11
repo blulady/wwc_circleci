@@ -13,12 +13,13 @@ jobs:
     environment:
         DEBUG: True
         SECRET_KEY: SECRET_KEY
+        SENDGRID_API_KEY: SENDGRID_API_KEY
         EMAIL_BACKEND: 'django.core.mail.backends.smtp.EmailBackend'
-        EMAIL_HOST: 'smtp.gmail.com'
+        EMAIL_HOST: 'smtp.sendgrid.net'
         EMAIL_USE_TLS: True
         EMAIL_PORT: 587
-        EMAIL_HOST_USER: 'WWCodeSV@gmail.com'
-        EMAIL_HOST_PASSWORD: EMAIL_HOST_PASSWORD
+        EMAIL_HOST_USER: 'apikey'
+        EMAIL_SENDER: 'WWCodeSV@gmail.com'
         FRONTEND_APP_URL: 'https://wwcode-chtools-fe.herokuapp.com'
         DATABASES['default']['ENGINE']: django.db.backends.postgresql
         DATABASES['default']['NAME']: postgres_test

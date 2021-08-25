@@ -41,11 +41,16 @@ class GetMembersView(ListAPIView):
         if not is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
             queryset = User.objects.exclude(userprofile__status='PENDING')
         date_filter = self.request.query_params.get('added_date')
+        todays_date = date.today()
         if date_filter:
             time_joined = {'3months' : todays_date - timedelta(weeks=12),
                            '6months' : todays_date - timedelta(weeks=24),
                            'current_year' : date(todays_date.year, 1, 1)}
-        todays_date = date.today()
+            queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
+        role_filter = self.request.query_params.get('role')
+        if role_filter is not None:
+            rfilter = Role.objects.get(name=role_filter)
+            queryset = queryset.filter(user_team__role=rfilter.id)
         return queryset
 
     def get_serializer_class(self):

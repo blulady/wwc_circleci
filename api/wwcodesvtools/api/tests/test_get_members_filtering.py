@@ -16,7 +16,6 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         self.assertTrue(s.is_valid())
         return s.validated_data['access']
 
-    
     # Testing get members filtering with status=ACTIVE
     def test_get_members_filtering_with_status(self):
         self.username = 'director@example.com'
@@ -25,11 +24,9 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?status=ACTIVE", **bearer)
         responseLength = len(response.data)
-        members = json.loads(response.content)  
+        members = json.loads(response.content)
         for i in range(responseLength):
             self.assertEqual(members[i]['status'], 'ACTIVE')
-
-
 
     # Testing get members filtering with date joined = current_year
     def test_get_members_filtering_with_date_joined(self):
@@ -38,7 +35,6 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?added_date=current_year", **bearer)
-        responseLength = len(response.data)
         current_year = date.today().year
         members = json.loads(response.content) 
         for i in range(len(members)):
@@ -57,7 +53,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         self.assertEqual(members[4]['role'], 'LEADER')
         self.assertEqual(members[5]['role'], 'LEADER')
 
-     # Testing get members filtering with role = LEADER and status = ACTIVE
+     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role(self):
         self.username = 'director@example.com'
         self.password = 'Password123'
@@ -68,5 +64,3 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         self.assertEqual(members[3]['status'], 'ACTIVE')
         self.assertEqual(members[3]['role'], 'LEADER')
-        
-

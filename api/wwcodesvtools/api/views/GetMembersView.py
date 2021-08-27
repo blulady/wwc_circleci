@@ -1,12 +1,11 @@
 from django.contrib.auth.models import User
-from django.utils import timezone
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from api.serializers.GetMemberForDirectorSerializer import GetMemberForDirectorSerializer
 from api.serializers.GetMemberSerializer import GetMemberSerializer
 from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
-from api.models import UserProfile,Role,User_Team
+from api.models import Role
 from rest_framework.filters import OrderingFilter, SearchFilter
 from datetime import date, datetime, timedelta
 import logging
@@ -45,9 +44,9 @@ class GetMembersView(ListAPIView):
         date_filter = self.request.query_params.get('added_date')
         todays_date = datetime.today().astimezone()
         if date_filter:
-            time_joined = {'3months' : todays_date - timedelta(weeks=12),
-                           '6months' : todays_date - timedelta(weeks=24),
-                           'current_year' : date(todays_date.year, 1, 1)}
+            time_joined = {'3months': todays_date - timedelta(weeks=12),
+                           '6months': todays_date - timedelta(weeks=24),
+                           'current_year': date(todays_date.year, 1, 1)}
             queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
         role_filter = self.request.query_params.get('role')
         if role_filter is not None:
@@ -61,7 +60,7 @@ class GetMembersView(ListAPIView):
         return GetMemberSerializer
 
 
-class GetMemberInfoView(RetrieveAPIView):    
+class GetMemberInfoView(RetrieveAPIView):  
     """
     Takes the user id as a parameter and gives back the information about the member.
     """

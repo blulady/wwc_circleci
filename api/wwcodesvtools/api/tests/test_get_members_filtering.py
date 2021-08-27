@@ -39,7 +39,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for i in range(len(members)):
             self.assertEqual(members[i]['date_joined'][:4], str(current_year))
-     
+
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
         self.username = 'director@example.com'

@@ -39,7 +39,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for i in range(len(members)):
             self.assertEqual(members[i]['date_joined'][:4], str(current_year))
-     
+       
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
         self.username = 'director@example.com'
@@ -47,19 +47,17 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?role=LEADER", **bearer)
-        responseLength = len(response.data)
         members = json.loads(response.content)
         self.assertEqual(members[4]['role'], 'LEADER')
         self.assertEqual(members[5]['role'], 'LEADER')
 
-     # Test get members filtering with role = LEADER and status = ACTIVE
+    # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
         self.username = 'director@example.com'
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?role=LEADER&status=ACTIVE", **bearer)
-        responseLength = len(response.data)
         members = json.loads(response.content)
         self.assertEqual(members[3]['status'], 'ACTIVE')
         self.assertEqual(members[3]['role'], 'LEADER')

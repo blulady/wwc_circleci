@@ -60,7 +60,7 @@ class GetMembersView(ListAPIView):
         return GetMemberSerializer
 
 
-class GetMemberInfoView(RetrieveAPIView):  
+class GetMemberInfoView(RetrieveAPIView):
     """
     Takes the user id as a parameter and gives back the information about the member.
     """

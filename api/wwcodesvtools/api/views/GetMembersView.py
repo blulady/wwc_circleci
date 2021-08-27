@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from api.serializers.GetMemberForDirectorSerializer import GetMemberForDirectorSerializer
 from api.serializers.GetMemberSerializer import GetMemberSerializer
 from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
+from api.models import UserProfile,Role,User_Team
 from rest_framework.filters import OrderingFilter, SearchFilter
-from datetime import date
+from datetime import date, datetime, timedelta
 import logging
 
 
@@ -39,9 +41,9 @@ class GetMembersView(ListAPIView):
         if status:
             queryset = queryset.filter(userprofile__status=status)
         if not is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
-            queryset = User.objects.exclude(userprofile__status='PENDING')
+            queryset = User.objects.exclude(userprofile__status="PENDING")
         date_filter = self.request.query_params.get('added_date')
-        todays_date = date.today()
+        todays_date = datetime.today().astimezone()
         if date_filter:
             time_joined = {'3months' : todays_date - timedelta(weeks=12),
                            '6months' : todays_date - timedelta(weeks=24),
@@ -59,7 +61,7 @@ class GetMembersView(ListAPIView):
         return GetMemberSerializer
 
 
-class GetMemberInfoView(RetrieveAPIView):
+class GetMemberInfoView(RetrieveAPIView):    
     """
     Takes the user id as a parameter and gives back the information about the member.
     """

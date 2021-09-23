@@ -41,7 +41,7 @@ class GetMembersView(ListAPIView):
             queryset = queryset.filter(userprofile__status=status)
         if not is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
             queryset = User.objects.exclude(userprofile__status="PENDING")
-        date_filter = self.request.query_params.get('added_date')
+        date_filter = self.request.query_params.get('created_at')
         todays_date = datetime.today().astimezone()
         if date_filter:
             time_joined = {'3months': todays_date - timedelta(weeks=12),

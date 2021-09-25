@@ -1,0 +1,498 @@
+ 
+.member-container {
+  max-width: 1082px;
+  background: #ffffff;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.member-details-container {
+  background: #fff;
+  border-radius: 10px;
+  margin-top: 25px;
+}
+.bottom-spacing {
+  height: 80vh;
+}
+.column {
+  padding-right: 45px;
+}
+
+.img-size {
+  width: 100%;
+  height: auto;
+}
+.section-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.section-box:first-child {
+  border-bottom: 0.5px solid #828282;
+}
+.view-member-details-div {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: 980px;
+  width: 98%;
+  padding: 45px;
+  background: #f5f5f5;
+}
+
+.view-member-image-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  background: inherit;
+  border: none;
+}
+
+.view-member-fields-div {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.view-member-fields-edit-div {
+  margin-top: -13%;
+}
+
+.leftmargin-button {
+  margin-left: 48px;
+}
+
+.view-memeber-edit-container {
+  width: 80%;
+}
+
+.fullname-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  color: #4f4f4f;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+  margin: 0px 0px;
+  word-wrap: normal;
+  word-break: break-all;
+}
+.role-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  color: #333333;
+  padding-right: 50px;
+  text-transform: capitalize;
+}
+.edit-section-label-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 27px;
+  color: #333333;
+}
+.edit-label-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #333333;
+}
+
+.edit-icon {
+  width: 100%;
+  height: auto;
+}
+.edit-image-left {
+  float: left;
+}
+.edit-image-right {
+  float: right;
+}
+
+.col-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label-font {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: 0.25px;
+  color: #333333;
+  margin-right: 7px;
+}
+
+.member-info-text {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0.25px;
+  color: #333333;
+  text-transform: capitalize;
+}
+
+.status-icon-wrapper {
+  margin-right: 7px;
+}
+
+.status-icon {
+  width: 100%;
+  height: auto;
+}
+
+.email-font {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  color: #2376e5;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 0px;
+}
+
+.datejoined-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  color: #48484a;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 0px;
+}
+
+.edit-separator {
+  height: 0px;
+  background: #f5f5f5;
+}
+
+.form-buttons-container {
+  width: 60%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-btn {
+  width: 100px;
+  height: 39px;
+  margin: 15px;
+  border-radius: 5px;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  align-items: center;
+  text-align: center;
+  float: right;
+}
+
+.btn-submit {
+  background: #007a7c;
+  color: #ffffff;
+  width: 155px;
+}
+
+.btn-cancel {
+  color: #007a7c;
+  background: #ffffff;
+  border: 1px solid #007a7c;
+  width: 155px;
+}
+.member-role {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 19px;
+  color: #48484a;
+}
+
+.team-title {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 33px;
+  color: #333333;
+}
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+}
+.custom-checkbox {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  max-width: 365px;
+  width: 58vw;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.checked {
+  background: #dbebeb;
+  border: 2px solid #007a7c;
+  box-sizing: border-box;
+}
+
+.unchecked {
+  color: #48484a;
+  background: #f5f5f5;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  opacity: 0.00001;
+}
+
+.custom-checkbox .checkbox-icon {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #0f283c;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkbox-icon {
+  border: none;
+  background-image: url(../../images/check_box_24px.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.edit-member-form {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+}
+.form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.show-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hide-form {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .view-member-fields-edit-div  {
+    margin-top: 0;
+    }
+    
+}
+
+@media (max-width: 576px) {
+  .member-container {
+    background: #f5f5f5;
+    padding: 0;
+  }
+
+  .member-details-container {
+    padding: 44px 28px;
+  }
+
+  .view-member-details-div {
+    padding: 0;
+  }
+
+  .status-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .section-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .col-wrapper {
+    display: inline-flex;
+  }
+
+  .view-member-details-div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 306px;
+    width: calc(100% - 15px * 2);
+    background: white;
+  }
+
+  .view-member-details-edit-div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 306px;
+    width: calc(100% - 15px * 2);
+    background: white;
+    padding: 0;
+  }
+
+  .view-member-fields-div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+ .view-member-fields-edit-div  {
+   padding: 0;
+ }
+  .fullname-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #4f4f4f;
+    margin: 0;
+    word-wrap: normal;
+    word-break: break-all;
+    text-transform: capitalize;
+  }
+
+  .role-font {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    padding-right: 50px;
+    text-transform: capitalize;
+  }
+
+  .edit-label-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333333;
+  }
+
+  .status-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: #333333;
+    padding-right: 56px;
+    text-transform: capitalize;
+  }
+
+  .email-font {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #2376e5;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .datejoined-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #48484a;
+    margin: 0px;
+  }
+
+  .label-font {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .member-info-text {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .edit-separator {
+    height: 0px;
+    background: #f5f5f5;
+  }
+
+  .member-role {
+    width: 84px;
+    height: 19px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    margin-left: 8px;
+    color: #48484a;
+  }
+
+  .status-icon-wrapper {
+    padding-bottom: 2px;
+  }
+
+  .edit-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  
+  .custom-checkbox {
+    max-width: 263px;
+    width: 80vw;
+  }
+
+  .edit-member-form {
+    margin-top: 17px;
+  }
+
+.form-buttons-container {
+  width: 100%;
+}
+}

@@ -1,0 +1,55 @@
+ .container {
+   margin: 0 auto;
+
+ }
+
+ .formDiv {
+   margin: 0 auto;
+   /* background-color: #369; */
+   max-width: 500px;
+ }
+
+ @media only screen and (max-width: 900px) {
+   .form-div {
+     margin: 0 auto;
+
+   }
+ }
+
+ .profileName {
+   font-size: 24px;
+   font-weight: bold;
+   color: #4F4F4F;
+ }
+
+ .userEmail {
+   font-weight: normal;
+   font-size: 20px;
+ }
+
+ .status {
+   display: flex;
+   align-items: center;
+ }
+
+ .statusIcon {
+   width: auto;
+   height: auto;
+ }
+
+ .membercard-img {
+   height: 112px;
+ }
+
+ .profileBorder {
+   width: 73%;
+ }
+
+ .profile-div {
+   display: flex;
+   flex-direction: row;
+   align-items: flex-start;
+   width: 306px;
+   background: white;
+   padding: 10%;
+ }

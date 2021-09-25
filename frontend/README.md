@@ -1,94 +1,143 @@
-# Front-end application 
+# Front-end application
 
- - Basic starter template
- - React application created using [Create React App](https://github.com/facebook/create-react-app).  
-
-## Additionaly installed packages
-
- - react-router-dom
- - axios
+- React application created using [Create React App](https://github.com/facebook/create-react-app).
 
 ## Requirements
 
- - Docker needs to be installed on your machine.
- - See [here](https://docs.docker.com/engine/install/) to find the download instructions that best fit your operating system.
-
+- Docker needs to be installed on your machine.
+- See [here](https://docs.docker.com/engine/install/) to find the download instructions that best fit your operating system.
+- environment variable: 
+```REACT_APP_API_URL= https://wwcode-chtools-api-dev.herokuapp.com/api```
 ## Steps to run the application
 
- - In the terminal, navigate to the frontend directory in the project.
+- In the terminal, navigate to the 'frontend' directory in the project.
 
- - To clear all previous versions of this container:
-- To see the created images, use the command:   
-   ```
-   docker images
-   ```  
-    If you see an image called **frontend_web**, run 
-     ```
-     docker rmi frontend_web
-     ```
+- To clear all previous versions of this container:  
+
+  - To see the created images, use:
+    ```
+    docker images
+    ```
+    If you see an image called **frontend_web**, run
+    ```
+    docker rmi frontend_web
+    ```
     to remove that image.
-- Next, to see the containers, use the command:  
+
+  - To see the containers, use:
     ```
     docker ps -a
     ```
-    If you see a container called **frontend_web**, remove it using:  
+    If you see a container called **frontend_web**, remove it using:
     ```
     docker rm frontend_web
     ```
- - Now to start up the project, use this command:
-   ```
-   docker-compose up
-   ```
+- To start up the project, use this command:
+
+  ```
+  docker-compose up
+  ```
+
   This will install all the dependencies and run the application
 
- -  Open [http://localhost:3000](http://localhost:3000) to view it in the browser.  
-    ![](READMEImages/rootscreen.gif)
-    
+- Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 ## To add features
 
- - Ensure that the current branch is the **development** branch
- - Create a new branch for your feature
- - To use axios, just import axios into the component  
- `import axios from 'axios';`  
-- We are ready to add features!
+- Create a new branch for your feature with the naming conventions decided by the team.
+- Base branch: `master`
+
 
 ## Git workflow using the terminal
 
 1. Clone the repo
-  - Ensure you are **on the dev branch** and **in the frontend directory**  
 
-2. Create a new branch for your feature  
-  
-    `git checkout -b <branchname>`  
+- Ensure that the current branch is the **master** branch and **in the frontend directory**
 
-    ![](READMEImages/checkoutfeaturebranch.png)
+2. Create a new branch for your feature
 
-3. Push your feature branch up.  
+   `git checkout -b <branchname>`
 
-	`git push --set-upstream origin <branchname>`
+3. Push your feature branch up.
 
-    ![](READMEImages/pushfeatureup.png)
+   `git push --set-upstream origin <branchname>`
 
-	**NOTE:** Use this command only the first time you are pushing the feature branch up. For the other times `git push` will suffice. Just ensure you are in the feature branch when running `git push`
+   **NOTE:** Use this command only the first time you are pushing the feature branch up. For the other times `git push` will suffice. Just ensure you are in the feature branch when running `git push`
 
 4. Make changes in your feature branch only.
 
 5. Commit changes often.
 
-	To stage changes-  `git add .`
-	To commit changes- `git commit . -m "<message>"`
+   To stage changes- `git add .`
+   To commit changes- `git commit . -m "<message>"`
 
-6. When the feature is ready, push changes up.  
+6. When the feature is ready, push changes up.
 
-    `git push`
+   `git push`
 
-5. On the repo, initiate a pull request.
+7. On the repo, initiate a pull request.
 
-    ![](READMEImages/initiatepullrequest.png)
+8. On the Pull request screen:
 
-6. On the Pull request screen:
-  - Tag @Rita and I. You will see us in the Reviewers section on the right.
-  - Leave a comment explaining the changes.
-  - Press the 'Create pull request'  button
+- Tag leads and other team members. You will see everyone in the Reviewers section on the right.
+- Leave a comment explaining the changes.
+- Press the 'Create pull request' button
 
-    ![](READMEImages/pullrequestscreen.png)
+## Heroku Setup and Deployment
+
+* Initial Setup(one time only)
+```
+  1. Create your Heroku account
+  2. Install Heroku CLI in your computer
+         $ npm install -g heroku
+  3. In the terminal, navigate to the frontend directory in the WWCode-SV project
+     Log in to Heroku:
+         $ heroku login
+  4. Log in to Container Registry:
+         $ heroku container:login
+  4. Create the Heroku app 
+     heroku create <unique-app-name>  --buildpack mars/create-react-app
+     heroku create my-heroku-react-app --buildpack mars/create-react-app 
+
+  This will ceate new empty application on Heroku using the buildpack for create-react-app.
+```
+* Deployment Steps
+
+1. Login to heroku
+```
+heroku login
+```
+2. Login to heroku container registry
+```
+heroku container:login
+```
+3. Build the image and push to Container Registry:
+```
+heroku container:push web -a <unique-app-name>
+heroku container:push web -a my-heroku-react-app
+```
+* Release the image to your app:
+```
+heroku container:release web -a <unique-app-name>
+heroku container:release web -a my-heroku-react-app
+```
+* Now open the app in your browser:
+```
+heroku open -a <unique-app-name>
+heroku open -a my-heroku-react-app
+```
+* Check releases
+```
+heroku releases -a <unique-app-name>
+heroku releases -a my_heroku_react_app
+```
+* Check logs
+```
+heroku logs --tail -a <unique-app-name>
+heroku logs --tail -a my-heroku-react-app
+```
+
+## DockerFiles
+Note:  
+1. Dockerfile.dev is used by docker-compose.yml for local dev deployment
+2. Dockerfile is used for production build deployment to Heroku app

@@ -1,0 +1,169 @@
+.WwcLogo {
+  background: url(../../images/logoPNG.png);
+  position: absolute;
+  width: 139px;
+  height: 76px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  left: 227px;
+  top: 42px;
+}
+
+.container {
+  height: 100vh;
+}
+
+main {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Open Sans";
+}
+
+.Register {
+  margin-top: -80px;
+  overflow: visible;
+}
+
+.Register header {
+  text-align: center;
+}
+
+.Register .title {
+  font-family: Montserrat;
+  font-style: normal;
+  padding: 5px;
+  color: #48484a;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 37px;
+}
+
+.Register .warning {
+  margin-top: 25px;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 26px;
+  color: #48484a;
+}
+
+.Register .register-form {
+  width: 270px;
+  margin: auto;
+}
+
+.Register .form-group {
+  margin-bottom: 0.7rem;
+}
+
+.Register .form-group label {
+  font-weight: 600;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  padding: 3px;
+  margin-bottom: 0rem;
+  margin-top: 10px;
+  color: #48484a;
+}
+
+.Register .register-form div input,
+.Register .register-form div .input-group-append{
+    border: 1px solid #48484a;
+    background: #fff;
+    box-sizing: border-box;
+    height: 36px;
+}
+
+.Register .form-control{
+  border-radius: 0;
+}
+.form-control[readonly]{
+  background: rgba(196, 196, 196, 0.6) !important;
+}
+
+.Register .register-form div input:focus{
+  border: 1px solid #007A7C;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.Register .show-hide {
+  font-weight: normal;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #007a7c;
+  cursor: pointer;
+}
+
+.input-group-text{
+  border:none;
+}
+
+.Register .btn {
+  width: 120px;
+  height: 39px;
+  border-radius: 5px;
+  background-color: #007a7c;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fff;
+  margin: 25px auto;
+}
+
+.Register .btn:disabled {
+  background: rgba(72, 72, 74, 0.5);
+  color: #fff;
+}
+
+@media only screen and (max-width: 768px) {
+  .Register{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 90vh;
+  }
+
+  .Register .title{
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 0;
+  }
+
+  .Register .warning{
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+  }
+
+  .Register header p{
+    margin: 5px auto;
+  }
+
+  .Register .register-form{
+    margin: 5px auto;
+  }
+
+  .Register .register-form div{
+    margin-bottom: .2rem;
+  }
+
+  .Register .register-form div label{
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+  }
+
+  .Register .register-form div input,
+  .Register .register-form div .input-group-append{
+    height: 34px;
+    
+  }
+
+}

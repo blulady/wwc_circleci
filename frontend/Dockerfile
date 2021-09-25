@@ -3,5 +3,6 @@ WORKDIR '/frontend'
 
 COPY package.json .
 RUN npm install
-
-CMD ["npm","run","dev"]
+COPY . .
+RUN npm run build
+CMD ["npm", "start"]

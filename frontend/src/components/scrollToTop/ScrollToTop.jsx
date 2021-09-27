@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { FaArrowCircleUp } from 'react-icons/fa';
+import styles from './ScrollToTop.module.css';
 
 const ScrollToTop = () => {
     const [visible, setVisible] = useState(false);
 
     const toggleButton = () => {
         const scrolled = document.documentElement.scrollTop;
-        if (scrolled > 100) {
+        if (scrolled > 200) {
             setVisible(true);
         } else {
             setVisible(false);
@@ -25,7 +26,8 @@ const ScrollToTop = () => {
     return (
         <React.Fragment>
             <FaArrowCircleUp onClick={scroll}
-            style={{display : visible ? 'inline' : 'none'}} />
+            style={{display : visible ? 'inline' : 'none'}}
+            className={styles['scroll-to-top-button']} />
         </React.Fragment>
     );
 }

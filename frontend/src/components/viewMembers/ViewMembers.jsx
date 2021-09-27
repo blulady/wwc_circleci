@@ -14,6 +14,7 @@ import SearchBox from "./SearchBox";
 import SuggestionBox from "./SuggestionBox";
 import FilterBox from "./FilterBox";
 import WwcApi from "../../WwcApi";
+import ScrollToTop from "../scrollToTop/ScrollToTop";
 
 const sortOptions = {
   NEW: { value: "new", label: "Newest Member", prop: "-date_joined" },
@@ -415,6 +416,7 @@ const ViewMembers = (props) => {
             />
           </div>
         )}
+        <ScrollToTop />
       </div>
   );
 };

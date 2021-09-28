@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowCircleUp } from 'react-icons/fa';
 import styles from './ScrollToTop.module.css';
 
 const ScrollToTop = () => {
-    const [visible, setVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        checkIsMobile();
+    }, []);
 
     const toggleButton = () => {
         const scrolled = document.documentElement.scrollTop;
+
         if (scrolled > 200) {
-            setVisible(true);
+            setIsVisible(true);
         } else {
-            setVisible(false);
+            setIsVisible(false);
         }
     };
 
@@ -21,12 +27,20 @@ const ScrollToTop = () => {
         });
     };
 
+    const checkIsMobile = () => {
+        const resolution = window.innerWidth;
+
+        if (resolution <= 480) {
+            setIsMobile(true);
+        }
+    };
+
     window.addEventListener('scroll', toggleButton);
 
     return (
         <React.Fragment>
             <FaArrowCircleUp onClick={scroll}
-            style={{display : visible ? 'inline' : 'none'}}
+            style={{display : isVisible && isMobile ? 'inline' : 'none'}}
             className={styles['scroll-to-top-button']} />
         </React.Fragment>
     );

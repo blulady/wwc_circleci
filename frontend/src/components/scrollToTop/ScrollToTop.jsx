@@ -20,8 +20,8 @@ const ScrollToTop = () => {
             const window = e.currentTarget;
 
             // Comment out if statement and use comment below to see button 
-            //if (scrollY > window.scrollY) {
-            if (scrolled > 4340 && scrollY > window.scrollY) {
+            if (scrollY > window.scrollY) {
+            //if (scrolled > 4340 && scrollY > window.scrollY) {
                 setIsVisible(true);
             } else {
                 setIsVisible(false);

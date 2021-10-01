@@ -10,6 +10,8 @@ import RoleRadioInput from "../addmember/RoleRadioField";
 import WwcApi from "../../WwcApi";
 import styles from "./MemberDetails.module.css";
 import cx from "classnames";
+import MessageBox from "../messagebox/MessageBox";
+import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 function ViewMemberDetails() {
   const history = useHistory();
@@ -22,6 +24,8 @@ function ViewMemberDetails() {
   const [teamEditMode, setTeamEditMode] = useState(false);
   const [teamsArray, setTeamsArray] = useState([]);
   const [teams, setTeams] = useState(new Set());
+
+  const [errorOnLoading, setErrorOnLoading] = useState(false);
 
   const handleEditMode = () => {
     setEditMode({ EditMode: true });
@@ -124,6 +128,7 @@ function ViewMemberDetails() {
       history.push({
         pathname: "/viewMembers",
       })} catch (error) {
+        setErrorOnLoading(true);
         console.log(error);
       }
   };
@@ -167,7 +172,12 @@ function ViewMemberDetails() {
             <div
               className={cx(styles["member-details-container"], { "bottom-spacing": editMode.EditMode || teamEditMode })}
             >
-              <div className="row justify-content-center">
+              <div className={cx(styles["member-details-wrapper"], "row justify-content-center")}>
+                {(editMode.EditMode && errorOnLoading) && (
+                  <div className={cx(styles["error-container"], "d-flex justify-content-center py-4")}>
+                    <MessageBox type="Error" title="Sorry!" message={ERROR_REQUEST_MESSAGE}></MessageBox>
+                  </div>
+                )}
                 <div className={cx("row", "justify-content-end", styles["view-member-details-div"])}>
                   <div className={cx("col-lg-3", "col-2", styles["view-member-image-div"])}>
                     <img

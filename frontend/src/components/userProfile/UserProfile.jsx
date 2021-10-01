@@ -7,17 +7,24 @@ import ActiveIcon from "../../images/Icon_Artwork.png";
 import PendingIcon from "../../images/Icon_Artwork_Gray.png";
 import ProfileImage from "../../images/ProfileImage.png";
 import classes from "./UserProfile.module.css";
+import cx from "classnames";
+
+import MessageBox from "../messagebox/MessageBox";
+import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 export const UserProfile = () => {
-  const [profileData, setProfileData] = useState([])
+  const [profileData, setProfileData] = useState({})
   const { userInfo } = useContext(AuthContext);
 
+  const [errorOnLoading, setErrorOnLoading] = useState(false);
+
   const getMyMemberData = async () => {
-
-    let _users = await WwcApi.getMembers();
-    let myMembership = _users.filter(user => user.id == userInfo.id)[0];
-
-    setProfileData(myMembership)
+    try {
+    let myMembership = await WwcApi.getMember(userInfo.id);
+    setProfileData(myMembership);
+    } catch (e) {
+      setErrorOnLoading(true);
+    }
   };
 
   useEffect(() => {
@@ -36,6 +43,11 @@ export const UserProfile = () => {
     <ContainerWithNav>
 
       <div className={`${classes.container}`}>
+        {errorOnLoading && (
+          <div className={cx(classes["error-container"], "d-flex justify-content-center py-4")}>
+            <MessageBox type="Error" title="Sorry!" message={ERROR_REQUEST_MESSAGE}></MessageBox>
+          </div>
+        )}
         <div className={`${classes.formDiv}`}>
           <div className='row justify-content-center viewmember-form-div-spacing'>
             <div className='row justify-content-center viewmember-form-div-spacing'>
@@ -73,7 +85,7 @@ export const UserProfile = () => {
                         <span className="font-weight-bold"> Role:</span> {profileData.role}
                       </div>
                       <div className="role">
-                        <span className="font-weight-bold"> Team:</span> {profileData.teams}
+                        <span className="font-weight-bold"> Team:</span> {((profileData.teams || [{}])[0]).name}
                       </div>
                     </section>
                   </div>

@@ -49,7 +49,7 @@ class GetMembersView(ListAPIView):
                            'current_year': date(todays_date.year, 1, 1)}
             queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
         role_filter = self.request.query_params.get('role')
-        if role_filter is not None:
+        if role_filter:
             rfilter = Role.objects.get(name=role_filter)
             queryset = queryset.filter(user_team__role=rfilter.id)
         return queryset

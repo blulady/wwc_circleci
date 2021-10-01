@@ -25,8 +25,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         response = self.client.get("/api/users/?status=ACTIVE", **bearer)
         responseLength = len(response.data)
         members = json.loads(response.content)
-        for i in range(responseLength):
-            self.assertEqual(members[i]['status'], 'ACTIVE')
+        for member in members:
+            self.assertEqual(member['status'], 'ACTIVE')
 
     # Testing get members filtering with date joined = current_year
     def test_get_members_filtering_with_date_joined(self):
@@ -34,11 +34,11 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?added_date=current_year", **bearer)
+        response = self.client.get("/api/users/?created_at=current_year", **bearer)
         current_year = date.today().year
         members = json.loads(response.content)
-        for i in range(len(members)):
-            self.assertEqual(members[i]['date_joined'][:4], str(current_year))
+        for member in members:
+            self.assertEqual(member['date_joined'][:4], str(current_year))
 
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
@@ -48,8 +48,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?role=LEADER", **bearer)
         members = json.loads(response.content)
-        self.assertEqual(members[4]['role'], 'LEADER')
-        self.assertEqual(members[5]['role'], 'LEADER')
+        for member in members:
+            self.assertEqual(member['role'], 'LEADER')
 
     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
@@ -59,5 +59,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?role=LEADER&status=ACTIVE", **bearer)
         members = json.loads(response.content)
-        self.assertEqual(members[3]['status'], 'ACTIVE')
-        self.assertEqual(members[3]['role'], 'LEADER')
+        for member in members:
+            self.assertEqual(member['status'], 'ACTIVE')
+            self.assertEqual(member['role'], 'LEADER')
+

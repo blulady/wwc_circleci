@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import "./ContainerWithNav.css";
+import styles from "./ContainerWithNav.module.css";
+import cx from 'classnames';
 import AuthContext from "../../context/auth/AuthContext";
 import WwcApi from "../../WwcApi";
 
@@ -36,20 +37,20 @@ const ContainerWithNav = ({ children }) => {
   }
 
   return (
-    <div className='container-fluid'>
-      <nav className='container-navbar'>
-        <div className='container-inner'>
-          <div className='navbar-wwc-logo navbar-brand'>
-            <div className='logo-png' onClick={handleGoHome}></div>
+    <div className={cx('container-fluid', styles['container-fluid'])}>
+      <nav className={styles['container-navbar']}>
+        <div className={styles['container-inner']}>
+          <div className={cx('navbar-brand', styles['navbar-wwc-logo'], )}>
+            <div className={styles['logo-png']} onClick={handleGoHome}></div>
           </div>
-          <div className='navbar-items '>
-            <ul className='navbar-items-ul'>
-              <li className='navbar-items-wwc-title navbar-text'>
+          <div className={styles['navbar-items ']}>
+            <ul className={styles['navbar-items-ul']}>
+              <li className={cx('navbar-text', styles['navbar-items-wwc-title'])}>
                 Chapter Tools
               </li>
-              <li className='navbar-items-user-button'>
+              <li className={styles['navbar-items-user-button']}>
                 <div
-                  className='user-button'
+                  className={styles['user-button']}
                   id='navbarDropdown'
                   role='button'
                   data-toggle='dropdown'
@@ -58,22 +59,22 @@ const ContainerWithNav = ({ children }) => {
                 >
                   <span>{firstNameInitial}</span>
                 </div>
-                <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
+                <div className={cx('dropdown-menu', styles['dropdown-menu' ])} aria-labelledby='navbarDropdown'>
 
-                  <p className='dropdown-item signed-user'>Signed-in as</p>
-                  <p className='dropdown-item signed-user font-weight-bold'>{userEmail}</p>
+                  <p className={cx('dropdown-item', styles['signed-user'] ,styles['dropdown-item'])}>Signed-in as</p>
+                  <p className={cx('font-weight-bold dropdown-item',styles['signed-user'], styles['dropdown-item'])}>{userEmail}</p>
                   <button
                     onClick={() => {
                       history.push({ pathname: "/member/profile" });
                     }}
-                    className='dropdown-item item-profile'
+                    className={cx('dropdown-item', styles['dropdown-item'])}
                   >
                     Your Profile
                   </button>
-                  <div className='dropdown-divider'></div>
+                  <hr className={cx('dropdown-divider', styles['dropdown-hr'])} />
                   <button
                     onClick={handleLogout}
-                    className='dropdown-item item-logout'
+                    className={cx('dropdown-item', styles['item-logout'], styles['dropdown-item'])}
                   >
                     Log Out
                   </button>

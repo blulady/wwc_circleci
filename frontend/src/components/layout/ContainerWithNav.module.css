@@ -16,6 +16,7 @@
   padding: 0rem 11.25rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
+  align-items: center;
 }
 
 /* container navbar */
@@ -35,15 +36,11 @@
   background-color: #f5f5f5;
 }
 
-/* We want the navbar to show all divs in a line */
-nav .container-inner {
-  align-items: center;
-}
 
 /*----------container-navbar settings----------- */
 
 /* ---- navbar logo --- */
-nav .navbar-wwc-logo .logo-png {
+.navbar-wwc-logo .logo-png {
   position: absolute;
   width: 140px;
   height: 75.16px;
@@ -54,7 +51,7 @@ nav .navbar-wwc-logo .logo-png {
 }
 
 /* ---- navbar items other than logo --- */
-nav .navbar-items-ul {
+.navbar-items-ul {
   display: grid;
   grid-template-columns: 464px 40px;
   justify-content: flex-end;
@@ -75,11 +72,11 @@ nav .navbar-items-ul {
   color: #333333;
 }
 
-nav .navbar-items-user-button {
+.navbar-items-user-button {
   padding: 0;
 }
 
-nav .user-button {
+.user-button {
   max-width: 40px;
   height: 40px;
   font-family: 'Montserrat';
@@ -98,29 +95,29 @@ nav .user-button {
   margin-right: 0;
 }
 
-nav .navbar-items-user-button .dropdown-menu {
+.dropdown-menu {
   width: 300px;
-  height: 154px;
+  height: 138px;
   border-radius: 5px;
   border: 0px;
   background-color: #FFFFFF;
   box-shadow: 0px 3px 18px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
 }
 
-nav .navbar-items-user-button .dropdown-menu .signed-user:hover {
+.signed-user{
+  padding:0;
+}
+
+.signed-user:nth-child(2){
+  margin-top: -5px;
+}
+
+.signed-user:hover {
   background-color: #fff;
 }
 
-.navbar-items-user-button .dropdown-menu:before {
-  content: '';
-  position: absolute;
-  top: 86px;
-  right: 181px;
-  z-index: 1;
-
-}
-
-nav .dropdown-menu .dropdown-item {
+.dropdown-item {
   width: 298px;
   height: 30px;
   top: 98px;
@@ -133,15 +130,22 @@ nav .dropdown-menu .dropdown-item {
   line-height: 22px;
   color: black;
   margin: 0;
+  padding: 0 5px;
 }
 
-nav .dropdown-menu .dropdown-item:hover {
-  background-color: rgba(72, 72, 74, 0.1);
+.dropdown-item:hover {
+  background-color: rgba(130,130,130, 0.25);
   ;
 }
 
-nav .dropdown-menu .item-logout {
-  color: #464547;
+.item-logout {
+  color: #000;
+}
+
+.dropdown-hr{
+  background: #6b3768;
+  border: 1px solid #828282;
+  margin-top: 0;
 }
 
 /*----------mediaquery settings----------- */
@@ -153,12 +157,12 @@ nav .dropdown-menu .item-logout {
     height: 60px;
   }
 
-  nav .container-inner {
+  .container-inner {
     width: 100%;
     padding: 0em 0.5em;
   }
 
-  nav .navbar-wwc-logo .logo-png {
+  .navbar-wwc-logo .logo-png {
     width: 70px;
     height: 36px;
     left: 8px;
@@ -167,7 +171,7 @@ nav .dropdown-menu .item-logout {
     background: url(../../images/logoPNG2.png);
   }
 
-  nav .navbar-items-ul {
+  .navbar-items-ul {
     height: 30px;
     grid-template-columns: 182px 30px;
   }
@@ -178,24 +182,20 @@ nav .dropdown-menu .item-logout {
     letter-spacing: unset;
   }
 
-  nav .user-button {
+  .user-button {
     max-width: 30px;
     height: 30px;
   }
 
-  nav .navbar-items-user-button .dropdown-menu {
+  .dropdown-menu {
     width: 202px;
-    height: 69px;
+    height: 89px;
     top: 51px;
     box-shadow: 0px 3px 18px 8px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
   }
 
-  .navbar-items-user-button .dropdown-menu:before {
-    left: 110px;
-  }
-
-  nav .dropdown-menu .dropdown-item {
+  .dropdown-menu .dropdown-item {
     width: 202px;
     height: 18px;
     font-size: 10px;

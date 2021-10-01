@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import "./Login.css";
+import styles from "./Login.module.css";
+import cx from "classnames";
 import WwcBackground from "./WwcBackground";
 import AuthContext from "../../context/auth/AuthContext";
 import { useHistory } from "react-router-dom";
@@ -74,7 +75,7 @@ const Login = () => {
       handleSetAuth(token, user);
       history.push("/");
     } catch (err) {
-      form.classList.add("was-validated");
+      form.classList.add(styles["was-validated"]);
     }
   };
 
@@ -116,19 +117,19 @@ const Login = () => {
   return (
     <div>
       <WwcBackground>
-        <div className='container'>
-          <div className='WwcLogo'></div>
+        <div className={cx('container', styles['container'])}>
+          <div className={styles['WwcLogo']}></div>
           <main>
-            <div className='Login col col-md-6 col-lg-4'>
-              <div className='header'>
-                <div className='h1Login'>Chapter Tools Login</div>
+            <div className={cx(styles['Login'], 'col col-md-6 col-lg-4')}>
+              <div className={cx('header', styles['header'])}>
+                <div className={styles['h1Login']}>Chapter Tools Login</div>
               </div>
               <form
-                className='needs-validation LoginForm'
+                className={styles['LoginForm']}
                 onSubmit={handleSubmit}
                 data-testid = 'login-form'
               >
-                <div className='invalid-feedback'>
+                <div className={cx('invalid-feedback', styles['invalid-feedback'])}>
                   Invalid username and password
                 </div>
                 <div className='form-group col'>
@@ -140,7 +141,7 @@ const Login = () => {
                     type='email'
                     name='username'
                     id='email'
-                    className='form-control'
+                    className={cx('form-control', styles['form-control'])}
                     required
                     onChange={handleChange}
                   />
@@ -156,19 +157,19 @@ const Login = () => {
                       name='password'
                       id='password'
                       ref={pwdInput}
-                      className='form-control login-pwd'
+                      className={cx('form-control', styles['form-control'], styles['login-pwd'])}
                       required
                       onChange={handleChange}
                     />
-                    <div className='input-group-append'>
-                      <span className='input-group-text' onClick={handleShow}>
+                    <div className={cx('input-group-append', styles['input-group-append'])}>
+                      <span className={cx('input-group-text', styles['input-group-text'], styles['show-hide'])} onClick={handleShow}>
                         {" "}
                         SHOW{" "}
                       </span>
                     </div>
                   </div>
                   <span
-                    className='hypertext'
+                    className={styles['hypertext']}
                     type='text'
                     onClick={handleOpenResetPasswordModal}
                   >
@@ -177,7 +178,7 @@ const Login = () => {
                 </div>
                 <button
                   data-testid= 'login-submit-btn'
-                  className='btn'
+                  className={cx('btn', styles['btn'])}
                   type='submit'
                   disabled={!loginData.password || !loginData.username}
                 >

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import cancelIcon from "../../images/cancel_24px.png";
 import checkIcon from "../../images/check_circle_24px.png";
 import styles from "./Password.module.css";
+import cx from 'classnames';
 
 const Password = ({ setPwd , pwdLabel= "Password *"}) => {
   const [password, setPassword] = useState("");
@@ -51,29 +52,28 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
 
   return (
     <div className='form-group' onFocus={() => setPwdValidation(true)}>
-      <label className={`pb-1 ${styles.label}`} htmlFor='Password'>{pwdLabel}</label>
+      <label className={cx('pb-1', styles['label'])} htmlFor='Password'>{pwdLabel}</label>
       <div>
         <div className='input-group'>
           <input
             type={hidden ? "password" : "text"}
             name='password'
-            style={{ borderRight: "none" }}
-            className='form-control'
+            className={cx('form-control', styles['input-pwd'])}
             data-testId="password"
             id='password'
             value={password}
             autoComplete="password"
             onChange={validatePassword}
           />
-          <div className='input-group-append' style={{ borderLeft: "none" }}>
-            <span className='show-hide input-group-text' onClick={handleShow}>
+          <div className='input-group-append'>
+            <span className={cx('input-group-text', styles['show-hide'])} onClick={handleShow}>
               <u>{hidden ? "SHOW" : "HIDE"}</u>
             </span>
           </div>
         </div>
       </div>
       <div className={styles.validations}>
-        <aside style={{ display: pwdValidation ? "inline" : "none" }}>
+        <aside className={pwdValidation ? styles['display-inline'] : styles['display-none'] }>
           {passwdValidStatus.map((x, idx) => {
             const iconSrc = x ? checkIcon : cancelIcon;
             return (
@@ -81,7 +81,7 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
                 <img
                   src={iconSrc}
                   alt='Invalid Password Icon'
-                  style={{ width: "17.5px", height: "17.5px" }}
+                  className={styles['validation-img']}
                 />
                 <span className={styles.pwddesc}>
                   {passwordValidationDescriptions[idx]}

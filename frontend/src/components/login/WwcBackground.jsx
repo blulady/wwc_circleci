@@ -1,12 +1,12 @@
 import React from 'react';
 
-import "./WwcBackground.css";
+import styles from "./WwcBackground.module.css";
 
 function WwcBackground(props) {
 
   return (
-    <div className="WwcBackground">
-      <div className="WwcBackground-opacity">
+    <div className={styles["WwcBackground"]}>
+      <div className={styles["WwcBackground-opacity"]}>
         {props.children}
       </div>
     </div>

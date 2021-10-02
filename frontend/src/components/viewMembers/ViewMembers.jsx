@@ -13,8 +13,10 @@ import cx from "classnames";
 import SearchBox from "./SearchBox";
 import SuggestionBox from "./SuggestionBox";
 import FilterBox from "./FilterBox";
+import MessageBox from "../messagebox/MessageBox";
 import WwcApi from "../../WwcApi";
 import ScrollToTop from "../scrollToTop/ScrollToTop";
+import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 const sortOptions = {
   NEW: { value: "new", label: "Newest Member", prop: "-date_joined" },
@@ -38,6 +40,8 @@ const ViewMembers = (props) => {
   const { userInfo } = useContext(AuthContext);
   const isDirector = userInfo.role === "DIRECTOR";
   const pageRef = React.createRef();
+  
+  const [errorOnLoading, setErrorOnLoading] = useState(false);
 
   // update pagination info once user data is changed
   useEffect(() => {
@@ -74,6 +78,7 @@ const ViewMembers = (props) => {
       let _users = await WwcApi.getMembers(sort, search);
       return _users;
     } catch (error) {
+      setErrorOnLoading(true);
       console.log(error);
     }
   };
@@ -235,7 +240,7 @@ const ViewMembers = (props) => {
     async function getUsers() {
       let sortProp = sortKey.prop;
       let members = await filterMembers(getMembersData(sortProp, search));
-      setUsers(members);
+      setUsers(members || []);
     }
     getUsers()
   }, [sortKey, filters, search]);
@@ -369,6 +374,12 @@ const ViewMembers = (props) => {
                 "no-gutters": isBrowser,
               })}
             >
+              {errorOnLoading && (
+                <div className={cx(styles["error-container"], "d-flex justify-content-center")}>
+                  <MessageBox type="Error" title="Sorry!" message={ERROR_REQUEST_MESSAGE}></MessageBox>
+                </div>
+              )}
+              
               {(isBrowser ? paginationInfo.currentUsers : users).map(
                 (userInfo, idx) => {
                   return (

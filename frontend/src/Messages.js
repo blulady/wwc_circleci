@@ -1,0 +1,1 @@
+export const ERROR_REQUEST_MESSAGE = "We could not process your request. \nPlease try again.";

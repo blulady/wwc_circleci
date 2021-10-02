@@ -10,7 +10,7 @@
 }
 
 .container {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .header {
@@ -71,7 +71,7 @@ main {
   margin-top: 10px;
 }
 
-.LoginForm.needs-validation .btn {
+.btn {
   display: block;
   margin: 25px auto;
   width: 120px;
@@ -84,24 +84,24 @@ main {
   line-height: 29px;
 }
 
-.LoginForm.needs-validation.was-validated {
+.was-validated {
   margin-top: 36px;
 }
 
-.LoginForm.needs-validation.was-validated .invalid-feedback {
+.LoginForm.was-validated .invalid-feedback {
   display: block;
   text-align: center;
   margin-bottom: 20px;
 }
 
-.LoginForm.needs-validation.was-validated .form-control,
-.LoginForm.needs-validation.was-validated .input-group-text {
+.was-validated .form-control,
+.was-validated .input-group-text {
   box-shadow: 0px 4px 4px rgba(189, 26, 26, 0.75);
   border-color: #ced4da;
   background-image: none;
 }
 
-.LoginForm.needs-validation .btn:disabled {
+.btn:disabled {
   background-color: #48484a;
 }
 
@@ -110,11 +110,13 @@ main {
 input.login-pwd {
   border-right: 0;
 }
+
+
 div.input-group-append {
   margin-top: 0 !important;
 }
 
-span.input-group-text {
+.show-hide {
   background-color: white;
   border-left: none;
   border-top: 1px solid #ced4da;
@@ -173,7 +175,7 @@ span.input-group-text {
     color: rgb(72, 72, 74);
   }
 
-  .LoginForm.needs-validation .btn {
+  .btn {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-size: 16px;
     font-weight: 600;

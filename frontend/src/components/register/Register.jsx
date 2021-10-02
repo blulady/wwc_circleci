@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./Register.css";
+import styles from "./Register.module.css";
+import cx from 'classnames';
 import queryString from "query-string";
 import { useHistory } from "react-router-dom";
 import Password from "../layout/Password";
@@ -40,25 +41,25 @@ function Register(props) {
   };
 
   return (
-    <div className='container'>
-      <div className='WwcLogo'></div>
+    <div className={cx('container-fluid', styles['container'])}>
+      <div className={styles['WwcLogo']}></div>
       <main>
-        <div className='Register col col-md-6 col-lg-4'>
-          <header>
-            <div className='title'>Register for</div>
-            <div className='title'>Chapter Tools</div>
-            <p className='warning' id='warning'>
+        <div className={cx(styles['Register'], 'col col-md-6 col-lg-4')}>
+          <header className="text-center">
+            <div className={styles['title']}>Register for</div>
+            <div className={styles['title']}>Chapter Tools</div>
+            <p className={styles['warning']} id='warning'>
               *All fields are mandatory
             </p>
           </header>
-          <div className='register-form'>
+          <div className={styles['register-form']}>
             <form onSubmit={handleSubmit}>
-              <div className='form-group'>
+              <div className={cx('form-group', styles['form-group'])}>
                 <label htmlFor='first_name'>First Name *</label>
                 <input
                   type='text'
                   name='first_name'
-                  className='form-control'
+                  className={cx('form-control', styles['form-control'])}
                   id='first_name'
                   data-testid="register-firstname"
                   aria-describedby='firstnameHelp'
@@ -66,12 +67,12 @@ function Register(props) {
                   onChange={handleChange}
                 />
               </div>
-              <div className='form-group'>
+              <div className={cx('form-group', styles['form-group'])}>
                 <label htmlFor='last_name'>Last Name *</label>
                 <input
                   type='text'
                   name='last_name'
-                  className='form-control'
+                  className={cx('form-control', styles['form-control'])}
                   id='last_name'
                   data-testid="register-lastname"
                   aria-describedby='lastnameHelp'
@@ -79,12 +80,12 @@ function Register(props) {
                   onChange={handleChange}
                 />
               </div>
-              <div className='form-group'>
+              <div className={cx('form-group', styles['form-group'])}>
                 <label htmlFor='Email'>Email address *</label>
                 <input
                   type='email'
                   name='email'
-                  className='form-control'
+                  className={cx('form-control', styles['form-control'])}
                   id='Email'
                   data-testid = 'register-email'
                   aria-describedby='emailHelp'
@@ -96,7 +97,7 @@ function Register(props) {
               <div className='text-center'>
                 <button
                   type='submit'
-                  className='btn'
+                  className={cx('btn', styles['btn'])}
                   data-testid='register-submit-button'
                   disabled={
                     !userInfo.password ||

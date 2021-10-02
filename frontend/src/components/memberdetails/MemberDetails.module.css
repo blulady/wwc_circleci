@@ -12,6 +12,9 @@
   border-radius: 10px;
   margin-top: 25px;
 }
+.member-details-wrapper {
+  background: #f5f5f5;
+}
 .bottom-spacing {
   height: 80vh;
 }
@@ -40,7 +43,6 @@
   max-width: 980px;
   width: 98%;
   padding: 45px;
-  background: #f5f5f5;
 }
 
 .view-member-image-div {

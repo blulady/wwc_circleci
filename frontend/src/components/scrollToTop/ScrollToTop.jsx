@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './ScrollToTop.module.css';
+import cx from 'classnames';
 
 const ScrollToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -20,8 +21,8 @@ const ScrollToTop = () => {
             const window = e.currentTarget;
 
             // Comment out if statement and use comment below to see button 
-            if (scrollY > window.scrollY) {
-            //if (scrolled > 4340 && scrollY > window.scrollY) {
+            //if (scrollY > window.scrollY && (scrollY !== 0 && window.scrollY !== 0)) {
+            if (scrolled > 4340 && scrollY > window.scrollY && (scrollY !== 0 && window.scrollY !== 0)) {
                 setIsVisible(true);
             } else {
                 setIsVisible(false);
@@ -55,11 +56,15 @@ const ScrollToTop = () => {
         }
     }, [handleScroll]);
 
+    const scrollClasses =  cx({
+        'scroll-to-top-visible': isVisible && isMobile,
+        'scroll-to-top-not-visible': !(isVisible && isMobile)
+    });
+
     return (
         <div>
             <button onClick={scroll}
-            style={{display : isVisible && isMobile ? 'inline' : 'none'}}
-            className={styles['scroll-to-top-button']} >
+            className={cx(styles['scroll-to-top-button'], styles[scrollClasses])} >
                 Back to top <i className="fas fa-angle-double-up 2x"></i>
             </button>
         </div>

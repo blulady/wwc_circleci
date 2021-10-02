@@ -12,3 +12,11 @@
   background-color: #f8f8f8;
   box-shadow: 0px 5px 5px rgb(0 0 0 / 0.5);
 }
+
+.scroll-to-top-not-visible {
+  display: none;
+}
+
+.scroll-to-top-visible {
+  display: inline;
+}

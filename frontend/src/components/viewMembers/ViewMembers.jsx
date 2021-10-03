@@ -15,6 +15,7 @@ import SuggestionBox from "./SuggestionBox";
 import FilterBox from "./FilterBox";
 import MessageBox from "../messagebox/MessageBox";
 import WwcApi from "../../WwcApi";
+import ScrollToTop from "../scrollToTop/ScrollToTop";
 import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 const sortOptions = {
@@ -426,6 +427,7 @@ const ViewMembers = (props) => {
             />
           </div>
         )}
+        <ScrollToTop />
       </div>
   );
 };

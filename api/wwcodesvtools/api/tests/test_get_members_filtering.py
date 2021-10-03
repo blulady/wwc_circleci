@@ -63,3 +63,4 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], 'ACTIVE')
             if member['role']:
                 self.assertEqual(member['role'], 'LEADER')
+                

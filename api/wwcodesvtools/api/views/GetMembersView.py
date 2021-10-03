@@ -7,6 +7,8 @@ from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
 from api.models import Role
 from rest_framework.filters import OrderingFilter, SearchFilter
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from datetime import date, datetime, timedelta
 import logging
 
@@ -34,6 +36,11 @@ class GetMembersView(ListAPIView):
     ordering = ['-date_joined']
     search_fields = ['^first_name', '^last_name']
 
+    status_param = openapi.Parameter('status',openapi.IN_QUERY, description="Filter on status", type=openapi.TYPE_STRING)
+    role_param = openapi.Parameter('role',openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_STRING)
+    created_at_param = openapi.Parameter('created_at',openapi.IN_QUERY, description="Filter on date joined", type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[status_param, role_param, created_at_param])
     def get_queryset(self):
         queryset = User.objects.all()
         status = self.request.query_params.get('status')

@@ -49,7 +49,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         response = self.client.get("/api/users/?role=LEADER", **bearer)
         members = json.loads(response.content)
         for member in members:
-            self.assertEqual(member['role'], 'LEADER')
+            if member['role']:
+                self.assertEqual(member['role'], 'LEADER')
 
     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
@@ -61,5 +62,6 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for member in members:
             self.assertEqual(member['status'], 'ACTIVE')
-            self.assertEqual(member['role'], 'LEADER')
+            if member['role']:
+                self.assertEqual(member['role'], 'LEADER')
 

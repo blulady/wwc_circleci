@@ -23,7 +23,6 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?status=ACTIVE", **bearer)
-        responseLength = len(response.data)
         members = json.loads(response.content)
         for member in members:
             self.assertEqual(member['status'], 'ACTIVE')
@@ -64,4 +63,3 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], 'ACTIVE')
             if member['role']:
                 self.assertEqual(member['role'], 'LEADER')
-

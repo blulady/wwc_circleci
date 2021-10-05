@@ -84,3 +84,9 @@ class User_Team(models.Model):
 
     def highest_role(user_id):
         return User_Team.objects.filter(user=user_id).order_by('-role_id').values('role__name')[0]['role__name']
+
+
+class Resource(models.Model):
+    slug = models.CharField(max_length=150, null=False, blank=False, unique=True)
+    edit_link = models.CharField(max_length=255, null=False, blank=False)
+    published_link = models.CharField(max_length=255, null=False, blank=False)

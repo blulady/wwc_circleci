@@ -1,0 +1,20 @@
+[
+{
+    "model": "api.resource",
+    "pk": 1,
+    "fields": {
+        "slug": "volunteer_resource",
+        "edit_link": "https://docs.google.com/document/d/1suejCUIs9kzQwg3S6oEfETr8srG9on1souRF13Xfgqc/edit",
+        "published_link": "https://docs.google.com/document/d/e/2PACX-1vTCz0hr1N2DkTwpc3sJzuWwKlIX2HgzD-9OjOMBgJCSfizIQv0LecMdV7VdqLL4Mw0OGbTsGrWFpIm6/pub?embedded=true" 
+    }
+},
+{
+    "model": "api.resource",
+    "pk": 2,
+    "fields": {
+        "slug": "social_media_resource",
+        "edit_link": "https://docs.google.com/document/d/1suejCUIs9kzQwg3S6oEfETr8srG9on1souRF13Xfgqc/edit",
+        "published_link": "https://docs.google.com/document/d/e/2PACX-1vTCz0hr1N2DkTwpc3sJzuWwKlIX2HgzD-9OjOMBgJCSfizIQv0LecMdV7VdqLL4Mw0OGbTsGrWFpIm6/pub?embedded=true" 
+    }
+}
+]

@@ -59,7 +59,7 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
             type={hidden ? "password" : "text"}
             name='password'
             className={cx('form-control', styles['input-pwd'])}
-            data-testId="password"
+            data-testid="password"
             id='password'
             value={password}
             autoComplete="password"
@@ -67,7 +67,7 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
           />
           <div className='input-group-append'>
             <span className={cx('input-group-text', styles['show-hide'])} onClick={handleShow}>
-              <u>{hidden ? "SHOW" : "HIDE"}</u>
+              <u data-testid="show-hide">{hidden ? "SHOW" : "HIDE"}</u>
             </span>
           </div>
         </div>

@@ -131,6 +131,13 @@ class WwcApi {
     });
   }
 
+  static async getVolunteerResources(slug) {
+    let res = await axios.get(`${BASE_URL}/resources/${slug}`, {
+      headers: getConfig(),
+    });
+    return res.data;
+  }
+
   static async changeMemberStatus(userId,data){
     return await axios.post(`${BASE_URL}/user/edit/${userId}/status`, data, {
       headers: getConfig(),
@@ -142,7 +149,5 @@ class WwcApi {
       headers: getConfig(),
     });
   }
-
 }
-
 export default WwcApi;

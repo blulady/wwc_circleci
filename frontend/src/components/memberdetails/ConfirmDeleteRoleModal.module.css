@@ -1,0 +1,41 @@
+.delete-role-modal{
+  display:block;
+}
+
+.bg {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.role-modal-content{
+  font-family: "Open Sans";;
+  font-style: normal;
+  background: #fff;
+}
+
+.modal-confirmation{
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.modal-message{
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: left;
+}
+
+.modal-submit{
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  color: #fff;
+  background: #007a7c;
+}
+
+.modal-submit:hover{
+  background: #007a7c;
+  box-shadow: 2px 2px 10px #888;
+}

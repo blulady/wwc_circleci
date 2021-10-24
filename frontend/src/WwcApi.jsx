@@ -131,6 +131,18 @@ class WwcApi {
     });
   }
 
+  static async changeMemberStatus(userId,data){
+    return await axios.post(`${BASE_URL}/user/edit/${userId}/status`, data, {
+      headers: getConfig(),
+    });
+  }
+
+  static async deleteMemberRole(userId,data){
+    return await axios.delete(`${BASE_URL}/user/edit/${userId}/role`, data, {
+      headers: getConfig(),
+    });
+  }
+
 }
 
 export default WwcApi;

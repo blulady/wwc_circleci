@@ -321,8 +321,6 @@
     height: 115px !important;
   }
   #confirmModal {
-    top: 75%;
-    right: 50%;
     outline: none;
     overflow: hidden;
   }
@@ -451,6 +449,7 @@
     margin-left: 20px;
   }
   .radio-input {
+    padding: 5px;
     width: 408.17px;
     height: 30px;
     display: flex;
@@ -461,6 +460,7 @@
     height: 30px;
     display: flex;
     align-items: center;
+    color: #007a7c;
   }
   .email-input {
     width: 408.17px;
@@ -475,8 +475,8 @@
     margin-left: 10px;
   }
   #confirmModal {
-    top: 60%;
-    right: 50%;
+    /* top: 60%;
+    right: 50%; */
     outline: none;
     overflow: hidden;
   }

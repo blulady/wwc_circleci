@@ -1,127 +1,69 @@
  
-.member-container {
+.view-member-wrapper{
   max-width: 1082px;
-  background: #ffffff;
+  margin: 0 auto;
+  padding-top: 45px;
+ }
+
+.member-container {
+  background: rgba(130, 130, 130, 0.1);
+  border-radius :8px;
+  outline: none !important;
+  background: #fff;
   box-sizing: border-box;
   border-radius: 10px;
   padding: 30px;
+  margin-top: 34px;
 }
 
 .member-details-container {
-  background: #fff;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #828282;
+  border-radius: 4px;
   margin-top: 25px;
-}
-.member-details-wrapper {
-  background: #f5f5f5;
-}
-.bottom-spacing {
-  height: 80vh;
-}
-.column {
-  padding-right: 45px;
+  padding: 50px 25px;
 }
 
-.img-size {
-  width: 100%;
-  height: auto;
-}
 .section-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
+  padding: 16px 0 0 0;
 }
 
-.section-box:first-child {
-  border-bottom: 0.5px solid #828282;
-}
-.view-member-details-div {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  max-width: 980px;
-  width: 98%;
-  padding: 45px;
-}
-
-.view-member-image-div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  background: inherit;
-  border: none;
+.section-divider {
+  background: #6b3768;
+  color: #828282;
+  margin-bottom: 0;
 }
 
 .view-member-fields-div {
   flex-direction: column;
   align-items: flex-start;
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: normal;
+  margin: auto;
 }
 
-.view-member-fields-edit-div {
-  margin-top: -13%;
+.view-member-info-editable {
+  padding-left: 50px;
+  min-width: 540px;
+  max-width: 540px;
+  float: right;
 }
 
-.leftmargin-button {
-  margin-left: 48px;
+.add-team-role{
+  color: #2376E5;
+}
+
+.add-team-role:hover{
+  cursor:pointer;
 }
 
 .view-memeber-edit-container {
   width: 80%;
-}
-
-.fullname-font {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 32px;
-  line-height: 44px;
-  color: #4f4f4f;
-  flex: none;
-  order: 0;
-  align-self: stretch;
-  flex-grow: 0;
-  margin: 0px 0px;
-  word-wrap: normal;
-  word-break: break-all;
-}
-.role-font {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 24px;
-  color: #333333;
-  padding-right: 50px;
-  text-transform: capitalize;
-}
-.edit-section-label-font {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 27px;
-  color: #333333;
-}
-.edit-label-font {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 22px;
-  color: #333333;
-}
-
-.edit-icon {
-  width: 100%;
-  height: auto;
-}
-.edit-image-left {
-  float: left;
-}
-.edit-image-right {
-  float: right;
 }
 
 .col-wrapper {
@@ -130,18 +72,15 @@
 }
 
 .label-font {
-  font-family: "Open Sans";
-  font-style: normal;
   font-weight: 600;
   font-size: 24px;
+  line-height: 20px;
   letter-spacing: 0.25px;
   color: #333333;
   margin-right: 7px;
 }
 
 .member-info-text {
-  font-family: "Open Sans";
-  font-style: normal;
   font-weight: 400;
   font-size: 24px;
   letter-spacing: 0.25px;
@@ -149,43 +88,36 @@
   text-transform: capitalize;
 }
 
-.status-icon-wrapper {
-  margin-right: 7px;
-}
 
-.status-icon {
-  width: 100%;
-  height: auto;
-}
-
-.email-font {
-  font-family: "Open Sans";
+.change-status-text{
+  font-family: 'Open Sans';
   font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 32px;
-  display: flex;
-  align-items: center;
-  color: #2376e5;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  margin: 0px 0px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 10px;
+  text-align: center;
+  margin:0;
+  padding-top: 8px
 }
 
-.datejoined-font {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 32px;
-  display: flex;
-  align-items: center;
-  color: #48484a;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  margin: 0px 0px;
+.icon-wrapper{
+  text-align: center;
+  align-self: flex-start;
+}
+
+.icon-wrapper:hover{
+  cursor: pointer;
+}
+.member-info-icon{
+  font-size: 18px;
+}
+
+.member-icon-active{
+  color: #007a7c;
+}
+
+.member-icon-inactive{
+  color: #828282;
 }
 
 .edit-separator {
@@ -220,46 +152,18 @@
   width: 155px;
 }
 
+.btn-submit.disabled{
+  background-color: rgba(72, 72, 74, 0.5);
+  color:#fff;
+}
+
 .btn-cancel {
   color: #007a7c;
   background: #ffffff;
   border: 1px solid #007a7c;
   width: 155px;
 }
-.member-role {
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 19px;
-  color: #48484a;
-}
 
-.team-title {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 33px;
-  color: #333333;
-}
-.checkbox-container {
-  display: flex;
-  flex-direction: column;
-}
-.custom-checkbox {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  max-width: 365px;
-  width: 58vw;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-}
 .checked {
   background: #dbebeb;
   border: 2px solid #007a7c;
@@ -271,38 +175,27 @@
   background: #f5f5f5;
 }
 
-.custom-checkbox input[type="checkbox"] {
-  position: absolute;
-  width: 1em;
-  height: 1em;
-  opacity: 0.00001;
+.disabled{
+  color: rgba(130, 130, 130, .7);
+  background: #f5f5f5;
 }
 
-.custom-checkbox .checkbox-icon {
-  width: 18px;
-  height: 18px;
-  border: 1px solid #0f283c;
-  border-radius: 3px;
-  margin-right: 10px;
-}
-
-.custom-checkbox input[type="checkbox"]:checked + .checkbox-icon {
-  border: none;
-  background-image: url(../../images/check_box_24px.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 .edit-member-form {
   background: #ffffff;
   border-radius: 10px;
-  padding: 20px;
+}
+
+.add-role-form{
+  padding-left: 50px;
+  min-width: 540px;
+  max-width: 540px;
+  float:right;
 }
 .form-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 }
 .show-form {
   display: flex;
@@ -313,36 +206,39 @@
   display: none;
 }
 
-@media (max-width: 992px) {
-  .view-member-fields-edit-div  {
-    margin-top: 0;
-    }
-    
-}
+@media only screen and (max-width: 576px) {
+  .view-member-wrapper{
+    padding: 10px;
+  }
 
-@media (max-width: 576px) {
   .member-container {
     background: #f5f5f5;
     padding: 0;
   }
 
   .member-details-container {
-    padding: 44px 28px;
+    padding: 44px 0;
+    background: #fff;
   }
 
-  .view-member-details-div {
-    padding: 0;
+  .view-member-name-email-date{
+    min-width: 180px;
+    float:left;
+    padding-left: 30px;
   }
 
-  .status-icon {
-    width: 12px;
-    height: 12px;
+  .view-member-info-editable{
+    min-width: 100%;
+    max-width: 100%;
+    clear:both;
+    padding-left: 0;
   }
 
   .section-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 8px 0 0 0;
   }
 
   .col-wrapper {
@@ -351,11 +247,11 @@
 
   .view-member-details-div {
     display: flex;
-    flex-direction: row;
     align-items: flex-start;
     max-width: 306px;
     width: calc(100% - 15px * 2);
     background: white;
+    padding: 0;
   }
 
   .view-member-details-edit-div {
@@ -366,27 +262,6 @@
     width: calc(100% - 15px * 2);
     background: white;
     padding: 0;
-  }
-
-  .view-member-fields-div {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
- .view-member-fields-edit-div  {
-   padding: 0;
- }
-  .fullname-font {
-    font-family: "Open Sans";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-    color: #4f4f4f;
-    margin: 0;
-    word-wrap: normal;
-    word-break: break-all;
-    text-transform: capitalize;
   }
 
   .role-font {
@@ -421,31 +296,8 @@
     text-transform: capitalize;
   }
 
-  .email-font {
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    color: #2376e5;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 0px 0px;
-  }
-
-  .datejoined-font {
-    font-family: "Open Sans";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 20px;
-    display: flex;
-    align-items: center;
-    color: #48484a;
-    margin: 0px;
+  .change-status-text{
+    display: none;
   }
 
   .label-font {
@@ -463,28 +315,6 @@
     background: #f5f5f5;
   }
 
-  .member-role {
-    width: 84px;
-    height: 19px;
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 19px;
-    margin-left: 8px;
-    color: #48484a;
-  }
-
-  .status-icon-wrapper {
-    padding-bottom: 2px;
-  }
-
-  .edit-icon {
-    width: 12px;
-    height: 12px;
-  }
-
-  
   .custom-checkbox {
     max-width: 263px;
     width: 80vw;

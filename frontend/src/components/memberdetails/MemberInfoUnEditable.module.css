@@ -1,0 +1,76 @@
+
+.view-member-name-email-date{
+  font-family: "Open Sans";
+  font-style: normal;
+  padding-left: 50px;
+  min-width: 540px;
+  max-width: 540px;
+  float: right;
+}
+
+.fullname-font {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  color: #4f4f4f;
+  align-self: stretch;
+  flex-grow: 0;
+  margin: 10px 0px 0px 0px;
+  word-wrap: normal;
+  word-break: break-all;
+}
+
+.email-font {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: #2376e5;
+  order: 0;
+  flex-grow: 0;
+}
+
+.datejoined-font {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: #48484a;
+  order: 0;
+  flex-grow: 0;
+}
+
+@media only screen and (max-width: 576px) {
+  .view-member-name-email-date{
+    min-width: 180px;
+    float:left;
+    padding-left: 30px;
+  }
+  .fullname-font {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: capitalize;
+  }
+
+  .email-font {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #2376e5;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .datejoined-font {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #48484a;
+    margin: 0px;
+  }
+}

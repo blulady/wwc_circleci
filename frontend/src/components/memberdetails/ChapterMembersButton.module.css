@@ -1,0 +1,17 @@
+.tab-selected-button{
+  width: 165px;
+  height: 51px;
+  background: rgba(130, 130, 130, 0.1);
+  border-radius :8px;
+  outline: none !important;
+}
+
+@media only screen and (max-width: 576px) {
+
+  .tab-selected-button{
+    width: 100px;
+    height: 20px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+}

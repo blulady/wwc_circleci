@@ -10,8 +10,8 @@ import AuthProvider from "./context/auth/AuthProvider";
 import ViewMembers from "./components/viewMembers/ViewMembers";
 import ReviewMember from "./components/addmember/ReviewMember";
 import AddMember from "./components/addmember/AddMember";
-import ViewMemberDetails from "./components/memberdetails/ViewMemberDetails";
-import UserProfile from './components/userProfile/UserProfile'
+import MemberDetails from "./components/memberdetails/MemberDetails";
+import UserProfile from './components/userprofile/UserProfile'
 import PrivateRoute from "./PrivateRoute";
 import VolunteerResources from "./components/viewMembers/VolunteerResources";
 import ChapterMembersContainer from "./components/viewMembers/ChapterMembersContainer";
@@ -38,7 +38,7 @@ function App() {
             <ViewMembers />
           </PrivateRoute>
           <PrivateRoute exact path='/member/view'>
-            <ViewMemberDetails />
+            <MemberDetails />
           </PrivateRoute>
           <PrivateRoute exact path='/member/add'>
             <AddMember />

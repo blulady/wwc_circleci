@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import ViewMemberDetails from "./ViewMemberDetails";
+import MemberDetails from "./MemberDetails";
 import { useLocation } from "react-router";
 import WwcApi from "../../WwcApi";
 
@@ -57,7 +57,7 @@ jest.mock("../layout/ContainerWithNav", function () {
 
 test("component is rendering", async () => {
   await act(async () => {
-    render(<ViewMemberDetails />);
+    render(<MemberDetails />);
   });
 
   expect(screen.getByText("John Doe")).toBeTruthy();
@@ -72,7 +72,7 @@ test("component is rendering", async () => {
 
 test("opens edit status/role form on edit status click", async () => {
   await act(async () => {
-    render(<ViewMemberDetails />);
+    render(<MemberDetails />);
   });
   const button = screen.getByAltText("Edit-status");
   fireEvent.click(button);
@@ -81,7 +81,7 @@ test("opens edit status/role form on edit status click", async () => {
 
 test("opens edit status/role form on edit role click", async () => {
   await act(async () => {
-    render(<ViewMemberDetails />);
+    render(<MemberDetails />);
   });
   const button = screen.getByAltText("Edit-role");
   fireEvent.click(button);
@@ -90,7 +90,7 @@ test("opens edit status/role form on edit role click", async () => {
 
 test("opens edit teams form on btn click", async () => {
   await act(async () => {
-    render(<ViewMemberDetails />);
+    render(<MemberDetails />);
   });
   const button = screen.getByAltText("Edit-team");
   fireEvent.click(button);

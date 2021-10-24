@@ -3,7 +3,7 @@ import React from "react";
 const ConfirmationModal = (props) => {
   return (
     <div className="modal" id="confirmModal" tabIndex="-1" role="dialog">
-      <div className="modal-dialog">
+      <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-body modal-open-text">
             *Selected role for this member is{" "}
@@ -15,7 +15,6 @@ const ConfirmationModal = (props) => {
                 type="button"
                 className="modal-confirm-btn"
                 data-dismiss="modal"
-                onClick={props.onClick}
               >
                 Confirm
               </button>

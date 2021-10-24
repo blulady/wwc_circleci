@@ -1,0 +1,19 @@
+.team-info-text{
+  margin-top: -8px;
+}
+
+.team-info-list{
+  list-style: none;
+  padding-inline-start: 5px;
+}
+
+@media only screen and (max-width: 576px) {
+
+  .team-info-text{
+    margin-top: unset;
+  }
+  
+  .team-info-list{
+    margin-bottom: 0;
+  }
+}

@@ -183,9 +183,6 @@ function AddMember(props) {
                 </form>
                 {/* Role Confirmation Modal code starts */}
                 <ConfirmationModal
-                  onClick={() => {
-                    setShowModal(false);
-                  }}
                   memberrole={memberRole.MemberRole}
                   memberdesc={memberRole.MemberRoleDescription}
                 />

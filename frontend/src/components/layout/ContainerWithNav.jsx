@@ -84,7 +84,7 @@ const ContainerWithNav = ({ children }) => {
           </div>
         </div>
       </nav>
-      <div className='container-body'>{children}</div>
+      <div className={styles['container-body']}>{children}</div>
     </div>
   );
 };

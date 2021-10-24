@@ -50,6 +50,10 @@
   background: url(../../images/logoPNG1.png);
 }
 
+.navbar-wwc-logo:hover{
+  cursor: pointer;
+}
+
 /* ---- navbar items other than logo --- */
 .navbar-items-ul {
   display: grid;

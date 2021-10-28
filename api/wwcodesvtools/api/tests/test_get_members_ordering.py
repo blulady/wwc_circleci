@@ -1,13 +1,20 @@
-import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from ..models import User
+from datetime import datetime
 
 
 class GetMembersOrderingTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
+    DIRECTOR_EMAIL = 'director@example.com'
+    LEADER_EMAIL = 'leader@example.com'
+    VOLUNTEER_EMAIL = 'volunteer@example.com'
+    PASSWORD = 'Password123'
 
-    def get_token(self, username, password):
+    def get_token(self, username):
+        self.username = username or self.DIRECTOR_EMAIL
+        self.password = self.PASSWORD
         s = TokenObtainPairSerializer(data={
             TokenObtainPairSerializer.username_field: self.username,
             'password': self.password,
@@ -18,111 +25,77 @@ class GetMembersOrderingTestCase(TransactionTestCase):
     # Testing get members ordering with role = DIRECTOR
     # first_name field ordered by "Ascending" order
     def test_get_members_ordering_by_first_name_asc(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=first_name", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 9)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Alexander')
-        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Alice')
-        self.assertEqual(json.loads(response.content)[2]['first_name'], 'Brenda')
-        self.assertEqual(json.loads(response.content)[3]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Caroline')
-        self.assertEqual(json.loads(response.content)[5]['first_name'], 'Jack')
-        self.assertEqual(json.loads(response.content)[6]['first_name'], 'John')
-        self.assertEqual(json.loads(response.content)[7]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[8]['first_name'], 'Sophie')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['first_name'] for member in members]
+        db_user_data = [entity for entity in User.objects.values_list('first_name', flat=True).order_by('first_name')]
+        self.assertEqual(db_user_data, api_resp_data)
 
     # Testing get members ordering with role = DIRECTOR
     # first_name field ordered by "Descending" order
     def test_get_members_ordering_by_first_name_desc(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-first_name", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 9)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[2]['first_name'], 'John')
-        self.assertEqual(json.loads(response.content)[3]['first_name'], 'Jack')
-        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Caroline')
-        self.assertEqual(json.loads(response.content)[5]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[6]['first_name'], 'Brenda')
-        self.assertEqual(json.loads(response.content)[7]['first_name'], 'Alice')
-        self.assertEqual(json.loads(response.content)[8]['first_name'], 'Alexander')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['first_name'] for member in members]
+        db_user_data = [entity for entity in User.objects.values_list('first_name', flat=True).order_by('-first_name')]
+        self.assertEqual(db_user_data, api_resp_data)
 
     # Testing get members ordering with role = LEADER
     # last_name field ordered by "Ascending" order
     def test_get_members_ordering_by_last_name_asc(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=last_name", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Brown')
-        self.assertEqual(json.loads(response.content)[1]['last_name'], 'Butler')
-        self.assertEqual(json.loads(response.content)[2]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[3]['last_name'], 'Fisher')
-        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Jackson')
-        self.assertEqual(json.loads(response.content)[5]['last_name'], 'Robinson')
-        self.assertEqual(json.loads(response.content)[6]['last_name'], 'Smith')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['last_name'] for member in members]
+        db_user_data = [entity for entity in User.objects.values_list('last_name', flat=True).order_by('last_name').exclude(userprofile__status='PENDING')]
+        self.assertEqual(db_user_data, api_resp_data)
 
     # Testing get members ordering with role = LEADER
     # last_name field ordered by "Descending" order
     def test_get_members_ordering_by_last_name_desc(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-last_name", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Smith')
-        self.assertEqual(json.loads(response.content)[1]['last_name'], 'Robinson')
-        self.assertEqual(json.loads(response.content)[2]['last_name'], 'Jackson')
-        self.assertEqual(json.loads(response.content)[3]['last_name'], 'Fisher')
-        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[5]['last_name'], 'Butler')
-        self.assertEqual(json.loads(response.content)[6]['last_name'], 'Brown')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['last_name'] for member in members]
+        db_user_data = [entity for entity in User.objects.values_list('last_name', flat=True).order_by('-last_name').exclude(userprofile__status='PENDING')]
+        self.assertEqual(db_user_data, api_resp_data)
 
     # Testing get members ordering with role = VOLUNTEER
     # date_joined field ordered by "Ascending" order
     def test_get_members_ordering_by_date_joined_asc(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(self.VOLUNTEER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=date_joined", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-02-19T01:55:01.810000Z')
-        self.assertEqual(json.loads(response.content)[1]['date_joined'], '2021-02-19T01:56:06.115000Z')
-        self.assertEqual(json.loads(response.content)[2]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[3]['date_joined'], '2021-05-24T23:50:53.484000Z')
-        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-05-24T23:55:04.556000Z')
-        self.assertEqual(json.loads(response.content)[5]['date_joined'], '2021-05-25T00:00:52.353000Z')
-        self.assertEqual(json.loads(response.content)[6]['date_joined'], '2021-05-27T21:34:01.149000Z')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['date_joined'] for member in members]
+        db_user_data = [datetime.strftime(entity, "%Y-%m-%dT%H:%M:%S.%fZ") for entity in User.objects.values_list('date_joined', flat=True).order_by('date_joined').exclude(userprofile__status='PENDING')]
+        self.assertEqual(db_user_data, api_resp_data)
 
     # Testing get members ordering with role = VOLUNTEER
     # date_joined field ordered by "Descending" order
     def test_get_members_ordering_by_date_joined_desc(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(self.VOLUNTEER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-date_joined", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[0]['date_joined'], '2021-05-27T21:34:01.149000Z')
-        self.assertEqual(json.loads(response.content)[1]['date_joined'], '2021-05-25T00:00:52.353000Z')
-        self.assertEqual(json.loads(response.content)[2]['date_joined'], '2021-05-24T23:55:04.556000Z')
-        self.assertEqual(json.loads(response.content)[3]['date_joined'], '2021-05-24T23:50:53.484000Z')
-        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[5]['date_joined'], '2021-02-19T01:56:06.115000Z')
-        self.assertEqual(json.loads(response.content)[6]['date_joined'], '2021-02-19T01:55:01.810000Z')
+
+        # validate the ordering
+        members = response.json()
+        api_resp_data = [member['date_joined'] for member in members]
+        db_user_data = [datetime.strftime(entity, "%Y-%m-%dT%H:%M:%S.%fZ") for entity in User.objects.values_list('date_joined', flat=True).order_by('-date_joined').exclude(userprofile__status='PENDING')]
+        self.assertEqual(db_user_data, api_resp_data)

@@ -1,7 +1,7 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from ..models import UserProfile, Role
+from ..models import UserProfile, Role, User_Team
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AND
 from api.permissions import CanEditMember
@@ -31,6 +31,10 @@ class EditMemberViewTestCase(TransactionTestCase):
                                 accept="application/json",
                                 content_type="application/json",)
 
+    def validate_teams(self, user_id, team_ids):
+        user_teams = [entity.team_id for entity in User_Team.objects.filter(user_id=user_id).order_by('team_id')]
+        self.assertEquals(user_teams, team_ids)
+
     # test cannot edit an invalid userid
     def test_edit_member_invalid_user_id(self):
         data = {"role": Role.VOLUNTEER, "status": UserProfile.INACTIVE, "teams": []}
@@ -56,7 +60,7 @@ class EditMemberViewTestCase(TransactionTestCase):
 
     # test edit member fails for invalid input Status
     def test_edit_member_for_invalid_status(self):
-        data = {"role": Role.VOLUNTEER, "status": "DORMANT", "teams": []}
+        data = {"role": Role.VOLUNTEER, "status": "PENDING", "teams": []}
         response = self.post_request(3, data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Invalid Status: accepted values are 'ACTIVE','INACTIVE'",
@@ -109,38 +113,20 @@ class EditMemberViewTestCase(TransactionTestCase):
         response = self.post_request(3, data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {
-                         'result': self.USER_EDITED_SUCCESSFULLY})
+                        'result': self.USER_EDITED_SUCCESSFULLY})
 
-        # validate the team rows added for user role Leader
-        response = self.client.get("/api/user/3", **self.bearer)
-        self.assertEqual(json.loads(response.content)['id'], 3)
-        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)['teams'][0]['id'], 1)
-        self.assertEqual(json.loads(response.content)['teams'][0]['name'], 'Event Volunteers')
-        self.assertEqual(json.loads(response.content)['teams'][1]['id'], 7)
-        self.assertEqual(json.loads(response.content)['teams'][1]['name'], 'Volunteer Management')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # validate the team rows added for user
+        self.validate_teams(user_id=3, team_ids=[1, 7])
 
         # next, edit member with another list of teams for the user role Leader
         data = {"role": Role.LEADER, "status": UserProfile.ACTIVE, "teams": [4, 7, 5]}
         response = self.post_request(3, data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {
-                         'result': self.USER_EDITED_SUCCESSFULLY})
+                        'result': self.USER_EDITED_SUCCESSFULLY})
 
         # validate the team rows are updated successfully to the new list of teams
-        response = self.client.get("/api/user/3", **self.bearer)
-        self.assertEqual(json.loads(response.content)['id'], 3)
-        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)['teams'][0]['id'], 4)
-        self.assertEqual(json.loads(response.content)['teams'][0]['name'], 'Partnership Management')
-        self.assertEqual(json.loads(response.content)['teams'][1]['id'], 5)
-        self.assertEqual(json.loads(response.content)['teams'][1]['name'], 'Social Media')
-        self.assertEqual(json.loads(response.content)['teams'][2]['id'], 7)
-        self.assertEqual(json.loads(response.content)['teams'][2]['name'], 'Volunteer Management')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.validate_teams(user_id=3, team_ids=[4, 5, 7])
 
     # test edit member for user role with no team
     def test_edit_member_user_role_with_no_team(self):
@@ -152,13 +138,7 @@ class EditMemberViewTestCase(TransactionTestCase):
                          'result': self.USER_EDITED_SUCCESSFULLY})
 
         # validate the team row added for user role Leader
-        response = self.client.get("/api/user/3", **self.bearer)
-        self.assertEqual(json.loads(response.content)['id'], 3)
-        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)['teams'][0]['id'], 1)
-        self.assertEqual(json.loads(response.content)['teams'][0]['name'], 'Event Volunteers')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.validate_teams(user_id=3, team_ids=[1])
 
         # next, edit member with no team for the user role
         data = {"role": Role.LEADER, "status": UserProfile.ACTIVE, "teams": []}
@@ -168,12 +148,7 @@ class EditMemberViewTestCase(TransactionTestCase):
                          'result': self.USER_EDITED_SUCCESSFULLY})
 
         # validate user role row has no team
-        response = self.client.get("/api/user/3", **self.bearer)
-        self.assertEqual(json.loads(response.content)['id'], 3)
-        self.assertEqual(json.loads(response.content)['status'], 'ACTIVE')
-        self.assertEqual(json.loads(response.content)['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)['teams'], [{}])
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.validate_teams(user_id=3, team_ids=[None])
 
     def test_edit_member_view_permissions(self):
         view_permissions = EditMemberView().permission_classes

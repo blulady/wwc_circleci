@@ -15,7 +15,7 @@ describe('Password', () => {
         expect(container).toMatchSnapshot();
     });
 
-    test('it validates password on change', () => {
+    test.skip('it validates password on change', () => {
         const { container, getByTestId } = render(<Password setPwd={mockSetPassword} />);
         const inputPwd = getByTestId('password');
         

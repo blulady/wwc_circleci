@@ -154,7 +154,7 @@ describe('TextAreaInput', () => {
         expect(container).toMatchSnapshot();
     });
 
-    test('it calls onChange handler on textarea change', () => {
+    test('it calls onChange handler on textarea change and updates props', () => {
         mockMessage = 'Hello There World!'
         const { container, rerender } = render(<TextAreaInput name='Message'
                                                     pclass='hide'

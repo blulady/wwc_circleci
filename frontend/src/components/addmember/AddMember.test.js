@@ -2,39 +2,24 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import AddMember from './AddMember';
 
-const mockSetMemberRole = jest.fn();
-const mockSetNewMember = jest.fn();
-const mockSetCheck = jest.fn();
-const mockSetShowModal = jest.fn();
-const mockSetShowSuccessModal = jest.fn();
-const mockSetState = jest.fn().mockImplementationOnce((init) => { return [init, mockSetMemberRole] })
-                              .mockImplementationOnce((init) => { return [init, mockSetNewMember] })
-                              .mockImplementationOnce((init) => { return [init, mockSetCheck] })
-                              .mockImplementationOnce((init) => { return [init, mockSetShowModal] })
-                              .mockImplementationOnce((init) => { return [init, mockSetShowSuccessModal] });
 const mockHistoryPush = jest.fn();
-const expectedMemberInfo = {
-    Email: 'test@example.com',
-    Role: 'Leader',
-    Message: 'hello world!'
-};
-const expectedMemberRole = {
-    'MemberRoleId': '2',
-    'MemberRole': 'Leader',
-    'MemberRoleDescription': 'Access to all areas excluding Director area'
-};
+let mockFromReview = false;
 
-jest.mock('react-router-dom', () => ({
-    useHistory: () => ({
-      push: mockHistoryPush,
-      replace: jest.fn()
-    }),
-    useLocation: () => ({
-        state: {
-            fromReview: false
-        }
-    })
-}));
+jest.mock('react-router-dom', () => {
+    const ActualReactRouterDom = require.requireActual('react-router-dom');
+    return {
+        ...ActualReactRouterDom,
+        useHistory: () => ({
+        push: mockHistoryPush,
+        replace: jest.fn()
+        }),
+        useLocation: () => ({
+            state: {
+                fromReview: mockFromReview
+            }
+        })
+    }
+});
 
 jest.mock('react', () => {
     const ActualReact = require.requireActual('react');
@@ -50,25 +35,18 @@ jest.mock('react', () => {
             },
             handleRemoveAuth: jest.fn()
         }),
-        useState: (init) => {
-            return [init, mockSetState];
-        }
     };
 });
 
 describe('AddMember', () => {
-    beforeEach(() => {
-        mockSetState.mockClear();
-    });
-
     test('it renders without crashing', () => {
         const { container } = render(<AddMember />);
         
         expect(container).toMatchSnapshot();
     });
 
-    test('it calls setNewMember on input change', () => {
-        const { container } = render(<AddMember />);
+    test('it reflects input change', () => {
+        const { container, rerender } = render(<AddMember />);
         const emailInput = container.querySelector('.email-input');
         const selectedRole = container.querySelector("[id='2']");
         const textAreaInput = container.querySelector('.message-textarea');
@@ -76,45 +54,33 @@ describe('AddMember', () => {
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.click(selectedRole);
         fireEvent.change(textAreaInput, { target: { value: 'hello world!' } });
+        rerender();
 
-        expect(mockSetState).toHaveBeenCalledTimes(6);
+        expect(emailInput.value).toBe('test@example.com');
+        expect(selectedRole).toHaveClass('role-radio-selected');
+        expect(textAreaInput.value).toBe('hello world!');
     });
 
-    test('it calls setMemberRole, setNewMember, setCheckId, setShowModal on radio click', () => {
-        const { container } = render(<AddMember />);
-        const selectedRole = container.querySelector("[id='2']");
-
-        fireEvent.click(selectedRole);
-
-        expect(mockSetState).toHaveBeenCalledTimes(4);
-
-        // setMemberRole call
-        //expect(mockSetMemberRole).toBeCalledWith(expectedMemberRole);
-
-        // setCheckId call
-        //expect(mockSetCheck).toBeCalledWith(2);
-
-        // setShowModal call
-        //expect(mockSetShowModal).toBeCalledWith(true);
-
-        // setNewMember call
-        //expect(mockSetState).toBeCalledWith({ Role: 'Leader' });
-    });
-
-    test('it calls handleSubmit on form submit', () => {
-        const { container } = render(<AddMember />);
+    test('it handles form submit', () => {
+        const { container, getByText } = render(<AddMember />);
         const emailInput = container.querySelector('.email-input');
         const selectedRole = container.querySelector("[id='3']");
-        const reviewBtn = container.querySelector('.review-btn');
+        const textAreaInput = container.querySelector('.message-textarea');
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.click(selectedRole);
+        fireEvent.change(textAreaInput, { target: { value: 'hello world!' } });
+        fireEvent.click(getByText('Confirm'));
+        fireEvent.submit(getByText('Review'));
 
-        const confirmBtn = container.querySelector('.modal-confirm-btn');
-        fireEvent.click(confirmBtn);
-        fireEvent.click(reviewBtn);
+        expect(mockHistoryPush).toHaveBeenCalledTimes(1);
+    });
 
-        //expect(mockHistoryPush).toHaveBeenCalledTimes(1);
-        //expect(mockHistoryPush).toBeCalledWith({ pathname: '/member/review', state: { memberinfo: expectedMemberInfo, roleinfo: expectedMemberRole } });
+
+    test('it shows success modal', () => {
+        mockFromReview = true;
+        const { getByText } = render(<AddMember />);
+
+        expect(getByText('Member has been added and emailed a registration link')).toBeInTheDocument();
     });
 });

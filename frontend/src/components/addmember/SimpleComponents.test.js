@@ -23,10 +23,8 @@ describe('ConfirmationModal', () => {
                                                         memberdesc='Limited access to areas of portal'
                                                         onClick={mockShowModal} />);
         const button = container.querySelector('.modal-confirm-btn');
-
-        act(() => {
-            fireEvent.click(button);
-        });
+        
+        fireEvent.click(button);
 
         expect(mockShowModal).toHaveBeenCalledTimes(1);
     });
@@ -57,9 +55,7 @@ describe('EmailInput', () => {
                                                  placeholder='eg. sam@wwcode.com' />);
         const input = container.querySelector('.email-input');
 
-        act(() => {
-            fireEvent.change(input, { target: { value: 'test@example.com' } });
-        });
+        fireEvent.change(input, { target: { value: 'test@example.com' } });
         
         expect(mockHandleChange).toHaveBeenCalledTimes(1);
         expect(input.value).toBe('test@example.com');
@@ -106,9 +102,7 @@ describe('RoleRadioField', () => {
                                                      roledesc='Limited access to areas of portal' />);
         const input = container.querySelector('.role-radio');
                                                 
-        act(() => {
-            fireEvent.click(input);
-        });
+        fireEvent.click(input);
 
         expect(mockHandleClick).toHaveBeenCalledTimes(1);
     });
@@ -127,9 +121,7 @@ describe('SuccessModal', () => {
         const { container } = render(<SuccessModal onClick={mockHandleClick} />);
         const button = container.querySelector('.modal-success-btn');
 
-        act(() => {
-            fireEvent.click(button);
-        });
+        fireEvent.click(button);
 
         expect(mockHandleClick).toHaveBeenCalledTimes(1);
     });
@@ -137,8 +129,14 @@ describe('SuccessModal', () => {
 
 describe('TextAreaInput', () => {
     let mockMessage = "Hello World!";
-    let mockCounterValue = mockMessage.length;
-    const mockHandleChange = jest.fn();
+    let mockNewMember = {
+        Email: '',
+        Role: '',
+        Message: mockMessage
+    }
+    const mockHandleChange = jest.fn().mockImplementation((e) => {
+        mockNewMember.Message = e.target.value;
+    });
     
     test('it renders without crashing', () => {
         const { container } = render(<TextAreaInput name='Message'
@@ -148,13 +146,16 @@ describe('TextAreaInput', () => {
                                                     className='form-control message-textarea'
                                                     onChange={mockHandleChange}
                                                     counterclass='message-counter'
-                                                    value={mockMessage}
-                                                    countervalue={mockCounterValue} />);
+                                                    value={mockNewMember.message}
+                                                    countervalue={ mockNewMember.Message
+                                                        ? mockNewMember.Message.length + "/2000 char"
+                                                        : null} />);
         
         expect(container).toMatchSnapshot();
     });
 
     test('it calls onChange handler on textarea change', () => {
+        mockMessage = 'Hello There World!'
         const { container } = render(<TextAreaInput name='Message'
                                                     pclass='hide'
                                                     editclass='hide'
@@ -162,21 +163,15 @@ describe('TextAreaInput', () => {
                                                     className='form-control message-textarea'
                                                     onChange={mockHandleChange}
                                                     counterclass='message-counter'
-                                                    value={mockMessage}
-                                                    countervalue={mockCounterValue} />);
+                                                    value={mockNewMember.message}
+                                                    countervalue={ mockNewMember.Message
+                                                        ? mockNewMember.Message.length + "/2000 char"
+                                                        : null} />);
         const textArea = container.querySelector('.message-textarea');
-        const counter = container.querySelector('.message-counter');
-        mockMessage = 'Hello There!'
-        mockCounterValue = mockMessage.length;
+        
+        fireEvent.change(textArea, { target: { value: mockMessage } });
 
-        act(() => {
-            fireEvent.change(textArea, { target: { value: mockMessage } });
-        });
-
-        setTimeout(() => {
-            expect(mockHandleChange).toHaveBeenCalledTimes(1);
-            expect(textArea.value).toBe('Hello There!');
-            expect(counter).toHaveTextContent(7);
-        });
+        expect(mockHandleChange).toHaveBeenCalledTimes(1);
+        expect(textArea.value).toBe('Hello There World!');
     });
 });

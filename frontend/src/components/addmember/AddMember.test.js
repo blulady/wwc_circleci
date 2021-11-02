@@ -1,8 +1,17 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import AddMember from './AddMember';
 
-const mockSetState = jest.fn();
+const mockSetMemberRole = jest.fn();
+const mockSetNewMember = jest.fn();
+const mockSetCheck = jest.fn();
+const mockSetShowModal = jest.fn();
+const mockSetShowSuccessModal = jest.fn();
+const mockSetState = jest.fn().mockImplementationOnce((init) => { return [init, mockSetMemberRole] })
+                              .mockImplementationOnce((init) => { return [init, mockSetNewMember] })
+                              .mockImplementationOnce((init) => { return [init, mockSetCheck] })
+                              .mockImplementationOnce((init) => { return [init, mockSetShowModal] })
+                              .mockImplementationOnce((init) => { return [init, mockSetShowSuccessModal] });
 const mockHistoryPush = jest.fn();
 const expectedMemberInfo = {
     Email: 'test@example.com',
@@ -64,34 +73,29 @@ describe('AddMember', () => {
         const selectedRole = container.querySelector("[id='2']");
         const textAreaInput = container.querySelector('.message-textarea');
 
-        act(() => {
-            fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-            fireEvent.click(selectedRole);
-            fireEvent.change(textAreaInput, { target: { value: 'hello world!' } });
-        });
+        fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+        fireEvent.click(selectedRole);
+        fireEvent.change(textAreaInput, { target: { value: 'hello world!' } });
 
         expect(mockSetState).toHaveBeenCalledTimes(6);
-        // expect to have been called with
     });
 
     test('it calls setMemberRole, setNewMember, setCheckId, setShowModal on radio click', () => {
         const { container } = render(<AddMember />);
         const selectedRole = container.querySelector("[id='2']");
 
-        act(() => {
-            fireEvent.click(selectedRole);
-        });
+        fireEvent.click(selectedRole);
 
         expect(mockSetState).toHaveBeenCalledTimes(4);
 
         // setMemberRole call
-        //expect(mockSetState).toBeCalledWith(expectedMemberRole);
+        //expect(mockSetMemberRole).toBeCalledWith(expectedMemberRole);
 
         // setCheckId call
-        //expect(mockSetState).toBeCalledWith(2);
+        //expect(mockSetCheck).toBeCalledWith(2);
 
         // setShowModal call
-        //expect(mockSetState).toBeCalledWith(true);
+        //expect(mockSetShowModal).toBeCalledWith(true);
 
         // setNewMember call
         //expect(mockSetState).toBeCalledWith({ Role: 'Leader' });
@@ -103,16 +107,12 @@ describe('AddMember', () => {
         const selectedRole = container.querySelector("[id='3']");
         const reviewBtn = container.querySelector('.review-btn');
 
-        act(() => {
-            fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-            fireEvent.click(selectedRole);
-        });
+        fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+        fireEvent.click(selectedRole);
 
-        act(() => {
-            const confirmBtn = container.querySelector('.modal-confirm-btn');
-            fireEvent.click(confirmBtn);
-            fireEvent.click(reviewBtn);
-        });
+        const confirmBtn = container.querySelector('.modal-confirm-btn');
+        fireEvent.click(confirmBtn);
+        fireEvent.click(reviewBtn);
 
         //expect(mockHistoryPush).toHaveBeenCalledTimes(1);
         //expect(mockHistoryPush).toBeCalledWith({ pathname: '/member/review', state: { memberinfo: expectedMemberInfo, roleinfo: expectedMemberRole } });

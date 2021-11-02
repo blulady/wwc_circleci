@@ -147,7 +147,7 @@ describe('TextAreaInput', () => {
                                                     onChange={mockHandleChange}
                                                     counterclass='message-counter'
                                                     value={mockNewMember.message}
-                                                    countervalue={ mockNewMember.Message
+                                                    countervalue={mockNewMember.Message
                                                         ? mockNewMember.Message.length + "/2000 char"
                                                         : null} />);
         
@@ -156,7 +156,7 @@ describe('TextAreaInput', () => {
 
     test('it calls onChange handler on textarea change', () => {
         mockMessage = 'Hello There World!'
-        const { container } = render(<TextAreaInput name='Message'
+        const { container, rerender } = render(<TextAreaInput name='Message'
                                                     pclass='hide'
                                                     editclass='hide'
                                                     buttonclass='hide'
@@ -164,14 +164,27 @@ describe('TextAreaInput', () => {
                                                     onChange={mockHandleChange}
                                                     counterclass='message-counter'
                                                     value={mockNewMember.message}
-                                                    countervalue={ mockNewMember.Message
+                                                    countervalue={mockNewMember.Message
                                                         ? mockNewMember.Message.length + "/2000 char"
                                                         : null} />);
         const textArea = container.querySelector('.message-textarea');
+        const counter = container.querySelector('.message-counter');
         
         fireEvent.change(textArea, { target: { value: mockMessage } });
+        rerender(<TextAreaInput name='Message'
+        pclass='hide'
+        editclass='hide'
+        buttonclass='hide'
+        className='form-control message-textarea'
+        onChange={mockHandleChange}
+        counterclass='message-counter'
+        value={mockNewMember.message}
+        countervalue={mockNewMember.Message
+            ? mockNewMember.Message.length + "/2000 char"
+            : null} />);
 
         expect(mockHandleChange).toHaveBeenCalledTimes(1);
         expect(textArea.value).toBe('Hello There World!');
+        expect(counter).toHaveTextContent('18/2000 char');
     });
 });

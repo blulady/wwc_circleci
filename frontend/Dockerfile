@@ -1,4 +1,4 @@
-FROM node:alpine3.12
+FROM node:alpine3.14
 WORKDIR '/frontend'
 
 COPY package.json .

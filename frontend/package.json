@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
@@ -14,9 +14,8 @@
     "react-dom": "^16.13.1",
     "react-paginate": "^6.5.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
     "react-tooltip": "^4.2.10",
-    "serve": "^11.3.2"
+    "serve": "^12.0.1"
   },
   "scripts": {
     "dev": "react-scripts start",
@@ -41,6 +40,7 @@
     ]
   },
   "devDependencies": {
-    "axios-mock-server": "^0.19.0"
+    "axios-mock-server": "^0.19.0",
+    "react-scripts": "4.0.3"
   }
 }

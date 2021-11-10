@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 import queryString from "query-string";
 import Password from "../layout/Password"
 import classes from "./ResetPasswordForm.module.css";
@@ -39,7 +39,7 @@ return submitted
             <div className={classes.title}>Reset your password</div>
           </header>
           <div className={classes.passwordForm}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} data-testid='reset-pw-form'>
               <Password setPwd={handleSetPassword} pwdLabel="Enter New Password" />
               <div className='text-center'>
                 <button
@@ -48,6 +48,7 @@ return submitted
                   disabled={
                     !password 
                   }
+                  data-testid='reset-pw-button'
                 >
                   Reset
                 </button>

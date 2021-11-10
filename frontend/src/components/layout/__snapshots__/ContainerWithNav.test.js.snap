@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerWithNav it renders without crashing 1`] = `
+<div>
+  <div
+    class="container-fluid container-fluid"
+  >
+    <nav
+      class="container-navbar"
+    >
+      <div
+        class="container-inner"
+      >
+        <div
+          class="navbar-brand navbar-wwc-logo"
+        >
+          <div
+            class="logo-png"
+          />
+        </div>
+        <div
+          class="navbar-items "
+        >
+          <ul
+            class="navbar-items-ul"
+          >
+            <li
+              class="navbar-text navbar-items-wwc-title"
+            >
+              Chapter Tools
+            </li>
+            <li
+              class="navbar-items-user-button"
+            >
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                class="user-button"
+                data-toggle="dropdown"
+                id="navbarDropdown"
+                role="button"
+              >
+                <span>
+                  J
+                </span>
+              </div>
+              <div
+                aria-labelledby="navbarDropdown"
+                class="dropdown-menu dropdown-menu"
+              >
+                <p
+                  class="dropdown-item signed-user dropdown-item"
+                >
+                  Signed-in as
+                </p>
+                <p
+                  class="font-weight-bold dropdown-item signed-user dropdown-item"
+                >
+                  director@example.com
+                </p>
+                <button
+                  class="dropdown-item dropdown-item"
+                >
+                  Your Profile
+                </button>
+                <hr
+                  class="dropdown-divider dropdown-hr"
+                />
+                <button
+                  class="dropdown-item item-logout dropdown-item"
+                >
+                  Log Out
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div
+      class="container-body"
+    />
+  </div>
+</div>
+`;

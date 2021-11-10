@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScrollToTop it renders without crashing 1`] = `
+<div>
+  <div>
+    <button
+      class="scroll-to-top-button scroll-to-top-not-visible"
+    >
+      Back to top 
+      <i
+        class="fas fa-angle-double-up 2x"
+      />
+    </button>
+  </div>
+</div>
+`;

@@ -51,13 +51,11 @@ function ReviewMember(props) {
           MemberRole: item.role,
           MemberRoleDescription: item.desc,
         });
-        openModal();
+        setShowModal(true);
       }
     });
   };
-  const openModal = () => {
-    setShowModal(true);
-  };
+
   const handleChange = (event) => {
     setMember({ ...member, [event.target.name]: event.target.value });
   };

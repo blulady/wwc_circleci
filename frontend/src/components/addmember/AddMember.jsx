@@ -53,13 +53,11 @@ function AddMember(props) {
           MemberRoleDescription: item.desc,
         });
         setCheck(id);
-        openModal();
+        setShowModal(true);
       }
     });
   };
-  const openModal = () => {
-    setShowModal(true);
-  };
+
   const handleChange = (event) => {
     // event.persist();
     setNewMember({ ...newMember, [event.target.name]: event.target.value });

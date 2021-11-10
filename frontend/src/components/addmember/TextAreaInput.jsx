@@ -15,6 +15,7 @@ const TextAreaInput = (props) => {
           placeholder="Add an optional message to the registration email sent to the user (max 2000 char)"
           onChange={props.onChange}
           maxLength="2000"
+          data-testid='message'
         ></textarea>
         <div className={props.counterclass}>{props.countervalue}</div>
       </div>

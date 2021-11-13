@@ -40,18 +40,16 @@ describe('ScrollToTop', () => {
         const scrollTopSpy = jest.spyOn(document.documentElement, 'scrollTop', 'get')
                                  .mockImplementation(() => 4350);
         window.scrollTo = jest.fn();
+        let button;
 
         act(() => {
             fireEvent.scroll(global, { target: { scrollY: 4350 } });
             fireEvent.scroll(global, { target: { scrollY: 4341 } });
-    
-            const button = getByText(/Back to Top/i);
-            fireEvent.click(button);    
+            button = getByText(/Back to Top/i);
+            fireEvent.click(button);
         });
 
-        setTimeout(() => {
-            expect(global.scrollY).toBe(0);
-            expect(button).toHaveClass('scroll-to-top-not-visible');
-        }, 100);
+        expect(window.scrollTo).toHaveBeenCalled();
+        expect(button).toHaveClass('scroll-to-top-not-visible');
     });
 });

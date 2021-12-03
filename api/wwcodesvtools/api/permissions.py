@@ -36,3 +36,12 @@ class CanEditMember(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return is_director_or_superuser(request.user.id, request.user.is_superuser)
+
+
+class CanEditResource(permissions.BasePermission):
+    """
+    Check if user can edit member.
+    """
+
+    def has_permission(self, request, view):
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)

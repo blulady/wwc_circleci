@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TransactionTestCase
-from ..permissions import CanSendEmail, CanGetMemberInfo, CanAddMember, CanDeleteMember, CanEditMember
+from ..permissions import CanSendEmail, CanAddMember, CanDeleteMember, CanEditMember
 from django.http.request import HttpRequest
 
 
@@ -34,24 +34,6 @@ class PermissionsTestCase(TransactionTestCase):
         self._req.user = self._volunteer
         permission = self._can_send_email_permission.has_permission(self._req, None)
         self.assertFalse(permission, 'Volunteer should not have permission to send email')
-
-    # Can get member info
-    _can_get_member_info_permission = CanGetMemberInfo()
-
-    def test_can_get_member_info_permission_true_for_director(self):
-        self._req.user = self._director
-        permission = self._can_get_member_info_permission.has_permission(self._req, None)
-        self.assertTrue(permission, 'Director should have permission to get member info')
-
-    def test_can_get_member_info_permission_false_for_leader(self):
-        self._req.user = self._leader
-        permission = self._can_get_member_info_permission.has_permission(self._req, None)
-        self.assertFalse(permission, 'Leader should not have permission to get member info')
-
-    def test_can_get_member_info_permission_false_for_volunteer(self):
-        self._req.user = self._volunteer
-        permission = self._can_get_member_info_permission.has_permission(self._req, None)
-        self.assertFalse(permission, 'Volunteer should not have permission to get member info')
 
     # Can add member
     _can_add_member_permission = CanAddMember()

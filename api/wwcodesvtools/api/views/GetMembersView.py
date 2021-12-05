@@ -47,9 +47,12 @@ class GetMembersView(ListAPIView):
     def get(self, request):
         # This get method needs to be written purely to add the swagger_auto_schema decorator
         # So that we can display and accept the query params from swagger UI
-        print("***", self.request.query_params, "***")
+        print("***", request.query_params, "***")
         queryset = self.get_queryset()
-        serializer = self.get_serializer_class()(queryset, many=True)
+        print("<<<",queryset,"<<<")
+        filter_query_set = self.filter_queryset(queryset)
+        print("<<<",filter_query_set,"<<<")
+        serializer = self.get_serializer_class()(filter_query_set, many=True)
         return Response(serializer.data)
 
 

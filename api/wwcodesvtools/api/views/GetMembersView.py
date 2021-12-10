@@ -41,8 +41,6 @@ class GetMembersView(ListAPIView):
     role_param = openapi.Parameter('role', openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_STRING)
     created_at_param = openapi.Parameter('created_at', openapi.IN_QUERY, description="Filter on date joined", type=openapi.TYPE_STRING)
 
-
-
     @swagger_auto_schema(manual_parameters=[status_param, role_param, created_at_param])
     def get(self, request):
         # This get method needs to be written purely to add the swagger_auto_schema decorator
@@ -51,7 +49,6 @@ class GetMembersView(ListAPIView):
         filter_query_set = self.filter_queryset(queryset)
         serializer = self.get_serializer_class()(filter_query_set, many=True)
         return Response(serializer.data)
-
 
     def get_queryset(self):
         queryset = User.objects.all()

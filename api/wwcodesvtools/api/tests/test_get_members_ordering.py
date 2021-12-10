@@ -66,7 +66,7 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for ix in range(1, responseLength):
             self.assertLessEqual(members[ix]['last_name'], members[ix-1]['last_name'])
-    
+
     # Testing get members ordering with role = VOLUNTEER
     # date_joined field ordered by "Ascending" order
     def test_get_members_ordering_by_date_joined_asc(self):

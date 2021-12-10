@@ -27,7 +27,7 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for ix in range(1, responseLength):
             self.assertLessEqual(members[ix-1]['first_name'], members[ix]['first_name'])
-      
+
     # Testing get members ordering with role = DIRECTOR
     # first_name field ordered by "Descending" order
     def test_get_members_ordering_by_first_name_desc(self):

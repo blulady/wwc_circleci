@@ -2,9 +2,8 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
-from api.serializers.GetMemberForDirectorSerializer import GetMemberForDirectorSerializer
-from api.serializers.GetMemberSerializer import GetMemberSerializer
-from api.serializers.GetMemberProfileSerializer import GetMemberProfileSerializer
+from api.serializers.CompleteMemberInfoSerializer import CompleteMemberInfoSerializer
+from api.serializers.NonSensitiveMemberInfoSerializer import NonSensitiveMemberInfoSerializer
 from api.helper_functions import is_director_or_superuser
 from rest_framework.filters import OrderingFilter, SearchFilter
 import logging
@@ -42,8 +41,8 @@ class GetMembersView(ListAPIView):
 
     def get_serializer_class(self):
         if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
-            return GetMemberForDirectorSerializer
-        return GetMemberSerializer
+            return CompleteMemberInfoSerializer
+        return NonSensitiveMemberInfoSerializer
 
 
 class GetMemberInfoView(RetrieveAPIView):
@@ -57,9 +56,9 @@ class GetMemberInfoView(RetrieveAPIView):
     def get_serializer_class(self):
         try:
             if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
-                return GetMemberForDirectorSerializer
+                return CompleteMemberInfoSerializer
             else:
-                return GetMemberSerializer
+                return NonSensitiveMemberInfoSerializer
         except AttributeError:
             return "Attribute Exception: user id not found"
 
@@ -70,13 +69,13 @@ class GetMemberProfileView(RetrieveAPIView):
     message if there is no id match in the DB
     """
     permission_classes = [IsAuthenticated]
-    serializer_class = GetMemberProfileSerializer
+    serializer_class = CompleteMemberInfoSerializer
     queryset = None
     lookup_field = 'id'
 
     def get_serializer_class(self):
         try:
-            return GetMemberProfileSerializer
+            return CompleteMemberInfoSerializer
         except Exception:
             current_user = self.request.user
             return ("Exception: ", current_user, "not found.")

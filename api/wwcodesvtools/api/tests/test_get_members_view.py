@@ -8,8 +8,14 @@ from ..views.GetMembersView import GetMembersView
 class GetMembersViewTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
+    DIRECTOR_EMAIL = 'director@example.com'
+    LEADER_EMAIL = 'leader@example.com'
+    VOLUNTEER_EMAIL = 'volunteer@example.com'
+    PASSWORD = 'Password123'
 
-    def get_token(self, username, password):
+    def get_token(self, username):
+        self.username = username or self.DIRECTOR_EMAIL
+        self.password = self.PASSWORD
         s = TokenObtainPairSerializer(data={
             TokenObtainPairSerializer.username_field: self.username,
             'password': self.password,
@@ -20,62 +26,37 @@ class GetMembersViewTestCase(TransactionTestCase):
     # Testing get members with role = DIRECTOR
     # 'PENDING' status members and 'email' field are in the response
     def test_get_members_role_director(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 9)
-        self.assertEqual(json.loads(response.content)[5]['id'], 4)
-        self.assertEqual(json.loads(response.content)[5]['email'], 'leaderPendingStatus@example.com')
-        self.assertEqual(json.loads(response.content)[5]['first_name'], 'Caroline')
-        self.assertEqual(json.loads(response.content)[5]['last_name'], 'Miller')
-        self.assertEqual(json.loads(response.content)[5]['status'], 'PENDING')
-        self.assertEqual(json.loads(response.content)[5]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[5]['date_joined'], '2021-02-19T01:56:51.160000Z')
-        for i in range(responseLength):
-            self.assertIsNotNone(json.loads(response.content)[i]['email'])
+        members = json.loads(response.content)
+        for member in members:
+            self.assertIsNotNone(member['email'])
+            self.assertIn(member['status'], ('PENDING', 'ACTIVE'))
 
     # Testing get members with role = VOLUNTEER
     # 'PENDING' status members and 'email' field not in the response
     def test_get_members_role_volunteer(self):
-        self.username = 'volunteer@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        self.username = self.VOLUNTEER_EMAIL
+        access_token = self.get_token(self.username)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[4]['id'], 3)
-        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[4]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[4]['status'], 'ACTIVE')
-        for i in range(responseLength):
-            self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
-            self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
+        members = json.loads(response.content)
+        for member in members:
+            self.assertRaises(KeyError, lambda: member['email'])
+            self.assertIn(member['status'], 'ACTIVE')
 
     # Testing get members with role = LEADER
     # 'PENDING' status members and 'email' field not in the response
     def test_get_members_role_leader(self):
-        self.username = 'leader@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
+        self.username = self.LEADER_EMAIL
+        access_token = self.get_token(self.username)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
-        responseLength = len(response.data)
-        self.assertEqual(responseLength, 7)
-        self.assertEqual(json.loads(response.content)[4]['id'], 3)
-        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[4]['last_name'], 'Clark')
-        self.assertEqual(json.loads(response.content)[4]['role'], 'LEADER')
-        self.assertEqual(json.loads(response.content)[4]['date_joined'], '2021-02-19T01:56:29.756000Z')
-        self.assertEqual(json.loads(response.content)[4]['status'], 'ACTIVE')
-        for i in range(responseLength):
-            self.assertRaises(KeyError, lambda: json.loads(response.content)[i]['email'])
-            self.assertNotEqual(json.loads(response.content)[i]['status'], 'PENDING')
+        members = json.loads(response.content)
+        for member in members:
+            self.assertRaises(KeyError, lambda: member['email'])
+            self.assertIn(member['status'], 'ACTIVE')
 
     def test_get_members_view_permissions(self):
         view_permissions = GetMembersView().permission_classes

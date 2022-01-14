@@ -4,21 +4,22 @@ from api.models import User_Team
 from api.serializers.GetUserTeamSerializer import GetUserTeamSerializer
 
 
-class GetMemberSerializer(serializers.ModelSerializer):
+class NonSensitiveMemberInfoSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField('get_status')
     role = serializers.SerializerMethodField('get_role')
     teams = serializers.SerializerMethodField('get_teams')
 
-    class Meta(object):
+    class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'status', 'role', 'date_joined', 'teams']
 
-    def get_status(self, obj):
-        return obj.userprofile.status
+    def get_status(self, user):
+        return user.userprofile.status
 
-    def get_role(self, obj):
-        return obj.userprofile.role
+    def get_role(self, user):
+        role = User_Team.highest_role(user.id)
+        return role
 
-    def get_teams(self, obj):
-        userteam_qset = User_Team.objects.filter(user=obj)
+    def get_teams(self, user):
+        userteam_qset = User_Team.objects.filter(user=user)
         return GetUserTeamSerializer(userteam_qset, many=True).data

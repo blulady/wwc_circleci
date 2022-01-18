@@ -44,7 +44,7 @@
 
 ## To add features
 
-- Create a new branch for your feature with the naming conventions decided by the team.
+- Create a new branch for your feature. Your branch name should follow this pattern: `FESprint<sprint_num><feature_description>` eg. FESprint5ErrorHandling
 - Base branch: `master`
 
 
@@ -70,6 +70,8 @@
 
    To stage changes- `git add .`
    To commit changes- `git commit . -m "<message>"`
+   
+   Commit message should include `fix #<issue_number>`
 
 6. When the feature is ready, push changes up.
 
@@ -82,6 +84,13 @@
 - Tag leads and other team members. You will see everyone in the Reviewers section on the right.
 - Leave a comment explaining the changes.
 - Press the 'Create pull request' button
+
+9. Share your pull request in FE channel for awareness. 
+
+## Test
+
+- When you add new component or work on new feature, please try to add test cases. 
+- All tests will be run when you create a pull request as well as when you merge to master branch.
 
 ## Heroku Setup and Deployment
 
@@ -141,3 +150,7 @@ heroku logs --tail -a my-heroku-react-app
 Note:  
 1. Dockerfile.dev is used by docker-compose.yml for local dev deployment
 2. Dockerfile is used for production build deployment to Heroku app
+
+## Deployment
+
+There are 2 Heroku app, dev and prod. dev app is scheduled to get updated every merge to master. prod will be a manual update for now. We will create new branch to deploy to prod app when all the sprint features are ready. 

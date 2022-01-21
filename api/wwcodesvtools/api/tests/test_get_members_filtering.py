@@ -48,6 +48,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         response = self.client.get("/api/users/?role=LEADER", **bearer)
         members = json.loads(response.content)
         for member in members:
+            # TO DO This is needed because the test data has some members without role
+            #Remove this when sample data is fixed
             if member['role']:
                 self.assertEqual(member['role'], 'LEADER')
 

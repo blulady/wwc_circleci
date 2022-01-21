@@ -10,7 +10,7 @@ from api.models import Role
 from rest_framework.filters import OrderingFilter, SearchFilter
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from datetime import date, datetime, timedelta
+from datetime import date,datetime, timedelta
 import logging
 
 
@@ -45,6 +45,7 @@ class GetMembersView(ListAPIView):
     def get(self, request):
         # This get method needs to be written purely to add the swagger_auto_schema decorator
         # So that we can display and accept the query params from swagger UI
+        self.is_user_director_or_superuser = is_director_or_superuser(request.user.id, request.user.is_superuser)
         queryset = self.get_queryset()
         filter_query_set = self.filter_queryset(queryset)
         serializer = self.get_serializer_class()(filter_query_set, many=True)
@@ -52,10 +53,10 @@ class GetMembersView(ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
-        status = self.request.query_params.get('status')
-        if status:
-            queryset = queryset.filter(userprofile__status=status)
-        if not is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
+        status_filter = self.request.query_params.get('status')
+        if status_filter:
+            queryset = queryset.filter(userprofile__status=status_filter)
+        if not self.is_user_director_or_superuser:
             queryset = User.objects.exclude(userprofile__status="PENDING")
         date_filter = self.request.query_params.get('created_at')
         todays_date = datetime.today().astimezone()
@@ -66,12 +67,13 @@ class GetMembersView(ListAPIView):
             queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
         role_filter = self.request.query_params.get('role')
         if role_filter:
-            rfilter = Role.objects.get(name=role_filter)
-            queryset = queryset.filter(user_team__role=rfilter.id)
+            # rfilter = Role.objects.get(name=role_filter)
+            # queryset = queryset.filter(user_team__role=rfilter.id)
+            queryset = queryset.filter(user_team__role__name=role_filter)
         return queryset
 
     def get_serializer_class(self):
-        if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
+        if self.is_user_director_or_superuser:
             return GetMemberForDirectorSerializer
         return GetMemberSerializer
 

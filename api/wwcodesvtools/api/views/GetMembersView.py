@@ -6,11 +6,10 @@ from api.serializers.GetMemberForDirectorSerializer import GetMemberForDirectorS
 from api.serializers.GetMemberSerializer import GetMemberSerializer
 from api.helper_functions import is_director_or_superuser
 from api.permissions import CanGetMemberInfo
-from api.models import Role
 from rest_framework.filters import OrderingFilter, SearchFilter
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from datetime import date,datetime, timedelta
+from datetime import date, datetime, timedelta
 import logging
 
 

@@ -1,0 +1,375 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddMember it renders without crashing 1`] = `
+<div>
+  <div
+    class="container-fluid container-fluid"
+  >
+    <nav
+      class="container-navbar"
+    >
+      <div
+        class="container-inner"
+      >
+        <div
+          class="navbar-brand navbar-wwc-logo"
+        >
+          <div
+            class="logo-png"
+          />
+        </div>
+        <div
+          class="navbar-items "
+        >
+          <ul
+            class="navbar-items-ul"
+          >
+            <li
+              class="navbar-text navbar-items-wwc-title"
+            >
+              Chapter Tools
+            </li>
+            <li
+              class="navbar-items-user-button"
+            >
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                class="user-button"
+                data-toggle="dropdown"
+                id="navbarDropdown"
+                role="button"
+              >
+                <span>
+                  J
+                </span>
+              </div>
+              <div
+                aria-labelledby="navbarDropdown"
+                class="dropdown-menu dropdown-menu"
+              >
+                <p
+                  class="dropdown-item signed-user dropdown-item"
+                >
+                  Signed-in as
+                </p>
+                <p
+                  class="font-weight-bold dropdown-item signed-user dropdown-item"
+                >
+                  director@example.com
+                </p>
+                <button
+                  class="dropdown-item dropdown-item"
+                >
+                  Your Profile
+                </button>
+                <hr
+                  class="dropdown-divider dropdown-hr"
+                />
+                <button
+                  class="dropdown-item item-logout dropdown-item"
+                >
+                  Log Out
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div
+      class="container-body"
+    >
+      <main>
+        <div
+          class="container"
+        >
+          <div
+            class="button-inside-div"
+          >
+            <button
+              class="chapter-member-btn"
+            >
+               
+              Chapter Members
+               
+            </button>
+          </div>
+          <div
+            class="form-div"
+          >
+            <div
+              class="back-member-img-btn-div"
+            >
+              <img
+                alt="Back Button"
+                class="back-btn-img"
+                src="arrow_back_24px.png"
+                style="width: auto; height: auto;"
+              />
+              <button
+                class="back-member-btn"
+              >
+                 
+                Back to Member Portal
+                 
+              </button>
+            </div>
+            <div
+              class="row justify-content-center form-div-spacing"
+            >
+              <div>
+                <div
+                  class="header"
+                >
+                  Add New Member
+                </div>
+                <div
+                  class="header"
+                >
+                  to Portal
+                </div>
+                <p
+                  class="subheader"
+                >
+                   *Mandatory Fields
+                </p>
+                <form>
+                  <div
+                    class="form-group"
+                  >
+                    <div>
+                      <label
+                        class="input-label"
+                      >
+                        Email *
+                      </label>
+                    </div>
+                    <div
+                      class="div-inline responsive-div-block"
+                    >
+                      <p
+                        class="hide"
+                      />
+                      <input
+                        class="form-control email-input"
+                        id="email"
+                        name="Email"
+                        placeholder="eg. sam@wwcode.com"
+                        required=""
+                        type="email"
+                        value=""
+                      />
+                      <div
+                        class="spacer"
+                      />
+                      <div
+                        class="edit-icon"
+                      >
+                        <img
+                          alt="Edit"
+                          class="hide"
+                          src="edit_24px.png"
+                          style="width: auto; height: auto;"
+                        />
+                      </div>
+                      <button
+                        class="hide"
+                        type="submit"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="form-group"
+                  >
+                    <div>
+                      <label
+                        class="input-label"
+                      >
+                        Role *
+                      </label>
+                    </div>
+                    <div
+                      class="form-check radio-input"
+                    >
+                      <input
+                        class="form-check-input position-static role-radio"
+                        data-target="#confirmModal"
+                        data-toggle="modal"
+                        id="1"
+                        name="Role"
+                        type="radio"
+                        value="Volunteer"
+                      />
+                      <div
+                        class="member-role"
+                      >
+                        Volunteer
+                      </div>
+                      <div
+                        class="role-desc"
+                      >
+                        Limited access to areas of portal
+                      </div>
+                    </div>
+                    <div
+                      class="form-check radio-input"
+                    >
+                      <input
+                        class="form-check-input position-static role-radio"
+                        data-target="#confirmModal"
+                        data-toggle="modal"
+                        id="2"
+                        name="Role"
+                        type="radio"
+                        value="Leader"
+                      />
+                      <div
+                        class="member-role"
+                      >
+                        Leader
+                      </div>
+                      <div
+                        class="role-desc"
+                      >
+                        Access to all areas excluding Director area
+                      </div>
+                    </div>
+                    <div
+                      class="form-check radio-input"
+                    >
+                      <input
+                        class="form-check-input position-static role-radio"
+                        data-target="#confirmModal"
+                        data-toggle="modal"
+                        id="3"
+                        name="Role"
+                        type="radio"
+                        value="Director"
+                      />
+                      <div
+                        class="member-role"
+                      >
+                        Director
+                      </div>
+                      <div
+                        class="role-desc"
+                      >
+                        Access to all areas of portal
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="form-group"
+                  >
+                    <div>
+                      <label
+                        class="input-label"
+                      >
+                        Message (optional)
+                      </label>
+                    </div>
+                    <div
+                      class="div-inline responsive-div-block"
+                    >
+                      <p />
+                      <div
+                        style="display: block;"
+                      >
+                        <textarea
+                          class="form-control message-textarea"
+                          data-testid="message"
+                          id="message"
+                          maxlength="2000"
+                          name="Message"
+                          placeholder="Add an optional message to the registration email sent to the user (max 2000 char)"
+                          rows="6"
+                        />
+                        <div
+                          class="message-counter"
+                        />
+                      </div>
+                      <div
+                        class="spacer"
+                      />
+                      <div
+                        class="edit-icon"
+                      >
+                        <img
+                          alt="Edit"
+                          class="hide"
+                          src="edit_24px.png"
+                          style="width: auto; height: auto;"
+                        />
+                      </div>
+                      <button
+                        class="hide"
+                        type="submit"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="form-group d-flex justify-content-center"
+                  >
+                    <button
+                      class="d-flex justify-content-center review-btn"
+                      disabled=""
+                      type="submit"
+                    >
+                      Review
+                    </button>
+                  </div>
+                </form>
+                <div
+                  class="modal"
+                  id="confirmModal"
+                  role="dialog"
+                  tabindex="-1"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-centered"
+                  >
+                    <div
+                      class="modal-content"
+                    >
+                      <div
+                        class="modal-body modal-open-text"
+                      >
+                        *Selected role for this member is
+                         
+                        <span
+                          class="confirm-message"
+                        />
+                        , who will have
+                         
+                        <span
+                          class="confirm-message"
+                        />
+                        <div
+                          class="d-flex justify-content-center"
+                        >
+                          <button
+                            class="modal-confirm-btn"
+                            data-dismiss="modal"
+                            type="button"
+                          >
+                            Confirm
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+`;

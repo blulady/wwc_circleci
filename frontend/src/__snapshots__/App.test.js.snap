@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders learn react link 1`] = `
+<div>
+  <div>
+    <div
+      class="WwcBackground"
+    >
+      <div
+        class="WwcBackground-opacity"
+      >
+        <div
+          class="container container"
+        >
+          <div
+            class="WwcLogo"
+          />
+          <main>
+            <div
+              class="Login col col-md-6 col-lg-4"
+            >
+              <div
+                class="header header"
+              >
+                <div
+                  class="h1Login"
+                >
+                  Chapter Tools Login
+                </div>
+              </div>
+              <form
+                class="LoginForm"
+                data-testid="login-form"
+              >
+                <div
+                  class="invalid-feedback invalid-feedback"
+                >
+                  Invalid username and password
+                </div>
+                <div
+                  class="form-group col"
+                >
+                  <label
+                    class="Label"
+                    for="email"
+                  >
+                    Email *
+                  </label>
+                  <input
+                    class="form-control form-control"
+                    data-testid="login-email"
+                    id="email"
+                    name="username"
+                    required=""
+                    type="email"
+                  />
+                </div>
+                <div
+                  class="form-group col password"
+                >
+                  <label
+                    class="Label"
+                    for="password"
+                  >
+                    Password *
+                  </label>
+                  <div
+                    class="input-group"
+                  >
+                    <input
+                      class="form-control form-control login-pwd"
+                      data-testid="login-password"
+                      id="password"
+                      name="password"
+                      required=""
+                      type="password"
+                    />
+                    <div
+                      class="input-group-append input-group-append"
+                    >
+                      <span
+                        class="input-group-text input-group-text show-hide"
+                      >
+                         
+                        SHOW
+                         
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    class="hypertext"
+                    type="text"
+                  >
+                    Forgot your password?
+                  </span>
+                </div>
+                <button
+                  class="btn btn"
+                  data-testid="login-submit-btn"
+                  disabled=""
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

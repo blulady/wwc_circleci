@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./AddMember.css";
 import { useHistory, useLocation } from "react-router-dom";
 import ContainerWithNav from "../layout/ContainerWithNav";

@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('react', () => {
-    const ActualReact = require.requireActual('react');
+    const ActualReact = jest.requireActual('react');
     return {
         ...ActualReact,
         useContext: () => ({
@@ -50,7 +50,7 @@ describe('ContainerWithNav', () => {
         expect(mockHistoryPush).toBeCalledWith({ pathname: '/member/profile' });
     });
 
-    test('it logs out on logout button click', async (done) => {
+    test('it logs out on logout button click', async () => {
         const apiSpy = jest.spyOn(WwcApi, 'logout').mockReturnValue(await Promise.resolve('hello'));
         const { getByText } = render(<ContainerWithNav />);
         const logoutButton = getByText(/Log Out/i);
@@ -60,6 +60,7 @@ describe('ContainerWithNav', () => {
         await expect(apiSpy).toHaveBeenCalledTimes(1);
         expect(mockHandleRemoveAuth).toHaveBeenCalledTimes(1);
         expect(mockHistoryPush).toBeCalledWith('/login');
-        done();
+        //done();
+        return Promise.resolve()
     });
 });

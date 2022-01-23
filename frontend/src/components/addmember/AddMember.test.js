@@ -6,7 +6,7 @@ const mockHistoryPush = jest.fn();
 let mockFromReview = false;
 
 jest.mock('react-router-dom', () => {
-    const ActualReactRouterDom = require.requireActual('react-router-dom');
+    const ActualReactRouterDom = jest.requireActual('react-router-dom');
     return {
         ...ActualReactRouterDom,
         useHistory: () => ({
@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => {
 });
 
 jest.mock('react', () => {
-    const ActualReact = require.requireActual('react');
+    const ActualReact = jest.requireActual('react');
     return {
         ...ActualReact,
         useContext: () => ({

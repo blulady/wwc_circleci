@@ -27,7 +27,6 @@ const sortOptions = {
 
 const ViewMembers = (props) => {
   const history = useHistory();
-  const numOfRows = 3;
   const defaultUsersPerPage = 12;
   const [users, setUsers] = useState([]);
   const [paginationInfo, setPaginationInfo] = useState({
@@ -199,7 +198,8 @@ const ViewMembers = (props) => {
     },
   ]);
 
-  const getTeams = async () => {
+  useEffect(() => { 
+    const getTeams = async () => {
       let teams = await WwcApi.getTeams();
       teams = teams.map((team) => {
         return {
@@ -210,9 +210,9 @@ const ViewMembers = (props) => {
       let options = [...filterOptions];
       options[2].options = teams;
       setFilterOptions(options);
-  };
-
-  useEffect(() => { getTeams() }, [])
+    };
+    getTeams();
+  }, []);
 
   const [filters, setFilters] = useState({ role: [], status: [], date: [] });
   const onFilterApply = (vals) => {

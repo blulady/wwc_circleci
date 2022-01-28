@@ -1,7 +1,7 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from datetime import date
+from datetime import date,timedelta
 
 
 class GetMembersFilteringTestCase(TransactionTestCase):
@@ -38,6 +38,30 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for member in members:
             self.assertEqual(member['date_joined'][:4], str(current_year))
+
+    # Testing get members filtering with date joined = 3 months
+    def test_get_members_filtering_with_date_joined_3months(self):
+        self.username = 'director@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/users/?created_at=3months", **bearer)
+        three_months = date.today() - timedelta(weeks=12)
+        members = json.loads(response.content)
+        for member in members:
+            self.assertGreaterEqual(member['date_joined'][:10], str(three_months))
+
+             # Testing get members filtering with date joined = 3 months
+    def test_get_members_filtering_with_date_joined_6months(self):
+        self.username = 'director@example.com'
+        self.password = 'Password123'
+        access_token = self.get_token(self.username, self.password)
+        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
+        response = self.client.get("/api/users/?created_at=6months", **bearer)
+        six_months = date.today() - timedelta(weeks=24)
+        members = json.loads(response.content)
+        for member in members:
+            self.assertGreaterEqual(member['date_joined'][:10], str(six_months))
 
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):

@@ -1,7 +1,7 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from datetime import date,timedelta
+from datetime import date, timedelta
 
 
 class GetMembersFilteringTestCase(TransactionTestCase):
@@ -51,7 +51,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         for member in members:
             self.assertGreaterEqual(member['date_joined'][:10], str(three_months))
 
-             # Testing get members filtering with date joined = 3 months
+    # Testing get members filtering with date joined = 3 months
     def test_get_members_filtering_with_date_joined_6months(self):
         self.username = 'director@example.com'
         self.password = 'Password123'

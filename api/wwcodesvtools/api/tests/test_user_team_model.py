@@ -37,7 +37,7 @@ class UserTeamModelTestCase(TransactionTestCase):
             User_Team(user=user1, team=team3, role=role1)
         ])
         user_teams = User_Team.objects.all()
-        self.assertEqual(user_teams.count(), 17)
+        self.assertEqual(user_teams.count(), 19)
 
     # Testing a User can belong to many teams with different role
     def test_user_can_belong_to_many_teams_diff_roles(self):
@@ -56,7 +56,7 @@ class UserTeamModelTestCase(TransactionTestCase):
             User_Team(user=user1, team=team4, role=role1),
         ])
         user_teams = User_Team.objects.all()
-        self.assertEqual(user_teams.count(), 18)
+        self.assertEqual(user_teams.count(), 20)
 
     # Testing a Team and Role can have multiple Users
     def test_team_can_have_many_users(self):
@@ -71,7 +71,7 @@ class UserTeamModelTestCase(TransactionTestCase):
             User_Team(user=user3, team=team1, role=role1),
         ])
         user_teams = User_Team.objects.all()
-        self.assertEqual(user_teams.count(), 17)
+        self.assertEqual(user_teams.count(), 19)
 
     # Testing Users with Role and without a Team
     def test_team_role_without_team(self):
@@ -84,7 +84,7 @@ class UserTeamModelTestCase(TransactionTestCase):
             User_Team(user=user3, team=None, role=role3),
         ])
         user_teams = User_Team.objects.all()
-        self.assertEqual(user_teams.count(), 16)
+        self.assertEqual(user_teams.count(), 18)
 
     # Testing a user with different roles and without a team
     def test_user_with_roles_without_team(self):
@@ -98,4 +98,4 @@ class UserTeamModelTestCase(TransactionTestCase):
             User_Team(user=user1, team=None, role=role3),
         ])
         user_teams = User_Team.objects.all()
-        self.assertEqual(user_teams.count(), 17)
+        self.assertEqual(user_teams.count(), 19)

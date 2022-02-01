@@ -13,6 +13,7 @@ from api.views.CustomTokenObtainPairView import CustomTokenObtainPairView
 from api.views.LogoutView import LogoutView
 from api.views.DeleteMemberView import DeleteMemberView
 from api.views.GetTeamsView import GetTeamsView
+from api.views.ValidateRegLinkView import ValidateRegLinkView
 from api.views.GetResourceView import GetResourceView
 from api.views.EditResourceView import EditResourceView
 
@@ -38,5 +39,6 @@ urlpatterns = [
     path("user/edit/<int:id>", EditMemberView.as_view()),
     path('teams/', GetTeamsView.as_view()),
     path('resources/<str:slug>', GetResourceView.as_view()),
-    path('resources/edit/<str:slug>', EditResourceView.as_view())
+    path('resources/edit/<str:slug>', EditResourceView.as_view()),
+    path('validate/', ValidateRegLinkView.as_view())
 ]

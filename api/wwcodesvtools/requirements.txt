@@ -11,4 +11,4 @@ drf-yasg==1.17.1
 django-cors-headers==3.5.0
 django_heroku==0.3.1
 flake8==3.8.4
-python-dateutil==2.8.1
+

@@ -162,6 +162,42 @@
     }
 },
 {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$216000$bYO8FKGIKNvj$bOVRx+vk5FKx/cPOkkdu/vfip0hJ2aFssRqMOvI2hHs=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "thomasparker@example.com",
+        "first_name": "Thomas",
+        "last_name": "Parker",
+        "email": "thomasparker@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-05-27T21:34:01.365Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$216000$nUakym3vXbGI$A23hxIxxCLwWdLRz7DqqoXaMjaLJ81PI5kTdba+2AJ4=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "vincenttaylor@example.com",
+        "first_name": "Vincent",
+        "last_name": "Taylor",
+        "email": "vincenttaylor@example.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2022-01-19T17:30:10.464Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "api.user_team",
     "pk": 1,
     "fields": {
@@ -316,6 +352,28 @@
     }
 },
 {
+    "model": "api.user_team",
+    "pk": 15,
+    "fields": {
+        "user": [
+            "thomasparker@example.com"
+        ],
+        "team": null,
+        "role": 2
+    }
+},
+{
+    "model": "api.user_team",
+    "pk": 16,
+    "fields": {
+        "user": [
+            "vincenttaylor@example.com"
+        ],
+        "team": null,
+        "role": 2
+    }
+},
+{
     "model": "api.registrationtoken",
     "pk": 1,
     "fields": {
@@ -433,6 +491,32 @@
     }
 },
 {
+    "model": "api.registrationtoken",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "thomasparker@example.com"
+        ],
+        "token": "5f6a1048ef694b1692f3b7766caa56b920200527213401",
+        "used": false,
+        "created_at": "2020-05-27T21:34:01.369Z",
+        "updated_at": "2020-05-27T21:34:01.518Z"
+    }
+},
+{
+    "model": "api.registrationtoken",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "vincenttaylor@example.com"
+        ],
+        "token": "62080e2bb45e4b8588a83f4582acc8f420500119173010",
+        "used": true,
+        "created_at": "2022-01-19T17:30:10.469Z",
+        "updated_at": "2022-01-19T17:31:00.447Z"
+    }
+},
+{
     "model": "api.userprofile",
     "pk": 1,
     "fields": {
@@ -542,6 +626,31 @@
         "status": "ACTIVE",
         "created_at": "2021-05-27T21:34:01.151Z",
         "updated_at": "2021-05-27T21:35:10.454Z"
+    }
+},
+{
+    "model": "api.userprofile",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "thomasparker@example.com"
+        ],
+        "status": "PENDING",
+        "created_at": "2021-11-22T04:52:30.367Z",
+        "updated_at": "2021-11-22T04:52:30.515Z"
+    }
+},
+{
+    "model": "api.userprofile",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "vincenttaylor@example.com"
+        ],
+        "status": "ACTIVE",
+        "role": null,
+        "created_at": "2022-01-19T17:30:10.468Z",
+        "updated_at": "2022-01-19T17:31:00.445Z"
     }
 }
 ]

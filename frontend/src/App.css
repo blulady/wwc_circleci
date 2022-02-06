@@ -1,0 +1,11 @@
+*{margin: 0; padding: 0;}
+
+.App {
+    position: fixed;
+    min-height: 100%;
+    background-image: url("../images/loginBG.jpeg");
+    background-size: cover;
+    background-position: center;
+    top: 0px;
+
+}

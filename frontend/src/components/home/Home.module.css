@@ -1,0 +1,54 @@
+/* Group/Card/ChapterMembers */
+.chaptermembers {
+  position: absolute;
+  left: 180px;
+  top: 152px;
+  width: 320px;
+  height: 232px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.chaptermembers:hover{
+  cursor: pointer;
+}
+
+/* anna-earl-J-Jb1niw1j0-unsplash */
+.cardimgtop {
+  width: 100%;
+  height: 176px;
+  background: url(../../images/anna-earl-J-Jb1niw1j0-unsplash.png);
+}
+
+.cardbody {
+  width: 100%;
+  height: 56px;
+  background-color: #FFF;
+   /* Chapter Members */
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 32px;
+  /* Input/StrokeWWCode-Gray */
+  color: #333333;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .chaptermembers{
+    width: 95%;
+    height: 211px;
+    left: 8px;
+    top: 85px;
+  }
+
+  .cardimgtop{
+    width: 100%;
+    height: 160px;
+  }
+
+  .cardbody{
+    height: 51px;
+  }
+}

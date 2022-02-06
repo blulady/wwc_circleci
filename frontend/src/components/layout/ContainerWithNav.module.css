@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+/*----------outer container settings----------- */
+/* Main container */
+.container-fluid {
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Inner container to give margins on both sides */
+.container-inner {
+  min-width: 100%;
+  min-height: 100%;
+  margin: auto;
+  padding: 0rem 11.25rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+}
+
+/* container navbar */
+.container-navbar {
+  position: relative;
+  background-color: #ffffff;
+  height: 107px;
+  padding: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+/* container body */
+.container-body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+
+/*----------container-navbar settings----------- */
+
+/* ---- navbar logo --- */
+.navbar-wwc-logo .logo-png {
+  position: absolute;
+  width: 140px;
+  height: 75.16px;
+  left: 180px;
+  top: 16px;
+
+  background: url(../../images/logoPNG1.png);
+}
+
+.navbar-wwc-logo:hover{
+  cursor: pointer;
+}
+
+/* ---- navbar items other than logo --- */
+.navbar-items-ul {
+  display: grid;
+  grid-template-columns: 464px 40px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navbar-items-wwc-title {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 44px;
+  font-style: normal;
+  line-height: 54px;
+  letter-spacing: 0.015em;
+  text-align: center;
+  color: #333333;
+}
+
+.navbar-items-user-button {
+  padding: 0;
+}
+
+.user-button {
+  max-width: 40px;
+  height: 40px;
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 25px;
+  border-radius: 50%;
+  color: white;
+  background-color: #007d7f;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.dropdown-menu {
+  width: 300px;
+  height: 138px;
+  border-radius: 5px;
+  border: 0px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 3px 18px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+}
+
+.signed-user{
+  padding:0;
+}
+
+.signed-user:nth-child(2){
+  margin-top: -5px;
+}
+
+.signed-user:hover {
+  background-color: #fff;
+}
+
+.dropdown-item {
+  width: 298px;
+  height: 30px;
+  top: 98px;
+  right: 181px;
+  mix-blend-mode: normal;
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: black;
+  margin: 0;
+  padding: 0 5px;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(130,130,130, 0.25);
+  ;
+}
+
+.item-logout {
+  color: #000;
+}
+
+.dropdown-hr{
+  background: #6b3768;
+  border: 1px solid #828282;
+  margin-top: 0;
+}
+
+/*----------mediaquery settings----------- */
+
+/* small screen */
+@media only screen and (max-width: 576px) {
+  .container-navbar {
+    min-width: 100%;
+    height: 60px;
+  }
+
+  .container-inner {
+    width: 100%;
+    padding: 0em 0.5em;
+  }
+
+  .navbar-wwc-logo .logo-png {
+    width: 70px;
+    height: 36px;
+    left: 8px;
+    top: 10px;
+
+    background: url(../../images/logoPNG2.png);
+  }
+
+  .navbar-items-ul {
+    height: 30px;
+    grid-template-columns: 182px 30px;
+  }
+
+  .navbar-items-wwc-title {
+    font-size: 18px;
+    line-height: 0px;
+    letter-spacing: unset;
+  }
+
+  .user-button {
+    max-width: 30px;
+    height: 30px;
+  }
+
+  .dropdown-menu {
+    width: 202px;
+    height: 89px;
+    top: 51px;
+    box-shadow: 0px 3px 18px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+  }
+
+  .dropdown-menu .dropdown-item {
+    width: 202px;
+    height: 18px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+}

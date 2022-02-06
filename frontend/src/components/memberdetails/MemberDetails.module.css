@@ -1,0 +1,330 @@
+ 
+.view-member-wrapper{
+  max-width: 1082px;
+  margin: 0 auto;
+  padding-top: 45px;
+ }
+
+.member-container {
+  background: rgba(130, 130, 130, 0.1);
+  border-radius :8px;
+  outline: none !important;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 34px;
+}
+
+.member-details-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #828282;
+  border-radius: 4px;
+  margin-top: 25px;
+  padding: 50px 25px;
+}
+
+.section-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 0 0;
+}
+
+.section-divider {
+  background: #6b3768;
+  color: #828282;
+  margin-bottom: 0;
+}
+
+.view-member-fields-div {
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: normal;
+  margin: auto;
+}
+
+.view-member-info-editable {
+  padding-left: 50px;
+  min-width: 540px;
+  max-width: 540px;
+  float: right;
+}
+
+.add-team-role{
+  color: #2376E5;
+}
+
+.add-team-role:hover{
+  cursor:pointer;
+}
+
+.view-memeber-edit-container {
+  width: 80%;
+}
+
+.col-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label-font {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  color: #333333;
+  margin-right: 7px;
+}
+
+.member-info-text {
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0.25px;
+  color: #333333;
+  text-transform: capitalize;
+}
+
+
+.change-status-text{
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 10px;
+  text-align: center;
+  margin:0;
+  padding-top: 8px
+}
+
+.icon-wrapper{
+  text-align: center;
+  align-self: flex-start;
+}
+
+.icon-wrapper:hover{
+  cursor: pointer;
+}
+.member-info-icon{
+  font-size: 18px;
+}
+
+.member-icon-active{
+  color: #007a7c;
+}
+
+.member-icon-inactive{
+  color: #828282;
+}
+
+.edit-separator {
+  height: 0px;
+  background: #f5f5f5;
+}
+
+.form-buttons-container {
+  width: 60%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-btn {
+  width: 100px;
+  height: 39px;
+  margin: 15px;
+  border-radius: 5px;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  align-items: center;
+  text-align: center;
+  float: right;
+}
+
+.btn-submit {
+  background: #007a7c;
+  color: #ffffff;
+  width: 155px;
+}
+
+.btn-submit.disabled{
+  background-color: rgba(72, 72, 74, 0.5);
+  color:#fff;
+}
+
+.btn-cancel {
+  color: #007a7c;
+  background: #ffffff;
+  border: 1px solid #007a7c;
+  width: 155px;
+}
+
+.checked {
+  background: #dbebeb;
+  border: 2px solid #007a7c;
+  box-sizing: border-box;
+}
+
+.unchecked {
+  color: #48484a;
+  background: #f5f5f5;
+}
+
+.disabled{
+  color: rgba(130, 130, 130, .7);
+  background: #f5f5f5;
+}
+
+.edit-member-form {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.add-role-form{
+  padding-left: 50px;
+  min-width: 540px;
+  max-width: 540px;
+  float:right;
+}
+.form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+.show-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hide-form {
+  display: none;
+}
+
+@media only screen and (max-width: 576px) {
+  .view-member-wrapper{
+    padding: 10px;
+  }
+
+  .member-container {
+    background: #f5f5f5;
+    padding: 0;
+  }
+
+  .member-details-container {
+    padding: 44px 0;
+    background: #fff;
+  }
+
+  .view-member-name-email-date{
+    min-width: 180px;
+    float:left;
+    padding-left: 30px;
+  }
+
+  .view-member-info-editable{
+    min-width: 100%;
+    max-width: 100%;
+    clear:both;
+    padding-left: 0;
+  }
+
+  .section-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 0 0;
+  }
+
+  .col-wrapper {
+    display: inline-flex;
+  }
+
+  .view-member-details-div {
+    display: flex;
+    align-items: flex-start;
+    max-width: 306px;
+    width: calc(100% - 15px * 2);
+    background: white;
+    padding: 0;
+  }
+
+  .view-member-details-edit-div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 306px;
+    width: calc(100% - 15px * 2);
+    background: white;
+    padding: 0;
+  }
+
+  .role-font {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    padding-right: 50px;
+    text-transform: capitalize;
+  }
+
+  .edit-label-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333333;
+  }
+
+  .status-font {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: #333333;
+    padding-right: 56px;
+    text-transform: capitalize;
+  }
+
+  .change-status-text{
+    display: none;
+  }
+
+  .label-font {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .member-info-text {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .edit-separator {
+    height: 0px;
+    background: #f5f5f5;
+  }
+
+  .custom-checkbox {
+    max-width: 263px;
+    width: 80vw;
+  }
+
+  .edit-member-form {
+    margin-top: 17px;
+  }
+
+.form-buttons-container {
+  width: 100%;
+}
+}

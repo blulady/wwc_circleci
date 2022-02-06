@@ -1,0 +1,42 @@
+.search-box {
+    background-color: #FFFFFF;
+}
+
+.search-box .search-box-prepend {
+    width: 33.77px;
+}
+
+.search-box .search-box-prepend > div {
+    border: 1px solid #6B3768;
+}
+
+.search-box .search-text {
+    width: 512.35px;
+    height: 42px;
+    border: 1px solid #6B3768;
+}
+
+.search-box .search-text:focus {
+    box-shadow: none;
+}
+
+@media only screen and (max-width: 576px) {
+    .search-box .search-text {
+        width: 165px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .search-box .search-box-prepend {
+        width: 21px;
+    }
+
+    .search-box .search-box-prepend > div {
+        padding: 8px 4px 8px 5px;
+
+    }
+
+    .search-box .search-box-prepend > div > i {
+        font-size: 12px;
+    }
+}

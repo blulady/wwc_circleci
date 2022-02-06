@@ -1,0 +1,208 @@
+import React, { useState, useContext, useEffect } from "react";
+import styles from "./Login.module.css";
+import cx from "classnames";
+import WwcBackground from "./WwcBackground";
+import AuthContext from "../../context/auth/AuthContext";
+import { useHistory } from "react-router-dom";
+import ResetPasswordModal from "./ResetPasswordModal";
+import RequestSentModal from "./RequestSentModal";
+import PasswordResetSuccess from "./PasswordResetSuccessModal";
+import WwcApi from "../../WwcApi";
+
+/*
+ * sets session on submit and redirects to logout page on success
+ */
+const Login = () => {
+  const history = useHistory();
+  const { handleSetAuth } = useContext(AuthContext);
+  const pwdInput = React.createRef();
+  const [loginData, setLoginData] = useState({
+    // using username as key for email
+    // to match backend
+    username: "",
+    password: "",
+  });
+
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [showRequestSentModal, setShowRequestSentModal] = useState(false);
+  const [showResetsuccessModal, setShowResetSuccessModal] = useState(sessionStorage.getItem('password-reset') || false);
+
+  useEffect(() => {
+    /*
+     * Reroute if token present
+     */
+    if (sessionStorage.getItem("token")) {
+      history.push("/");
+    }
+  });
+
+  // updates login state
+  const handleChange = (event) => {
+    let nam = event.target.name;
+    let val = event.target.value;
+    setLoginData({ ...loginData, [nam]: val });
+  };
+
+  /*
+   * on submit sets success state to true
+   * stores token in session
+   * and redirects to logout page
+   */
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    try {
+      const results = await WwcApi.login(loginData);
+      const {
+        access,
+        refresh,
+        first_name,
+        last_name,
+        id,
+        email,
+        role,
+      } = results.data;
+      const token = { access, refresh };
+      const user = {
+        first_name,
+        last_name,
+        email,
+        id,
+        role,
+      };
+      // stores access token returned in session storage
+      // as {token: {access:...,refresh:...}}
+      handleSetAuth(token, user);
+      history.push("/");
+    } catch (err) {
+      form.classList.add(styles["was-validated"]);
+    }
+  };
+
+  // Handle show/hide toggle on password field
+  const handleShow = (e) => {
+    let pwdEl = pwdInput.current;
+    pwdEl.type === "password"
+      ? pwdEl.setAttribute("type", "text")
+      : pwdEl.setAttribute("type", "password");
+    e.target.innerText === "SHOW"
+      ? (e.target.innerText = "HIDE")
+      : (e.target.innerText = "SHOW");
+  };
+
+  const handleOpenResetPasswordModal = () => {
+    setShowResetPasswordModal(true);
+  };
+
+  const handleCloseResetPasswordModal = () => {
+    setShowResetPasswordModal(false);
+  };
+
+  const handleSendResetPasswordEmail = async ({ email }) => {
+    // make axios call to send request
+    await WwcApi.sendResetEmail(email);
+    setShowResetPasswordModal(false);
+    setShowRequestSentModal(true);
+  };
+
+  const handleClosePwdResetSuccessModal = () => {
+    sessionStorage.removeItem('password-reset');
+    setShowResetSuccessModal(false);
+  }
+
+  const handleCloseRequestSentModal = () => {
+    setShowRequestSentModal(false);
+  };
+
+  return (
+    <div>
+      <WwcBackground>
+        <div className={cx('container', styles['container'])}>
+          <div className={styles['WwcLogo']}></div>
+          <main>
+            <div className={cx(styles['Login'], 'col col-md-6 col-lg-4')}>
+              <div className={cx('header', styles['header'])}>
+                <div className={styles['h1Login']}>Chapter Tools Login</div>
+              </div>
+              <form
+                className={styles['LoginForm']}
+                onSubmit={handleSubmit}
+                data-testid = 'login-form'
+              >
+                <div className={cx('invalid-feedback', styles['invalid-feedback'])}>
+                  Invalid username and password
+                </div>
+                <div className='form-group col'>
+                  <label className='Label' htmlFor='email'>
+                    Email *
+                  </label>
+                  <input
+                    data-testid= 'login-email'
+                    type='email'
+                    name='username'
+                    id='email'
+                    className={cx('form-control', styles['form-control'])}
+                    required
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className='form-group col password'>
+                  <label className='Label' htmlFor='password'>
+                    Password *
+                  </label>
+                  <div className='input-group'>
+                    <input
+                      data-testid= 'login-password'
+                      type='password'
+                      name='password'
+                      id='password'
+                      ref={pwdInput}
+                      className={cx('form-control', styles['form-control'], styles['login-pwd'])}
+                      required
+                      onChange={handleChange}
+                    />
+                    <div className={cx('input-group-append', styles['input-group-append'])}>
+                      <span className={cx('input-group-text', styles['input-group-text'], styles['show-hide'])} onClick={handleShow}>
+                        {" "}
+                        SHOW{" "}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={styles['hypertext']}
+                    type='text'
+                    onClick={handleOpenResetPasswordModal}
+                  >
+                    Forgot your password?
+                  </span>
+                </div>
+                <button
+                  data-testid= 'login-submit-btn'
+                  className={cx('btn', styles['btn'])}
+                  type='submit'
+                  disabled={!loginData.password || !loginData.username}
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          </main>
+        </div>
+      </WwcBackground>
+      {showResetPasswordModal ? (
+        <ResetPasswordModal
+          send={handleSendResetPasswordEmail}
+          close={handleCloseResetPasswordModal}
+        />
+      ) : null}
+      {showRequestSentModal ? (
+        <RequestSentModal close={handleCloseRequestSentModal} />
+      ) : null}
+      {showResetsuccessModal ? (
+        <PasswordResetSuccess close={handleClosePwdResetSuccessModal} />
+      ) : null}
+    </div>
+  );
+};
+
+export default Login;

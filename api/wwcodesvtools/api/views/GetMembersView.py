@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
+from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from api.serializers.GetMemberForDirectorSerializer import GetMemberForDirectorSerializer
-from api.serializers.GetMemberSerializer import GetMemberSerializer
+from api.serializers.CompleteMemberInfoSerializer import CompleteMemberInfoSerializer
+from api.serializers.NonSensitiveMemberInfoSerializer import NonSensitiveMemberInfoSerializer
 from api.helper_functions import is_director_or_superuser
-from api.permissions import CanGetMemberInfo
+from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -71,15 +71,48 @@ class GetMembersView(ListAPIView):
 
     def get_serializer_class(self):
         if self.is_user_director_or_superuser:
-            return GetMemberForDirectorSerializer
-        return GetMemberSerializer
+            return CompleteMemberInfoSerializer
+        return NonSensitiveMemberInfoSerializer
 
 
 class GetMemberInfoView(RetrieveAPIView):
     """
     Takes the user id as a parameter and gives back the information about the member.
     """
-    permission_classes = [IsAuthenticated & CanGetMemberInfo]
+    permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
-    serializer_class = GetMemberForDirectorSerializer
     lookup_field = 'id'
+
+    def get_serializer_class(self):
+        try:
+            if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
+                return CompleteMemberInfoSerializer
+            else:
+                return NonSensitiveMemberInfoSerializer
+        except AttributeError:
+            return "Attribute Exception: user id not found"
+
+
+class GetMemberProfileView(RetrieveAPIView):
+    """
+    Get current logged in user's id. If valid, display profile information for that user. Return an error
+    message if there is no id match in the DB
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = CompleteMemberInfoSerializer
+    queryset = None
+    lookup_field = 'id'
+
+    def get_serializer_class(self):
+        try:
+            return CompleteMemberInfoSerializer
+        except Exception:
+            current_user = self.request.user
+            return ("Exception: ", current_user, "not found.")
+
+    def retrieve(self, request):
+        current_user = self.request.user
+        curr_id = current_user.id
+        instance = User.objects.get(pk=curr_id)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

@@ -6,7 +6,7 @@ is not already installed.
 1. Once Docker is installed, run the following commands:
     ```
     $ cd api/wwcodesvtools/
-    $ create a .env file and copy the content of ".env.example" to the new file
+    $ rename ".env.example" file to ".env"
     $ docker-compose up
     ```
 1. The web application will be available at http://localhost:8000

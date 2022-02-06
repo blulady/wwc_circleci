@@ -1,0 +1,47 @@
+name: FE-PR-Test
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  pull_request:
+    branches:
+      - "FESprint[0-9]+*"
+    types: [opened]
+    paths:
+      - "frontend/**"
+  push:
+    branches:
+      - "FESprint[0-9]+*"
+    paths:
+      - "frontend/**"
+      - ".github/workflows/FE*"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm ci, build and test
+        env:
+          CI: false
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build --if-present
+          npm test --silent -- --watchAll=false

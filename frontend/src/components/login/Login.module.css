@@ -1,0 +1,196 @@
+.WwcLogo {
+  background: url(../../images/logoPNG.png);
+  position: absolute;
+  width: 141px;
+  height: 76px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  left: 146px;
+  top: 42px;
+}
+
+.container {
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Login {
+  background-color: #f5f5f5;
+  padding: 30px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.h1Login {
+  font-family: Montserrat;
+  padding: 5px;
+  color: #48484a;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 49px;
+}
+
+.LoginForm {
+  width: 270px;
+  margin: 66px auto 0;
+}
+
+.form-group {
+  padding: 0;
+}
+
+.form-group label {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 29px;
+  margin-bottom: 0rem;
+}
+
+.input-group-text {
+  font-family: 'Open Sans';
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.password {
+  margin-top: 10px;
+}
+
+.btn {
+  display: block;
+  margin: 25px auto;
+  width: 120px;
+  height: 39px;
+  background: #007a7c;
+  color: #ffffff;
+  font-family: 'Open Sans';
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 29px;
+}
+
+.was-validated {
+  margin-top: 36px;
+}
+
+.LoginForm.was-validated .invalid-feedback {
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.was-validated .form-control,
+.was-validated .input-group-text {
+  box-shadow: 0px 4px 4px rgba(189, 26, 26, 0.75);
+  border-color: #ced4da;
+  background-image: none;
+}
+
+.btn:disabled {
+  background-color: #48484a;
+}
+
+/* Login password show hide toggle */
+
+input.login-pwd {
+  border-right: 0;
+}
+
+
+div.input-group-append {
+  margin-top: 0 !important;
+}
+
+.show-hide {
+  background-color: white;
+  border-left: none;
+  border-top: 1px solid #ced4da;
+  border-right: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #007a7c;
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+
+/* Forgot password */
+.hypertext {
+	font-family: "Open Sans";
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	color: #2376E5;
+	text-decoration-line: underline;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 767px) {
+
+  .WwcLogo {
+    width: 70px;
+    height: 37.58px;
+    top: 10px !important;
+    left: 8px !important;
+  }
+
+  /* Login Form */
+
+  .Login {
+    background-color: transparent;
+    height: 70%;
+    padding: 10px;
+  }
+
+  .h1Login {
+    font-size: 30px;
+    font-weight: 550;
+    line-height: 35px;
+    width: 85%;
+    margin: auto;
+  }
+
+  .LoginForm {
+    margin: auto;
+  }
+
+  .Login .LoginForm .form-group label {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgb(72, 72, 74);
+  }
+
+  .btn {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 21.79px;
+  }
+
+  /* Reset Password Form */
+  .modal-dialog .resetModalContent .h3ResetPassword {
+	color: #48484a;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 21.94px;
+  }
+  
+  .modal-dialog .resetModalContent .modal-confirm-btn {
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}

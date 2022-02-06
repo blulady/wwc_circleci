@@ -1,0 +1,39 @@
+.back-btn-img{
+  width: auto;
+  height: auto;
+  margin-right: 5px;
+}
+
+.back-member-btn {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  color: #007a7c;
+  background: #ffffff;
+  border: 1px solid #007a7c;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 10px;
+  width: 229px;
+  height: 42px;
+}
+
+@media only screen and (max-width: 580px) {
+  .back-btn-img {
+    width: 10.39px !important;
+    height: 10.12px !important;
+  }
+  .back-member-btn {
+    font-weight: normal;
+    width: 160px;
+    height: 32px;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 1px 1px 1px 1px;
+  }
+}

@@ -1,7 +1,5 @@
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from ..models import User
-from datetime import datetime
 import json
 
 

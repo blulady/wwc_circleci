@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from api.serializers.CompleteMemberInfoSerializer import CompleteMemberInfoSerializer
 from api.serializers.NonSensitiveMemberInfoSerializer import NonSensitiveMemberInfoSerializer
 from api.helper_functions import is_director_or_superuser
-from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter, SearchFilter
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema

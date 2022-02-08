@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ReactComponent as MemberImg } from "../../images/open_person_icon.svg";
 import { ReactComponent as MemberSmImg } from "../../images/open_person_sm_icon.svg";
 //import "./MemberCard.css";
-import {
-  isBrowser,
-  isMobile
-} from "react-device-detect";
+import { isBrowser, isMobile } from "react-device-detect";
 import { useHistory } from "react-router-dom";
 
 import styles from "./MemberCard.module.css";
@@ -18,14 +15,17 @@ import ReactTooltip from "react-tooltip";
 const MemberCard = (props) => {
   const cardUserInfo = props.userInfo;
   const isDirector = props.isDirector;
+  const userRole = props.userRole;
+  const memberCardAllowance = ["DIRECTOR", "LEADER", "VOLUNTEER"];
 
   const nameEltRef = React.createRef();
   const [isNameLong, setNameLong] = useState(false);
   const history = useHistory();
 
   // Show only first team if multiple teams
-  const hasTeams = !!(cardUserInfo.teams.length && cardUserInfo.teams[0].name)
-  const teamsStr = (cardUserInfo.teams.length && cardUserInfo.teams[0].name) || "No Team"
+  const hasTeams = !!(cardUserInfo.teams.length && cardUserInfo.teams[0].name);
+  const teamsStr =
+    (cardUserInfo.teams.length && cardUserInfo.teams[0].name) || "No Team";
 
   useEffect(() => {
     const nameElt = nameEltRef.current;
@@ -63,9 +63,11 @@ const MemberCard = (props) => {
       {isMobile && (
         <div
           className={cx(styles.membercard, "d-flex", props.viewClassName)}
-          onClick={isDirector ? handleClick : undefined}
+          onClick={
+            memberCardAllowance.includes(userRole) ? handleClick : undefined
+          }
         >
-          <div className='d-flex flex-column justify-content-around align-items-center'>
+          <div className="d-flex flex-column justify-content-around align-items-center">
             <MemberSmImg className={styles["membercard-img"]} />
             <div
               className={cx(
@@ -76,7 +78,7 @@ const MemberCard = (props) => {
               {cardUserInfo.status.toLowerCase()}
             </div>
           </div>
-          <div className='d-flex flex-column justify-content-around'>
+          <div className="d-flex flex-column justify-content-around">
             <div
               className={cx(
                 styles["membercard-name"],
@@ -89,13 +91,38 @@ const MemberCard = (props) => {
             <div className={styles["membercard-type"]}>
               {cardUserInfo.role?.toLowerCase()}
             </div>
-            <div className={cx(styles["membercard-team"], hasTeams ?  "" : styles["noteam"])}>
+            <div
+              className={cx(
+                styles["membercard-team"],
+                hasTeams ? "" : styles["noteam"]
+              )}
+            >
               {teamsStr}
               {cardUserInfo.teams.length > 1 && (
                 <React.Fragment>
-                  <div className={styles["multi-dots"]} onClick={() => { console.log("hey")}} data-tip data-for={"team-tooltip-" + random} data-event="click" data-event-off="mouseup" data-scroll-hide="true">...</div>
-                  <ReactTooltip id={"team-tooltip-" + random} effect="solid" type="light" globalEventOff="click">
-                    <span>Also part of {cardUserInfo.teams.length - 1} other team{(cardUserInfo.teams.length - 1) > 1 ? "s" : ""}</span>
+                  <div
+                    className={styles["multi-dots"]}
+                    onClick={() => {
+                      console.log("hey");
+                    }}
+                    data-tip
+                    data-for={"team-tooltip-" + random}
+                    data-event="click"
+                    data-event-off="mouseup"
+                    data-scroll-hide="true"
+                  >
+                    ...
+                  </div>
+                  <ReactTooltip
+                    id={"team-tooltip-" + random}
+                    effect="solid"
+                    type="light"
+                    globalEventOff="click"
+                  >
+                    <span>
+                      Also part of {cardUserInfo.teams.length - 1} other team
+                      {cardUserInfo.teams.length - 1 > 1 ? "s" : ""}
+                    </span>
                   </ReactTooltip>
                 </React.Fragment>
               )}
@@ -116,7 +143,9 @@ const MemberCard = (props) => {
             "card text-center",
             props.viewClassName
           )}
-          onClick={isDirector ? handleClick : undefined}
+          onClick={
+            memberCardAllowance.includes(userRole) ? handleClick : undefined
+          }
         >
           <div
             className={cx(
@@ -142,8 +171,8 @@ const MemberCard = (props) => {
             {isNameLong && (
               <ReactTooltip
                 className={cx(styles["membercard-name-tooltip"])}
-                place='top'
-                effect='solid'
+                place="top"
+                effect="solid"
                 id={"tooltip-" + random}
                 overridePosition={overridePosition}
                 style={{ width: "235px" }}
@@ -171,13 +200,32 @@ const MemberCard = (props) => {
             <div className={styles["membercard-type"]}>
               {cardUserInfo.role?.toLowerCase()}
             </div>
-            <div className={cx(styles["membercard-team"], hasTeams ?  "" : styles["noteam"])}>
+            <div
+              className={cx(
+                styles["membercard-team"],
+                hasTeams ? "" : styles["noteam"]
+              )}
+            >
               {teamsStr}
               {cardUserInfo.teams.length > 1 && (
                 <React.Fragment>
-                  <div className={styles["multi-dots"]} data-tip data-for={"team-tooltip-" + random} data-place="bottom">...</div>
-                  <ReactTooltip id={"team-tooltip-" + random} effect="solid" type="light">
-                    <span>Also part of {cardUserInfo.teams.length - 1} other team{(cardUserInfo.teams.length - 1) > 1 ? "s" : ""}</span>
+                  <div
+                    className={styles["multi-dots"]}
+                    data-tip
+                    data-for={"team-tooltip-" + random}
+                    data-place="bottom"
+                  >
+                    ...
+                  </div>
+                  <ReactTooltip
+                    id={"team-tooltip-" + random}
+                    effect="solid"
+                    type="light"
+                  >
+                    <span>
+                      Also part of {cardUserInfo.teams.length - 1} other team
+                      {cardUserInfo.teams.length - 1 > 1 ? "s" : ""}
+                    </span>
                   </ReactTooltip>
                 </React.Fragment>
               )}
@@ -190,6 +238,7 @@ const MemberCard = (props) => {
                 {cardUserInfo.email}
               </div>
             )}
+            {/* {isVolunteer && } */}
           </div>
         </div>
       )}

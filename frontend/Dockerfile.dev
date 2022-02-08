@@ -3,5 +3,6 @@ WORKDIR '/frontend'
 
 COPY package.json .
 RUN npm install
+ENV NODE_OPTIONS "--openssl-legacy-provider"
 
 CMD ["npm","run","dev"]

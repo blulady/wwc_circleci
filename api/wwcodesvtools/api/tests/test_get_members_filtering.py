@@ -29,6 +29,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], 'ACTIVE')
 
     # Testing get members filtering with date joined = current_year
+    # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined(self):
         self.username = 'director@example.com'
         self.password = 'Password123'
@@ -41,6 +42,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['date_joined'][:4], str(current_year))
 
     # Testing get members filtering with date joined = 3 months
+    # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined_3months(self):
         self.username = 'director@example.com'
         self.password = 'Password123'
@@ -52,7 +54,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         for member in members:
             self.assertGreaterEqual(member['date_joined'][:10], str(three_months))
 
-    # Testing get members filtering with date joined = 3 months
+    # Testing get members filtering with date joined = 6 months
+    # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined_6months(self):
         self.username = 'director@example.com'
         self.password = 'Password123'

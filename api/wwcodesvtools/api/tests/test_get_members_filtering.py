@@ -2,6 +2,7 @@ import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from datetime import date, timedelta
+from ..models import User_Team
 
 
 class GetMembersFilteringTestCase(TransactionTestCase):
@@ -72,10 +73,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         response = self.client.get("/api/users/?role=LEADER", **bearer)
         members = json.loads(response.content)
         for member in members:
-            # TO DO This is needed because the test data has some members without role
-            # Remove this when sample data is fixed
-            if member['role']:
-                self.assertEqual(member['role'], 'LEADER')
+            expected_role = User_Team.highest_role(member['id'])
+            self.assertEqual(member['role'], expected_role)
 
     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
@@ -87,5 +86,5 @@ class GetMembersFilteringTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for member in members:
             self.assertEqual(member['status'], 'ACTIVE')
-            if member['role']:
-                self.assertEqual(member['role'], 'LEADER')
+            expected_role = User_Team.highest_role(member['id'])
+            self.assertEqual(member['role'], expected_role)

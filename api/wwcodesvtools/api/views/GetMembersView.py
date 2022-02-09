@@ -6,6 +6,9 @@ from api.serializers.CompleteMemberInfoSerializer import CompleteMemberInfoSeria
 from api.serializers.NonSensitiveMemberInfoSerializer import NonSensitiveMemberInfoSerializer
 from api.helper_functions import is_director_or_superuser
 from rest_framework.filters import OrderingFilter, SearchFilter
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from datetime import date, datetime, timedelta
 import logging
 
 
@@ -32,15 +35,41 @@ class GetMembersView(ListAPIView):
     ordering = ['-date_joined']
     search_fields = ['^first_name', '^last_name']
 
+    status_param = openapi.Parameter('status', openapi.IN_QUERY, description="Filter on status", type=openapi.TYPE_STRING)
+    role_param = openapi.Parameter('role', openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_STRING)
+    created_at_param = openapi.Parameter('created_at', openapi.IN_QUERY, description="Filter on date joined", type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(manual_parameters=[status_param, role_param, created_at_param])
+    def get(self, request):
+        # This get method needs to be written purely to add the swagger_auto_schema decorator
+        # So that we can display and accept the query params from swagger UI
+        self.is_user_director_or_superuser = is_director_or_superuser(request.user.id, request.user.is_superuser)
+        queryset = self.get_queryset()
+        filter_query_set = self.filter_queryset(queryset)
+        serializer = self.get_serializer_class()(filter_query_set, many=True)
+        return Response(serializer.data)
+
     def get_queryset(self):
-        if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
-            queryset = User.objects.all()
-        else:
-            queryset = User.objects.exclude(userprofile__status='PENDING')
+        queryset = User.objects.all()
+        status_filter = self.request.query_params.get('status')
+        if status_filter:
+            queryset = queryset.filter(userprofile__status=status_filter)
+        if not self.is_user_director_or_superuser:
+            queryset = User.objects.exclude(userprofile__status="PENDING")
+        date_filter = self.request.query_params.get('created_at')
+        todays_date = datetime.today().astimezone()
+        if date_filter:
+            time_joined = {'3months': todays_date - timedelta(weeks=12),
+                           '6months': todays_date - timedelta(weeks=24),
+                           'current_year': date(todays_date.year, 1, 1)}
+            queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
+        role_filter = self.request.query_params.get('role')
+        if role_filter:
+            queryset = queryset.filter(user_team__role__name=role_filter)
         return queryset
 
     def get_serializer_class(self):
-        if is_director_or_superuser(self.request.user.id, self.request.user.is_superuser):
+        if self.is_user_director_or_superuser:
             return CompleteMemberInfoSerializer
         return NonSensitiveMemberInfoSerializer
 

@@ -91,3 +91,6 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             member_roles = User_Team.objects.values('role__name').filter(user_id=member['id'])
             self.assertEqual(member['status'], 'ACTIVE')
             self.assertIn(member['role'], [mr['role__name'] for mr in member_roles])
+
+    # TODO : Write test to unsure PENDING members are not retured in response when the non-director is logged-in
+    # logging as a non-director and the output should not have any pending users.

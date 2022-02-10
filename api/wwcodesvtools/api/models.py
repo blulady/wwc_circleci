@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     VOLUNTEER = 'VOLUNTEER'
     LEADER = 'LEADER'
     DIRECTOR = 'DIRECTOR'
+    REGISTERED_USER_VALID_STATUSES = [ACTIVE, INACTIVE]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20,
                               choices=((PENDING, PENDING),

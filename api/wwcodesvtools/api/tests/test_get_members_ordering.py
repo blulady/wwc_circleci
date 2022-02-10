@@ -1,7 +1,6 @@
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from ..models import User
-from datetime import datetime
+import json
 
 
 class GetMembersOrderingTestCase(TransactionTestCase):
@@ -28,12 +27,10 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=first_name", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['first_name'] for member in members]
-        db_user_data = [entity for entity in User.objects.values_list('first_name', flat=True).order_by('first_name')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertLessEqual(members[ix-1]['first_name'], members[ix]['first_name'])
 
     # Testing get members ordering with role = DIRECTOR
     # first_name field ordered by "Descending" order
@@ -41,12 +38,10 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-first_name", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['first_name'] for member in members]
-        db_user_data = [entity for entity in User.objects.values_list('first_name', flat=True).order_by('-first_name')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertLessEqual(members[ix]['first_name'], members[ix-1]['first_name'])
 
     # Testing get members ordering with role = LEADER
     # last_name field ordered by "Ascending" order
@@ -54,12 +49,10 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=last_name", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['last_name'] for member in members]
-        db_user_data = [entity for entity in User.objects.values_list('last_name', flat=True).order_by('last_name').exclude(userprofile__status='PENDING')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertLessEqual(members[ix-1]['last_name'], members[ix]['last_name'])
 
     # Testing get members ordering with role = LEADER
     # last_name field ordered by "Descending" order
@@ -67,12 +60,10 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-last_name", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['last_name'] for member in members]
-        db_user_data = [entity for entity in User.objects.values_list('last_name', flat=True).order_by('-last_name').exclude(userprofile__status='PENDING')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertLessEqual(members[ix]['last_name'], members[ix-1]['last_name'])
 
     # Testing get members ordering with role = VOLUNTEER
     # date_joined field ordered by "Ascending" order
@@ -80,12 +71,10 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(self.VOLUNTEER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=date_joined", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['date_joined'] for member in members]
-        db_user_data = [datetime.strftime(entity, "%Y-%m-%dT%H:%M:%S.%fZ") for entity in User.objects.values_list('date_joined', flat=True).order_by('date_joined').exclude(userprofile__status='PENDING')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertLess(members[ix - 1]['date_joined'], members[ix]['date_joined'])
 
     # Testing get members ordering with role = VOLUNTEER
     # date_joined field ordered by "Descending" order
@@ -93,9 +82,7 @@ class GetMembersOrderingTestCase(TransactionTestCase):
         access_token = self.get_token(self.VOLUNTEER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=-date_joined", **bearer)
-
-        # validate the ordering
-        members = response.json()
-        api_resp_data = [member['date_joined'] for member in members]
-        db_user_data = [datetime.strftime(entity, "%Y-%m-%dT%H:%M:%S.%fZ") for entity in User.objects.values_list('date_joined', flat=True).order_by('-date_joined').exclude(userprofile__status='PENDING')]
-        self.assertEqual(db_user_data, api_resp_data)
+        responseLength = len(response.data)
+        members = json.loads(response.content)
+        for ix in range(1, responseLength):
+            self.assertGreater(members[ix-1]['date_joined'], members[ix]['date_joined'])

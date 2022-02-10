@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Register.module.css";
 import cx from 'classnames';
 import queryString from "query-string";
@@ -8,14 +8,14 @@ import Spinner from "../layout/Spinner";
 import WwcApi from "../../WwcApi";
 
 import MessageBox from "../messagebox/MessageBox";
-import { ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EXPIRED } from "../../Messages";
+import { ERROR_REQUEST_MESSAGE, ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EXPIRED } from "../../Messages";
 
 
 function Register(props) {
   const history = useHistory();
   const { email, token } = queryString.parse(props.location.search);
-  const [errorOnLoading, setErrorOnLoading] = useState({hasError: false});
-  const [processing, setProcessing] = useState(false);
+  const [errorOnLoading, setErrorOnLoading] = useState({ hasError: false });
+  const [processing, setProcessing] = useState(true);
   const [userInfo, setUserInfo] = useState({
     first_name: "",
     last_name: "",
@@ -23,6 +23,27 @@ function Register(props) {
     password: "",
     token,
   });
+
+  React.useEffect( () => {
+      (async function validate() {
+        WwcApi.validateInvitation({ params: { email, token } }) // check valid invitation
+          .then((res) => {
+            console.log(res);
+            setProcessing(false);
+            if (res.data.success.status === "USED") {
+              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_USED });
+            }
+            if (res.data.success.status === "EXPIRED") {
+              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_EXPIRED });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            setErrorOnLoading({ hasError: true, title: "Sorry!", message: ERROR_REQUEST_MESSAGE }); // generic error
+            setProcessing(false);
+          });
+      }());
+  }, []); // only run once
 
   // function to update user info fields
   const handleChange = (event) => {
@@ -40,19 +61,13 @@ function Register(props) {
     setProcessing(true);
     const userData = { ...userInfo };
     try {
-      await WwcApi.validateInvitation({params: {email, token}}); // check valid invitation
-      try {
-        await WwcApi.activateMember(userData); // activate member
-        setProcessing(false);
-        history.push("/login");
-      } catch (error) { // error with activation
-        setProcessing(false);
-        setErrorOnLoading({hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_USED});
-        console.log(error);
-      }
-    } catch (error) { // error with invitation
+      await WwcApi.activateMember(userData); // activate new member
+      history.push("/login");
+    } catch (error) { // error with activation
+      setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REQUEST_MESSAGE }); // generic error
+      console.log(error);
+    } finally {
       setProcessing(false);
-      setErrorOnLoading({hasError: true, title: "Sorry!", message: ERROR_REGISTER_LINK_EXPIRED});
     }
   };
 

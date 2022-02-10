@@ -35,7 +35,7 @@ function ViewMemberDetails() {
     role: null,
     teams: null,
   });
-  const [editing, setEditing] = useState(null);
+  let [editing, setEditing] = useState(null);
   // Hardcoding team, role and user info for development as BE endpoint not ready
   // TODO When done with development,
   //      make api calls to get possible teams,roles and current user info by id
@@ -53,7 +53,7 @@ function ViewMemberDetails() {
       // VOLUNTEER: ["Partnership Management", "Social Media", "Host Management"],
     },
   });
-  console.log("user from member card", user);
+
   const memberRoleArray = [
     {
       id: "1",
@@ -86,7 +86,7 @@ function ViewMemberDetails() {
     { id: 8, name: "Volunteer Management" },
   ];
 
-  const handleStatusChange = async (checked) => {
+  let handleStatusChange = async (checked) => {
     let status = checked ? "ACTIVE" : "INACTIVE";
     setUser({ ...user, status: status });
     //TODO: Remove comments to make API call to change status once BE endpoint is ready
@@ -98,7 +98,7 @@ function ViewMemberDetails() {
     // }
   };
 
-  const handleRoleChange = async (role) => {
+  let handleRoleChange = async (role) => {
     // delete role
     let rt = {};
     for (let key in user.role_teams) {
@@ -116,7 +116,7 @@ function ViewMemberDetails() {
     // }
   };
 
-  const handleTeamChange = (role, selectedTeams) => {
+  let handleTeamChange = (role, selectedTeams) => {
     setEditing(null);
     if (!selectedTeams.size) {
       setUser({ ...user, role_teams: { ...role_teams, [role]: [] } });
@@ -179,6 +179,15 @@ function ViewMemberDetails() {
     getMemberData(id);
   }, [id]);
 
+  // Before rendering based on the user role make a choice to restrict
+  // delegation of the following functions to the component tree
+  if (userInfo.role === "LEADER" || userInfo.role === "VOLUNTEER") {
+    handleStatusChange = null;
+    handleRoleChange = null;
+    handleTeamChange = null;
+    setEditing = null;
+  }
+
   return (
     <ContainerWithNav>
       <div className={styles["view-member-wrapper"]}>
@@ -195,36 +204,6 @@ function ViewMemberDetails() {
             )}
             {!Object.keys(user).length ? (
               <Spinner />
-            ) : userInfo.role === "LEADER" || userInfo.role === "VOLUNTEER" ? (
-              <div className={cx("col-10", styles["view-member-fields-div"])}>
-                <MemberImage image={ProfileImage} />
-                <MemberInfoUnEditable
-                  first_name={first_name}
-                  last_name={last_name}
-                  email={email}
-                  date_joined={date_joined}
-                />
-                <div className={styles["view-member-info-editable"]}>
-                  <MemberStatus status={status} />
-                  {roles.map((role) => (
-                    <section key={role}>
-                      <MemberRole
-                        role={role}
-                        status={status}
-                        numRoles={roles.length}
-                      />
-                      <MemberTeams
-                        role={role}
-                        teams={role_teams[role]}
-                        status={status}
-                        totalTeams={teamsArray}
-                        allSelectedTeams={allSelectedRolesTeams.teams}
-                      />
-                      <hr className={styles["section-divider"]} />
-                    </section>
-                  ))}
-                </div>
-              </div>
             ) : (
               <div className={cx("col-10", styles["view-member-fields-div"])}>
                 <MemberImage image={ProfileImage} />

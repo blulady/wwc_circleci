@@ -110,6 +110,33 @@ describe('Register Component Validation Tests', () =>{
     expect(msgBox).toBeInTheDocument();
   });
 
+  test('Tests Register component behavior for INVALID invitation', async () => {       
+    // Mock EXPIRED invitation
+    WwcApi.validateInvitation.mockImplementation( 
+      async () => {
+        return await Promise.resolve({
+            data: {
+              success: {
+                  status: "INVALID",
+                  message: "Invalid token. Token in request does not match the token generated for this user."
+              }
+            }
+        })}
+      );
+    await act(async () => {
+      render(
+        <Router history={history}>
+          <Register location={loc}/>
+        </Router>
+      );
+    });
+    // Error message is rendered
+    const msgBox = screen.getByTestId('message-box');
+    expect(screen.getByText(/Oops/i)).toBeInTheDocument();
+    expect(screen.getByText(/This link is invalid/i)).toBeInTheDocument();
+    expect(msgBox).toBeInTheDocument();
+  });
+
   test('Tests Register component behavior for ERROR with invitation', async () => {       
     // Mock ERROR with invitation
     WwcApi.validateInvitation.mockImplementation( 

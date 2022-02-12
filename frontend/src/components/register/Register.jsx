@@ -8,7 +8,7 @@ import Spinner from "../layout/Spinner";
 import WwcApi from "../../WwcApi";
 
 import MessageBox from "../messagebox/MessageBox";
-import { ERROR_REQUEST_MESSAGE, ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EXPIRED } from "../../Messages";
+import { ERROR_REQUEST_MESSAGE, ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EXPIRED, ERROR_REGISTER_LINK_INVALID } from "../../Messages";
 
 
 function Register(props) {
@@ -34,6 +34,9 @@ function Register(props) {
             }
             if (res.data.success.status === "EXPIRED") {
               setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_EXPIRED });
+            }
+            if (res.data.success.status === "INVALID") {
+              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_INVALID });
             }
           })
           .catch((error) => {

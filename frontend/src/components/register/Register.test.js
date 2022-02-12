@@ -9,8 +9,7 @@ import WwcApi from "../../WwcApi";
 jest.mock("../../WwcApi", () => {
   return {
     ...jest.requireActual("../../WwcApi"),
-    validateInvitation: jest.fn(),
-    activateMember: jest.fn()
+    validateInvitation: jest.fn()
   };
 });
 

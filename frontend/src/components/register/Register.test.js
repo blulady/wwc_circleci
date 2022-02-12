@@ -38,16 +38,6 @@ describe('Register Component Validation Tests', () =>{
         })
       }
     );
-    // Mock successful activation
-    WwcApi.activateMember.mockImplementation( 
-      async () => {
-        return await Promise.resolve({
-            data: {
-              result: "User Activated Successfully"
-            }
-        })
-      }
-    );
     await act(async () => {
       render(
         <Router history={history}>

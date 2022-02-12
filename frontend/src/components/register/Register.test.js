@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import Register from './Register';
 import { createMemoryHistory } from 'history';
 import { Router} from "react-router";

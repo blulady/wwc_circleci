@@ -28,7 +28,6 @@ function Register(props) {
       (async function validate() {
         WwcApi.validateInvitation({ params: { email, token } }) // check valid invitation
           .then((res) => {
-            console.log(res);
             setProcessing(false);
             if (res.data.success.status === "USED") {
               setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_USED });
@@ -38,7 +37,6 @@ function Register(props) {
             }
           })
           .catch((error) => {
-            console.log(error);
             setErrorOnLoading({ hasError: true, title: "Sorry!", message: ERROR_REQUEST_MESSAGE }); // generic error
             setProcessing(false);
           });
@@ -65,7 +63,6 @@ function Register(props) {
       history.push("/login");
     } catch (error) { // error with activation
       setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REQUEST_MESSAGE }); // generic error
-      console.log(error);
     } finally {
       setProcessing(false);
     }

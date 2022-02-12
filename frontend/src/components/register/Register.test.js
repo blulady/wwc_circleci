@@ -15,14 +15,6 @@ jest.mock("../../WwcApi", () => {
 });
 
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: jest.fn(() => mockHistory)
-  })
-}));
-
-
 describe('Register Component Validation Tests', () =>{
   const history = createMemoryHistory({initialEntries: ['/register?email=a@b.com&token=test']});
   let loc;

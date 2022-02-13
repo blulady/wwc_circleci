@@ -114,8 +114,12 @@ class WwcApi {
     });
   }
 
-  static async register(data) {
+  static async activateMember(data) {
     return await axios.post(`${BASE_URL}/user/activate/`, data);
+  }
+
+  static async validateInvitation(data) {
+    return await axios.get(`${BASE_URL}/validate/`, data);
   }
 
   static async getTeams() {

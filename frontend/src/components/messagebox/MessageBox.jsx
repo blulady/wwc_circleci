@@ -14,11 +14,19 @@ const MessageBox = (props) => {
        return type[str] || this.type.Info;
     };
 
-    return (<div className={cx(styles[getTypeStr(props.type).toLowerCase()], styles["message-box"], "d-flex align-items-center justify-content-center flex-column")}>
-        <div className={styles["title"]}>{props.title}</div>
-        <div className={styles["message"]}>
-        {props.message}
+    return (
+        <div className={
+                cx(styles[getTypeStr(props.type).toLowerCase()],
+                styles["message-box"],
+                "d-flex align-items-center justify-content-center flex-column")
+                }
+            data-testid="message-box"
+        >
+            <div className={styles["title"]}>{props.title}</div>
+            <div className={styles["message"]}>
+                {props.message}
+            </div>
         </div>
-    </div>);
+    );
 };
 export default MessageBox;

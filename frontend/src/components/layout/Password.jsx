@@ -22,7 +22,7 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
   ]);
 
   useEffect(() => {
-    checkValidation();
+    checkValidation(password);
   }, [password]);
 
   // function for validating password
@@ -42,9 +42,9 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
     setHidden(!hidden);
   };
 
-  const checkValidation = () => {
+  const checkValidation = (pwd) => {
     if (passwdValidStatus.every((val) => val === true)) {
-      setPwd(password);
+      setPwd(pwd);
     } else {
       setPwd("");
     }

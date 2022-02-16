@@ -27,7 +27,7 @@ const MemberStatus = ({status, changeStatus=null}) => {
         ) : (
           <div className={classes["change-status-wrapper"]}>
             <label className={classes["switch"]}>
-              <input className={classes["switch-input"]} type="checkbox" checked={status==="ACTIVE" ? 'checked' : ''} onChange={handleStatusChange}/>
+              <input className={classes["switch-input"]} type="checkbox" checked={status==="ACTIVE" ? 'checked' : ''} onChange={handleStatusChange} data-testid="change-status-btn"/>
               <span className={cx(classes["switch-slider"], classes["switch-round"])}></span>
             </label>
             <p className={styles["change-status-text"]}>Change Status</p>

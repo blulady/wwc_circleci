@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessageBox it renders without crashing 1`] = `
+<div>
+  <div
+    class="error message-box d-flex align-items-center justify-content-center flex-column"
+    data-testid="message-box"
+  >
+    <div
+      class="title"
+    >
+      Sorry!
+    </div>
+    <div
+      class="message"
+    >
+      We could not process your request. \\nPlease try again.
+    </div>
+  </div>
+</div>
+`;

@@ -60,7 +60,7 @@ class EditMemberViewTestCase(TransactionTestCase):
 
     # test edit member fails for invalid input Status
     def test_edit_member_for_invalid_status(self):
-        data = {"role": Role.VOLUNTEER, "status": "PENDING", "teams": []}
+        data = {"role": Role.VOLUNTEER, "status": UserProfile.PENDING, "teams": []}
         response = self.post_request(3, data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Invalid Status: accepted values are 'ACTIVE','INACTIVE'",

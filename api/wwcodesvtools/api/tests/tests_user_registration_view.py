@@ -4,6 +4,7 @@ from rest_framework import status
 from ..models import RegistrationToken, UserProfile
 from rest_framework.permissions import AllowAny
 from ..views.UserRegistrationView import UserRegistrationView
+from datetime import datetime
 
 
 class UserRegistrationViewTestCase(TransactionTestCase):
@@ -110,7 +111,9 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         Test to verify that a POST call with valid user but non-existing token return invalid token
         response.
         """
-        self.registration_request_data["token"] = "abcdefa0342a4330bc790f23ac70a7b620220214015340"
+        now = datetime.now().strftime('%Y%m%d%H%M%S')
+        invalid_token = f"abcdefa0342a4330bc790f23ac70a7b6{now}"
+        self.registration_request_data["token"] = invalid_token
         expected_error = "Invalid token. Token does not exist in our system."
         resp = self.__send_request(self.registration_request_data)
         self.__perform_response_assertions(resp, status.HTTP_404_NOT_FOUND, expected_error)

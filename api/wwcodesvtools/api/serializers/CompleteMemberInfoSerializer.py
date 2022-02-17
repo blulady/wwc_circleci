@@ -5,4 +5,4 @@ from api.serializers.NonSensitiveMemberInfoSerializer import NonSensitiveMemberI
 class CompleteMemberInfoSerializer(NonSensitiveMemberInfoSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'status', 'role', 'date_joined', 'teams']
+        fields = ['id', 'first_name', 'last_name', 'email', 'status', 'highest_role', 'date_joined', 'role_teams']

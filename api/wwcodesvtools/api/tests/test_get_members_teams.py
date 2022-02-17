@@ -1,6 +1,7 @@
 import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from api.models import Role
 
 
 class TestGetMembersTeams(TransactionTestCase):
@@ -28,38 +29,35 @@ class TestGetMembersTeams(TransactionTestCase):
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=first_name", **bearer)
-        self.assertEqual(json.loads(response.content)[0]['first_name'], 'Alexander')
-        self.assertEqual(json.loads(response.content)[0]['teams'], [{}])
+        members = json.loads(response.content)
+        self.assertEqual(members[0]['first_name'], 'Alexander')
+        self.assertListEqual(members[0]['role_teams'], [{'role_name': Role.LEADER}])
 
-        self.assertEqual(json.loads(response.content)[1]['first_name'], 'Alice')
-        self.assertEqual(json.loads(response.content)[1]['teams'][0]['id'], 4)
-        self.assertEqual(json.loads(response.content)[1]['teams'][0]['name'], 'Partnership Management')
-        self.assertEqual(json.loads(response.content)[1]['teams'][1]['id'], 5)
-        self.assertEqual(json.loads(response.content)[1]['teams'][1]['name'], 'Social Media')
-        self.assertEqual(json.loads(response.content)[1]['teams'][2]['id'], 3)
-        self.assertEqual(json.loads(response.content)[1]['teams'][2]['name'], 'Host Management')
+        alice_expected_role_teams = [{'role_name': Role.VOLUNTEER, 'team_id': 4, 'team_name': 'Partnership Management'},
+                                     {'role_name': Role.VOLUNTEER, 'team_id': 5, 'team_name': 'Social Media'},
+                                     {'role_name': Role.VOLUNTEER, 'team_id': 3, 'team_name': 'Host Management'}]
+        self.assertEqual(members[1]['first_name'], 'Alice')
+        self.assertListEqual(members[1]['role_teams'], alice_expected_role_teams)
 
-        self.assertEqual(json.loads(response.content)[2]['first_name'], 'Brenda')
-        self.assertEqual(json.loads(response.content)[2]['teams'], [{}])
+        self.assertEqual(members[2]['first_name'], 'Brenda')
+        self.assertListEqual(members[2]['role_teams'], [{'role_name': Role.DIRECTOR}])
 
-        self.assertEqual(json.loads(response.content)[3]['first_name'], 'Bruno')
-        self.assertEqual(json.loads(response.content)[3]['teams'][0]['id'], 1)
-        self.assertEqual(json.loads(response.content)[3]['teams'][0]['name'], 'Event Volunteers')
-        self.assertEqual(json.loads(response.content)[3]['teams'][1]['id'], 7)
-        self.assertEqual(json.loads(response.content)[3]['teams'][1]['name'], 'Volunteer Management')
+        self.assertEqual(members[3]['first_name'], 'Bruno')
+        bruno_expected_role_teams = [{'role_name': Role.LEADER, 'team_id': 1, 'team_name': 'Event Volunteers'},
+                                     {'role_name': Role.LEADER, 'team_id': 7, 'team_name': 'Volunteer Management'}]
+        self.assertListEqual(members[3]['role_teams'], bruno_expected_role_teams)
 
-        self.assertEqual(json.loads(response.content)[4]['first_name'], 'Caroline')
-        self.assertEqual(json.loads(response.content)[4]['teams'], [{}])
+        self.assertEqual(members[4]['first_name'], 'Caroline')
+        self.assertListEqual(members[4]['role_teams'], [{'role_name': Role.LEADER}])
 
-        self.assertEqual(json.loads(response.content)[5]['first_name'], 'Jack')
-        self.assertEqual(json.loads(response.content)[5]['teams'], [{}])
+        self.assertEqual(members[5]['first_name'], 'Jack')
+        self.assertListEqual(members[5]['role_teams'], [{'role_name': Role.LEADER}])
 
-        self.assertEqual(json.loads(response.content)[6]['first_name'], 'John')
-        self.assertEqual(json.loads(response.content)[6]['teams'][0]['id'], 5)
-        self.assertEqual(json.loads(response.content)[6]['teams'][0]['name'], 'Social Media')
+        self.assertEqual(members[6]['first_name'], 'John')
+        john_expected_role_teams = [{'role_name': Role.DIRECTOR, 'team_id': 5, 'team_name': 'Social Media'}]
+        self.assertListEqual(members[6]['role_teams'], john_expected_role_teams)
 
-        self.assertEqual(json.loads(response.content)[7]['first_name'], 'Sophie')
-        self.assertEqual(json.loads(response.content)[7]['teams'][0]['id'], 2)
-        self.assertEqual(json.loads(response.content)[7]['teams'][0]['name'], 'Hackathon Volunteers')
-        self.assertEqual(json.loads(response.content)[7]['teams'][1]['id'], 6)
-        self.assertEqual(json.loads(response.content)[7]['teams'][1]['name'], 'Tech Event Volunteers')
+        self.assertEqual(members[7]['first_name'], 'Sophie')
+        sophie_expected_role_teams = [{'role_name': Role.LEADER, 'team_id': 6, 'team_name': 'Tech Event Volunteers'},
+                                      {'role_name': Role.VOLUNTEER, 'team_id': 2, 'team_name': 'Hackathon Volunteers'}]
+        self.assertListEqual(members[7]['role_teams'], sophie_expected_role_teams)

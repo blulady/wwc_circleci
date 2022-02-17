@@ -72,7 +72,6 @@ function ReviewMember(props) {
       };
       try {
         const results = await WwcApi.createMember(memberInfo);
-        console.log(results.result);
         history.push({
           pathname: "/member/add",
           state: { fromReview: true },

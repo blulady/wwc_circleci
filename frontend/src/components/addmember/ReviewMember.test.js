@@ -16,7 +16,7 @@ let mockRoleInfo = {
 };
 
 jest.mock('react-router-dom', () => {
-    const ActualReactRouterDom = require.requireActual('react-router-dom');
+    const ActualReactRouterDom = jest.requireActual('react-router-dom');
     return {
         ...ActualReactRouterDom,
         useHistory: () => ({
@@ -32,7 +32,7 @@ jest.mock('react-router-dom', () => {
 });
 
 jest.mock('react', () => {
-    const ActualReact = require.requireActual('react');
+    const ActualReact = jest.requireActual('react');
     return {
         ...ActualReact,
         useContext: () => ({
@@ -110,7 +110,7 @@ describe('ReviewMember', () => {
         expect(getAllByText('Save')[2]).toHaveClass('responsive-save-btn');
     });
 
-    test('it redirects on send invite click', async (done) => {
+    test('it redirects on send invite click', async () => {
         const apiSpy = jest.spyOn(WwcApi, 'createMember').mockReturnValue(await Promise.resolve('success'));
         const { container } = render(<ReviewMember />);
         const sendInvite = container.querySelector('.sendinvite-btn');
@@ -124,7 +124,7 @@ describe('ReviewMember', () => {
                 fromReview: true
             }
         });
-        done();
+        return Promise.resolve();
     });
 
     test('it shows error', () => {

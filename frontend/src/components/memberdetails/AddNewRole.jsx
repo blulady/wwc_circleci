@@ -8,7 +8,7 @@ import cx from "classnames";
 const AddNewRole = ({selectedRolesForUser, allRoles, addNewRole}) => {
 
   const [role, setRole] = useState({id: null, role: '', value: '', desc: ''});
-  const [selectedRoles, setSelectedRoles] = useState(new Set(selectedRolesForUser));
+  const [selectedRoles] = useState(new Set(selectedRolesForUser));
 
   const handleRoleChange = (e, id) => {
     allRoles.forEach((item) => {

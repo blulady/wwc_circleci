@@ -6,6 +6,7 @@ import AuthContext from "../../context/auth/AuthContext";
 import { useLocation } from "react-router";
 import WwcApi from "../../WwcApi";
 
+const userInfo = { userInfo: {} };
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useLocation: () => ({

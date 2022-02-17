@@ -2,7 +2,11 @@ import React from "react";
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MemberDetails from "./MemberDetails";
+import AuthContext from "../../context/auth/AuthContext";
+import { useLocation } from "react-router";
+import WwcApi from "../../WwcApi";
 
+const userInfo = { userInfo: {} };
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useLocation: () => ({
@@ -20,7 +24,7 @@ jest.mock("react-router-dom", () => ({
       status: "ACTIVE",
       teams: [],
     },
-  })
+  }),
 }));
 
 jest.mock("../../WwcApi", () => {
@@ -35,10 +39,9 @@ jest.mock("../../WwcApi", () => {
         last_name: "Doe",
         role: "VOLUNTEER",
         status: "ACTIVE",
-        teams: [
-          { id: 1, name: "Event Volunteers" }
-        ],
-    })},
+        teams: [{ id: 1, name: "Event Volunteers" }],
+      });
+    },
     getTeams: async () => {
       return await Promise.resolve([
         [
@@ -50,10 +53,10 @@ jest.mock("../../WwcApi", () => {
           { id: 6, name: "Tech Event Volunteers" },
           { id: 7, name: "Volunteer Management" },
         ],
-      ])}
+      ]);
+    },
   };
 });
-
 
 jest.mock("../layout/ContainerWithNav", function () {
   return {
@@ -64,7 +67,11 @@ jest.mock("../layout/ContainerWithNav", function () {
 
 test("component is rendering", async () => {
   await act(async () => {
-    render(<MemberDetails />);
+    render(
+      <AuthContext.Provider value={userInfo}>
+        <MemberDetails />
+      </AuthContext.Provider>
+    );
   });
 
   expect(screen.getByText("John Doe")).toBeTruthy();
@@ -72,14 +79,18 @@ test("component is rendering", async () => {
   expect(screen.getByText("active")).toBeTruthy();
   expect(screen.getByText("Member Since April 17, 2021")).toBeTruthy();
   expect(screen.getByText("volunteer")).toBeTruthy();
-  
+
   // if teams array isn't empty, can use screen.getByText("team name").toBeTruthy()
   expect(screen.getByText("Event Volunteers")).toBeTruthy();
 });
 
 test("change status to inactive by clicking slider", async () => {
   await act(async () => {
-    render(<MemberDetails />);
+    render(
+      <AuthContext.Provider value={userInfo}>
+        <MemberDetails />
+      </AuthContext.Provider>
+    );
   });
   const button = screen.getByTestId("change-status-btn");
   fireEvent.click(button);
@@ -90,11 +101,14 @@ test("change status to inactive by clicking slider", async () => {
 test("opens edit teams form on btn click", async () => {
   let _container;
   await act(async () => {
-    const { container } = render(<MemberDetails />);
+    const { container } = render(
+      <AuthContext.Provider value={userInfo}>
+        <MemberDetails />
+      </AuthContext.Provider>
+    );
     _container = container;
   });
   const teamEditDiv = _container.querySelector("#team-edit");
   fireEvent.click(teamEditDiv);
   expect(screen.getByText("Assign Team(s)")).toBeTruthy();
-}); 
-
+});

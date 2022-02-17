@@ -38,8 +38,10 @@ const ViewMembers = (props) => {
   const [sortKey, setSort] = useState(sortOptions.NEW);
   const { userInfo } = useContext(AuthContext);
   const isDirector = userInfo.role === "DIRECTOR";
+  const userRole = userInfo.role;
+
   const pageRef = React.createRef();
-  
+
   const [errorOnLoading, setErrorOnLoading] = useState(false);
 
   // update pagination info once user data is changed
@@ -98,7 +100,10 @@ const ViewMembers = (props) => {
       let match = true;
       Object.keys(nonemptyFilters).forEach((key) => {
         if (match) {
-          if (user[key] && !nonemptyFilters[key].includes(user[key].toLowerCase())) {
+          if (
+            user[key] &&
+            !nonemptyFilters[key].includes(user[key].toLowerCase())
+          ) {
             match = false;
           }
         }
@@ -117,8 +122,8 @@ const ViewMembers = (props) => {
       let suggestOptions = users.map((user) => {
         return {
           id: user.id,
-          value: user.first_name + " " + user.last_name
-        }
+          value: user.first_name + " " + user.last_name,
+        };
       });
       setSuggestions(suggestOptions);
       setIsOpenSuggestionBox(true);
@@ -141,7 +146,7 @@ const ViewMembers = (props) => {
   const onEnterSearch = (searchStr) => {
     setIsApplyingFilter(false);
     setIsOpenSuggestionBox(false);
-    setSearch(searchStr)
+    setSearch(searchStr);
   };
 
   const onSelectSuggestion = (selectedUser) => {
@@ -197,7 +202,7 @@ const ViewMembers = (props) => {
       ],
     },
   ]);
-
+  
   useEffect(() => { 
     const getTeams = async () => {
       let teams = await WwcApi.getTeams();
@@ -227,7 +232,7 @@ const ViewMembers = (props) => {
 
   const onFilterBoxBlur = () => {
     setIsApplyingFilter(false);
-  }
+  };
 
   const openFilter = () => {
     setIsOpenSuggestionBox(false);
@@ -242,193 +247,199 @@ const ViewMembers = (props) => {
       let members = await filterMembers(getMembersData(sortProp, search));
       setUsers(members || []);
     }
-    getUsers()
+    getUsers();
   }, [sortKey, filters, search]);
 
   return (
-      <div
-        id='viewMemberPage'
-        className={cx(styles["view-member-page"], "d-flex flex-column")}
-        ref={pageRef}
-      >
-        <div className={styles["view-member-page-list-wrapper"]}>
-          <div className={styles["page-label-wrapper"]}>
-            {" "}
-          </div>
+    <div
+      id="viewMemberPage"
+      className={cx(styles["view-member-page"], "d-flex flex-column")}
+      ref={pageRef}
+    >
+      <div className={styles["view-member-page-list-wrapper"]}>
+        <div className={styles["page-label-wrapper"]}> </div>
+        <div
+          id="functionContainer"
+          className={cx(styles["search-container"], "d-flex")}
+        >
           <div
-            id='functionContainer'
-            className={cx(styles["search-container"], "d-flex")}
+            id="filterContainer"
+            className={cx(styles["filter-container"], "d-flex")}
           >
-            <div
-              id='filterContainer'
-              className={cx(styles["filter-container"], "d-flex")}
-            >
-              <div className={styles["filter-search-box"]}>
-                <SearchBox
-                  onSearchChange={onSearch}
-                  onBlur={onBlurSearch}
-                  onFocus={onFocusSearch}
-                  onEnter={onEnterSearch}
-                ></SearchBox>
-              </div>
-              <div className={styles["filter-suggestion-box"]}>
-                {isOpenSuggestionBox && (
-                  <SuggestionBox
-                    options={suggestions}
-                    onSelect={onSelectSuggestion}
-                  ></SuggestionBox>
-                )}
-              </div>
-              {isBrowser && (
-                <button
-                  className={cx(
-                    styles["btn-group-append"],
-                    "btn btn-outline-secondary dropdown-toggle"
-                  )}
-                  type='button'
-                  onClick={openFilter}
-                >
-                  Filters
-                </button>
-              )}
-              {isApplyingFilter && (
-                <FilterBox
-                  options={filterOptions}
-                  state={filters}
-                  onBlur={onFilterBoxBlur}
-                  onFilterApply={onFilterApply}
-                  onFilterReset={onFilterReset}
-                ></FilterBox>
+            <div className={styles["filter-search-box"]}>
+              <SearchBox
+                onSearchChange={onSearch}
+                onBlur={onBlurSearch}
+                onFocus={onFocusSearch}
+                onEnter={onEnterSearch}
+              ></SearchBox>
+            </div>
+            <div className={styles["filter-suggestion-box"]}>
+              {isOpenSuggestionBox && (
+                <SuggestionBox
+                  options={suggestions}
+                  onSelect={onSelectSuggestion}
+                ></SuggestionBox>
               )}
             </div>
             {isBrowser && (
-              <div
-                id='sortContainer'
-                className={styles["sort-container"] + " d-flex"}
+              <button
+                className={cx(
+                  styles["btn-group-append"],
+                  "btn btn-outline-secondary dropdown-toggle"
+                )}
+                type="button"
+                onClick={openFilter}
               >
-                <div id='sortLabel' className={styles.label}>
-                  Sort By:
-                </div>
-                <button
-                  className={cx(
-                    styles["sort-button"],
-                    styles["action-button"],
-                    "btn dropdown-toggle"
-                  )}
-                  type='button'
-                  id='sortDropdownButton'
-                  data-toggle='dropdown'
-                  aria-haspopup='true'
-                  aria-expanded='false'
-                  data-offset='{top: 10}'
-                >
-                  {sortKey.label}
-                </button>
-                <div
-                  id='sortDropdownMenu'
-                  className={cx(styles["sort-dropdown"], "dropdown-menu")}
-                  aria-labelledby='sortDropdownButton'
-                >
-                  <span className={styles["dropdown-menu-arrow"]}></span>
-                  {Object.values(sortOptions).map((option, idx) => (
-                    <button
-                      type='button'
-                      key={idx}
-                      className={cx(
-                        styles["sort-dropdown-item"],
-                        "dropdown-item",
-                        { [styles.active]: option.value === sortKey.value }
-                      )}
-                      value={option.value}
-                      onClick={onSortSelect(option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                Filters
+              </button>
             )}
-            {isDirector && (
-              <div
-                id='addMemberButtonContainer'
-                className={styles["add-memeber-button-container"]}
-                onClick={handleAddMember}
-              >
-                <button
-                  type='button'
-                  id='addMemberButton'
-                  className={cx(
-                    styles["add-member-button"],
-                    styles["action-button"],
-                    "btn"
-                  )}
-                >
-                  + Add Member
-                </button>
-              </div>
+            {isApplyingFilter && (
+              <FilterBox
+                options={filterOptions}
+                state={filters}
+                onBlur={onFilterBoxBlur}
+                onFilterApply={onFilterApply}
+                onFilterReset={onFilterReset}
+              ></FilterBox>
             )}
           </div>
-          <div className={cx(styles["memberlist-container"], "container px-0")}>
+          {isBrowser && (
             <div
-              className={cx(styles["memberlist-row"], "row", {
-                "no-gutters": isBrowser,
-              })}
+              id="sortContainer"
+              className={styles["sort-container"] + " d-flex"}
             >
-              {errorOnLoading && (
-                <div className={cx(styles["error-container"], "d-flex justify-content-center")}>
-                  <MessageBox type="Error" title="Sorry!" message={ERROR_REQUEST_MESSAGE}></MessageBox>
-                </div>
-              )}
-              
-              {(isBrowser ? paginationInfo.currentUsers : users).map(
-                (userInfo, idx) => {
-                  return (
-                    <React.Fragment key={idx}>
-                      <MemberCard
-                        userInfo={userInfo}
-                        isDirector={isDirector}
-                        viewClassName={
-                          "col-12 col-lg-3 " +
-                          ((idx + 1) % 4 > 0
-                            ? styles["memberlist-card-gap"]
-                            : "")
-                        }
-                      />
-                      {(idx + 1) % 4 === 0 && (
-                        <div className={cx(styles.break, "w-100")}></div>
-                      )}
-                    </React.Fragment>
-                  );
-                }
-              )}
+              <div id="sortLabel" className={styles.label}>
+                Sort By:
+              </div>
+              <button
+                className={cx(
+                  styles["sort-button"],
+                  styles["action-button"],
+                  "btn dropdown-toggle"
+                )}
+                type="button"
+                id="sortDropdownButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                data-offset="{top: 10}"
+              >
+                {sortKey.label}
+              </button>
+              <div
+                id="sortDropdownMenu"
+                className={cx(styles["sort-dropdown"], "dropdown-menu")}
+                aria-labelledby="sortDropdownButton"
+              >
+                <span className={styles["dropdown-menu-arrow"]}></span>
+                {Object.values(sortOptions).map((option, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    className={cx(
+                      styles["sort-dropdown-item"],
+                      "dropdown-item",
+                      { [styles.active]: option.value === sortKey.value }
+                    )}
+                    value={option.value}
+                    onClick={onSortSelect(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
+          {isDirector && (
+            <div
+              id="addMemberButtonContainer"
+              className={styles["add-memeber-button-container"]}
+              onClick={handleAddMember}
+            >
+              <button
+                type="button"
+                id="addMemberButton"
+                className={cx(
+                  styles["add-member-button"],
+                  styles["action-button"],
+                  "btn"
+                )}
+              >
+                + Add Member
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={cx(styles["memberlist-container"], "container px-0")}>
+          <div
+            className={cx(styles["memberlist-row"], "row", {
+              "no-gutters": isBrowser,
+            })}
+          >
+            {errorOnLoading && (
+              <div
+                className={cx(
+                  styles["error-container"],
+                  "d-flex justify-content-center"
+                )}
+              >
+                <MessageBox
+                  type="Error"
+                  title="Sorry!"
+                  message={ERROR_REQUEST_MESSAGE}
+                ></MessageBox>
+              </div>
+            )}
+
+            {(isBrowser ? paginationInfo.currentUsers : users).map(
+              (userInfo, idx) => {
+                return (
+                  <React.Fragment key={idx}>
+                    <MemberCard
+                      userInfo={userInfo}
+                      isDirector={isDirector}
+                      userRole={userRole}
+                      viewClassName={
+                        "col-12 col-lg-3 " +
+                        ((idx + 1) % 4 > 0 ? styles["memberlist-card-gap"] : "")
+                      }
+                    />
+                    {(idx + 1) % 4 === 0 && (
+                      <div className={cx(styles.break, "w-100")}></div>
+                    )}
+                  </React.Fragment>
+                );
+              }
+            )}
           </div>
         </div>
-        {isBrowser && (
-          <div>
-            <ReactPaginate
-              previousLabel={""}
-              nextLabel={""}
-              breakLabel={"..."}
-              breakClassName={styles["break-me"]}
-              previousClassName={styles.previous}
-              previousLinkClassName={styles["prev-link"]}
-              nextClassName={styles.next}
-              nextLinkClassName={styles["next-link"]}
-              pageClassName={styles.page}
-              pageLinkClassName={styles.link}
-              pageCount={paginationInfo.pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={handlePageClick}
-              containerClassName={styles.pagination}
-              subContainerClassName={cx(styles.pages, styles.pagination)}
-              activeClassName={styles.active}
-            />
-          </div>
-        )}
-        <ScrollToTop />
       </div>
+      {isBrowser && (
+        <div>
+          <ReactPaginate
+            previousLabel={""}
+            nextLabel={""}
+            breakLabel={"..."}
+            breakClassName={styles["break-me"]}
+            previousClassName={styles.previous}
+            previousLinkClassName={styles["prev-link"]}
+            nextClassName={styles.next}
+            nextLinkClassName={styles["next-link"]}
+            pageClassName={styles.page}
+            pageLinkClassName={styles.link}
+            pageCount={paginationInfo.pageCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={styles.pagination}
+            subContainerClassName={cx(styles.pages, styles.pagination)}
+            activeClassName={styles.active}
+          />
+        </div>
+      )}
+      <ScrollToTop />
+    </div>
   );
 };
 

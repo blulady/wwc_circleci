@@ -4,10 +4,11 @@ from django.conf import settings
 from smtplib import SMTPException
 from django.core.validators import validate_email, ValidationError
 from pathlib import Path
-from api.models import UserProfile
+from api.models import User_Team, Role
 import logging
 import string
 import random
+
 
 logger = logging.getLogger('django')
 
@@ -43,10 +44,8 @@ def generate_random_password(num):
 
 def is_director_or_superuser(user_id, is_superuser):
     try:
-        user_profile = UserProfile.objects.get(user_id=user_id)
-        if user_profile.role == UserProfile.DIRECTOR or is_superuser:
-            return True
-        return False
-    except UserProfile.DoesNotExist as e:
+        highest_user_role = User_Team.highest_role(user_id=user_id)
+        return (highest_user_role == Role.DIRECTOR) or is_superuser
+    except Exception as e:
         logger.error(f'is_director_or_superuser: Error user not found : {e}')
         return False

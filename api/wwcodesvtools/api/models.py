@@ -10,19 +10,14 @@ class UserProfile(models.Model):
     PENDING = 'PENDING'
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
-    VOLUNTEER = 'VOLUNTEER'
-    LEADER = 'LEADER'
-    DIRECTOR = 'DIRECTOR'
     REGISTERED_USER_VALID_STATUSES = [ACTIVE, INACTIVE]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20,
                               choices=((PENDING, PENDING),
                                        (ACTIVE, ACTIVE), (INACTIVE, INACTIVE))
                               )
-    role = models.CharField(null=True, blank=True, max_length=20,
-                            choices=((VOLUNTEER, VOLUNTEER),
-                                     (LEADER, LEADER), (DIRECTOR, DIRECTOR))
-                            )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

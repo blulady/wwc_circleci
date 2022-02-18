@@ -104,7 +104,7 @@ class EditMemberView(GenericAPIView):
             sid = transaction.savepoint()
             result_user_role_team = self.update_user_role_team(user_obj, role, teams)
             if 'success' in result_user_role_team:
-                result_profile_status = self.edit_user_profile(userprofile_obj, user_status, role)
+                result_profile_status = self.edit_user_profile(userprofile_obj, user_status)
                 if 'success' in result_profile_status:
                     # commit txn now, both tables are updated
                     transaction.savepoint_commit(sid)
@@ -127,9 +127,9 @@ class EditMemberView(GenericAPIView):
             return Response({'result': self.USER_EDITED_SUCCESSFULLY}, status=status.HTTP_200_OK)
         return Response({'error': error}, status=res_status)
 
-    def edit_user_profile(self, userprofile_row, user_status, role):
+    def edit_user_profile(self, userprofile_row, user_status):
         try:
-            serializer_profile = UserProfileSerializer(userprofile_row, data={'status': user_status, 'role': role})
+            serializer_profile = UserProfileSerializer(userprofile_row, data={'status': user_status})
             if serializer_profile.is_valid():
                 serializer_profile.save()
                 return {'success': 'True'}

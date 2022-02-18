@@ -33,7 +33,7 @@ class AuthCustomTokenObtainPairSerializerTestCase(TransactionTestCase):
         })
         userProfile.is_valid()
         self.user_profile = userProfile.save()
-        role = Role.objects.get(name=UserProfile.VOLUNTEER)
+        role = Role.objects.get(name=Role.VOLUNTEER)
         userteam = User_Team(user=self.user, role=role)
         userteam.save()
 

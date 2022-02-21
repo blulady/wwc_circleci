@@ -102,9 +102,6 @@ const MemberCard = (props) => {
                 <React.Fragment>
                   <div
                     className={styles["multi-dots"]}
-                    onClick={() => {
-                      console.log("hey");
-                    }}
                     data-tip
                     data-for={"team-tooltip-" + random}
                     data-event="click"

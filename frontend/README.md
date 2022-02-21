@@ -7,6 +7,7 @@
 - Docker needs to be installed on your machine.
 - See [here](https://docs.docker.com/engine/install/) to find the download instructions that best fit your operating system.
 - environment variable: 
+   There are 3 .env files, local.env, dev.env and prod.env. For local development, please use local.env file which gets referenced bby Dockerfile.dev
 ```REACT_APP_API_URL= https://wwcode-chtools-api-dev.herokuapp.com/api```
 ## Steps to run the application
 

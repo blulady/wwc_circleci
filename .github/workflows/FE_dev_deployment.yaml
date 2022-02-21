@@ -3,16 +3,10 @@ name: FE-DEV-Deployment
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  #push:
-    #branches: [ main ]
-    #paths:
-      #- "frontend/**"
   push:
-    branches:
-      - "FESprint[0-9]+*"
+    branches: [ main ]
     paths:
       - "frontend/**"
-      - ".github/workflows/FE*"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -49,7 +43,7 @@ jobs:
           npm run build --if-present
           npm test --silent -- --watchAll=false 
   deploy: 
-    #needs: build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

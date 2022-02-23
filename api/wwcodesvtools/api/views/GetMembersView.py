@@ -24,10 +24,18 @@ class GetMembersView(ListAPIView):
     http//example.com/api/users/?ordering=first_name
     http//example.com/api/users/?ordering=-first_name
     Returns a list of members.
-    Search by any number of characters in first_name or last_name
     -------------------------------------------------------------
+    Search by any number of characters in first_name or last_name, like so:
     http//example.com/api/users/?search=first_name
     http//example.com/api/users/?search=last_name
+    Returns a list of members.
+    ---------------------------------------------------------------
+    You may also filter results based on user status, creation date, role and team, like so:
+    http//example.com/api/users/?role=VOLUNTEER&status=ACTIVE
+    http//example.com/api/users/?status=ACTIVE&created_at=3months
+    http//example.com/api/users/?role=VOLUNTEER&team=4
+    Returns a list of members.
+
     """
     permission_classes = [IsAuthenticated]
     filter_backends = [OrderingFilter, SearchFilter]
@@ -38,8 +46,9 @@ class GetMembersView(ListAPIView):
     status_param = openapi.Parameter('status', openapi.IN_QUERY, description="Filter on status", type=openapi.TYPE_STRING)
     role_param = openapi.Parameter('role', openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_STRING)
     created_at_param = openapi.Parameter('created_at', openapi.IN_QUERY, description="Filter on date joined", type=openapi.TYPE_STRING)
+    team_param = openapi.Parameter('team', openapi.IN_QUERY, description="Filter on team", type=openapi.TYPE_INTEGER)
 
-    @swagger_auto_schema(manual_parameters=[status_param, role_param, created_at_param])
+    @swagger_auto_schema(manual_parameters=[status_param, role_param, created_at_param, team_param])
     def get(self, request):
         # This get method needs to be written purely to add the swagger_auto_schema decorator
         # So that we can display and accept the query params from swagger UI
@@ -66,6 +75,9 @@ class GetMembersView(ListAPIView):
         role_filter = self.request.query_params.get('role')
         if role_filter:
             queryset = queryset.filter(user_team__role__name=role_filter)
+        team_filter = self.request.query_params.get('team')
+        if team_filter:
+            queryset = queryset.filter(user_team__team__id=team_filter)
         return queryset
 
     def get_serializer_class(self):

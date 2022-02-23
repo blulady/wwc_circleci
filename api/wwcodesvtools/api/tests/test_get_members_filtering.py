@@ -9,6 +9,12 @@ class GetMembersFilteringTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
 
+    def setUp(self):
+        self.username = 'director@example.com'
+        self.password = 'Password123'
+        self.access_token = self.get_token(self.username, self.password)
+        self.bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(self.access_token)}
+
     def get_token(self, username, password):
         s = TokenObtainPairSerializer(data={
             TokenObtainPairSerializer.username_field: self.username,
@@ -19,11 +25,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Testing get members filtering with status=ACTIVE
     def test_get_members_filtering_with_status(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?status=ACTIVE", **bearer)
+        response = self.client.get("/api/users/?status=ACTIVE", **self.bearer)
         members = json.loads(response.content)
         for member in members:
             self.assertEqual(member['status'], 'ACTIVE')
@@ -31,11 +33,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
     # Testing get members filtering with date joined = current_year
     # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?created_at=current_year", **bearer)
+        response = self.client.get("/api/users/?created_at=current_year", **self.bearer)
         current_year = date.today().year
         members = json.loads(response.content)
         for member in members:
@@ -44,11 +42,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
     # Testing get members filtering with date joined = 3 months
     # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined_3months(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?created_at=3months", **bearer)
+        response = self.client.get("/api/users/?created_at=3months", **self.bearer)
         three_months = date.today() - timedelta(weeks=12)
         members = json.loads(response.content)
         for member in members:
@@ -57,11 +51,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
     # Testing get members filtering with date joined = 6 months
     # TODO : Fix time dependent test. Right now the no members are returned in the response
     def test_get_members_filtering_with_date_joined_6months(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?created_at=6months", **bearer)
+        response = self.client.get("/api/users/?created_at=6months", **self.bearer)
         six_months = date.today() - timedelta(weeks=24)
         members = json.loads(response.content)
         for member in members:
@@ -69,12 +59,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
         requested_role = 'LEADER'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get(f"/api/users/?role={requested_role}", **bearer)
+        response = self.client.get(f"/api/users/?role={requested_role}", **self.bearer)
         members = json.loads(response.content)
         for member in members:
             member_roles_query = User_Team.objects.values('role__name').filter(user_id=member['id'])
@@ -84,12 +70,8 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
-        self.username = 'director@example.com'
-        self.password = 'Password123'
         requested_role = 'LEADER'
-        access_token = self.get_token(self.username, self.password)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get(f"/api/users/?role={requested_role}&status={UserProfile.ACTIVE}", **bearer)
+        response = self.client.get(f"/api/users/?role={requested_role}&status={UserProfile.ACTIVE}", **self.bearer)
         members = json.loads(response.content)
         for member in members:
             member_roles_query = User_Team.objects.values('role__name').filter(user_id=member['id'])
@@ -97,6 +79,39 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], UserProfile.ACTIVE)
             self.assertIn(member['highest_role'], member_roles)
             self.assertIn(requested_role, member_roles)
+
+    # Testing get members filtering with team = 4
+    def test_get_members_filtering_with_team(self):
+        requested_team = 4
+        requested_team_name = 'Partnership Management'
+        response = self.client.get(f"/api/users/?team={requested_team}", **self.bearer)
+        members = json.loads(response.content)
+        for member in members:
+            member_teams_query = User_Team.objects.values('team_id', 'team__name').filter(user_id=member['id'])
+            member_teams = []
+            member_team_names = []
+            for member_team in member_teams_query:
+                member_team_names.append(member_team['team__name'])
+                member_teams.append(member_team['team_id'])
+            self.assertIn(requested_team, member_teams)
+            self.assertIn(requested_team_name, member_team_names)
+
+    # Testing get members filtering with team = 1 and status = ACTIVE
+    def test_get_members_filtering_with_team_status(self):
+        requested_team = 1
+        requested_team_name = 'Event Volunteers'
+        response = self.client.get(f"/api/users/?team={requested_team}", **self.bearer)
+        members = json.loads(response.content)
+        for member in members:
+            member_teams_query = User_Team.objects.values('team_id', 'team__name').filter(user_id=member['id'])
+            member_teams = []
+            member_team_names = []
+            for member_team in member_teams_query:
+                member_team_names.append(member_team['team__name'])
+                member_teams.append(member_team['team_id'])
+            self.assertEqual(member['status'], 'ACTIVE')
+            self.assertIn(requested_team, member_teams)
+            self.assertIn(requested_team_name, member_team_names)
 
     # TODO : Write test to unsure PENDING members are not retured in response when the non-director is logged-in
     # logging as a non-director and the output should not have any pending users.

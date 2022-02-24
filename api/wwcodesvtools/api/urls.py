@@ -2,7 +2,7 @@ from django.urls import path
 from api.views.UserRegistrationView import UserRegistrationView
 from api.views.MailSender import MailSender
 from api.views.AddMemberView import AddMemberView
-from api.views.EditMemberView import EditMemberView
+from api.views.EditMemberRoleTeamsView import EditMemberRoleTeamsView
 from api.views.GetMembersView import GetMembersView, GetMemberInfoView, GetMemberProfileView
 from api.views.RequestPasswordResetView import RequestPasswordResetView
 from api.views.SetNewPasswordView import SetNewPasswordView
@@ -38,7 +38,7 @@ urlpatterns = [
     path('user/reset_password/confirm/', SetNewPasswordView.as_view()),
     path('user/delete/<int:id>', DeleteMemberView.as_view()),
     path('user/edit/<int:id>/status/', UpdateMemberStatusView.as_view()),
-    path('user/edit/<int:id>', EditMemberView.as_view()),
+    path('user/edit/<int:id>/role_teams', EditMemberRoleTeamsView.as_view()),
     path('teams/', GetTeamsView.as_view()),
     path('resources/<str:slug>', GetResourceView.as_view()),
     path('resources/edit/<str:slug>', EditResourceView.as_view()),

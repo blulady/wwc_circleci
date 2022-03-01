@@ -11,6 +11,8 @@ from drf_yasg.utils import swagger_auto_schema
 from datetime import date, datetime, timedelta
 import logging
 
+from ..models import UserProfile, Role
+
 
 logger = logging.getLogger('django')
 
@@ -34,6 +36,7 @@ class GetMembersView(ListAPIView):
     http//example.com/api/users/?role=VOLUNTEER&status=ACTIVE
     http//example.com/api/users/?status=ACTIVE&created_at=3months
     http//example.com/api/users/?role=VOLUNTEER&team=4
+    http//example.com/api/users/?status=ACTIVE&status=PENDING&role=LEADER&role=DIRECTOR
     Returns a list of members.
 
     """
@@ -43,8 +46,9 @@ class GetMembersView(ListAPIView):
     ordering = ['-date_joined']
     search_fields = ['^first_name', '^last_name']
 
-    status_param = openapi.Parameter('status', openapi.IN_QUERY, description="Filter on status", type=openapi.TYPE_STRING)
-    role_param = openapi.Parameter('role', openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_STRING)
+    item = openapi.Items(type=openapi.TYPE_STRING)
+    status_param = openapi.Parameter('status', openapi.IN_QUERY, description="Filter on status", type=openapi.TYPE_ARRAY, collectionFormat='multi', items=item)
+    role_param = openapi.Parameter('role', openapi.IN_QUERY, description="Filter on role", type=openapi.TYPE_ARRAY, collectionFormat='multi', items=item)
     created_at_param = openapi.Parameter('created_at', openapi.IN_QUERY, description="Filter on date joined", type=openapi.TYPE_STRING)
     team_param = openapi.Parameter('team', openapi.IN_QUERY, description="Filter on team", type=openapi.TYPE_INTEGER)
 
@@ -60,24 +64,31 @@ class GetMembersView(ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
-        status_filter = self.request.query_params.get('status')
-        if status_filter:
-            queryset = queryset.filter(userprofile__status=status_filter)
+
         if not self.is_user_director_or_superuser:
             queryset = User.objects.exclude(userprofile__status="PENDING")
+
+        status_filter = set(self.request.query_params.getlist('status'))
+        if status_filter and status_filter.issubset(UserProfile.ALL_STATUS_VALUES):
+            queryset = queryset.filter(userprofile__status__in=status_filter)
+
         date_filter = self.request.query_params.get('created_at')
         todays_date = datetime.today().astimezone()
-        if date_filter:
-            time_joined = {'3months': todays_date - timedelta(weeks=12),
-                           '6months': todays_date - timedelta(weeks=24),
-                           'current_year': date(todays_date.year, 1, 1)}
+        time_joined = {'3months': todays_date - timedelta(weeks=12),
+                       '6months': todays_date - timedelta(weeks=24),
+                       'current_year': date(todays_date.year, 1, 1)}
+        if date_filter and (date_filter in time_joined):
             queryset = queryset.filter(date_joined__gte=time_joined[date_filter])
-        role_filter = self.request.query_params.get('role')
-        if role_filter:
-            queryset = queryset.filter(user_team__role__name=role_filter)
+
+        role_filter = set(self.request.query_params.getlist('role'))
         team_filter = self.request.query_params.get('team')
-        if team_filter:
-            queryset = queryset.filter(user_team__team__id=team_filter)
+        role_team_filter = {}
+        if role_filter and role_filter.issubset(Role.VALID_ROLES):
+            role_team_filter['user_team__role__name__in'] = role_filter
+        if team_filter and team_filter.isnumeric():
+            role_team_filter['user_team__team__id'] = team_filter
+        if role_team_filter:
+            queryset = queryset.filter(**role_team_filter)
         return queryset
 
     def get_serializer_class(self):

@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
     REGISTERED_USER_VALID_STATUSES = [ACTIVE, INACTIVE]
+    ALL_STATUS_VALUES = {ACTIVE, INACTIVE, PENDING}
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20,

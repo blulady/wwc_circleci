@@ -2,7 +2,8 @@ import json
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from datetime import date, timedelta
-from ..models import User_Team, UserProfile
+from ..models import Role, User_Team, UserProfile
+from django.contrib.auth.models import User
 
 
 class GetMembersFilteringTestCase(TransactionTestCase):
@@ -59,7 +60,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Testing get members filtering with role = LEADER
     def test_get_members_filtering_with_role(self):
-        requested_role = 'LEADER'
+        requested_role = Role.LEADER
         response = self.client.get(f"/api/users/?role={requested_role}", **self.bearer)
         members = json.loads(response.content)
         for member in members:
@@ -70,7 +71,7 @@ class GetMembersFilteringTestCase(TransactionTestCase):
 
     # Test get members filtering with role = LEADER and status = ACTIVE
     def test_get_members_filtering_with_role_and_status(self):
-        requested_role = 'LEADER'
+        requested_role = Role.LEADER
         response = self.client.get(f"/api/users/?role={requested_role}&status={UserProfile.ACTIVE}", **self.bearer)
         members = json.loads(response.content)
         for member in members:
@@ -79,6 +80,38 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], UserProfile.ACTIVE)
             self.assertIn(member['highest_role'], member_roles)
             self.assertIn(requested_role, member_roles)
+
+    # Test get members filtering with multiple status filter values
+    def test_get_members_filtering_with_multiple_status_values(self):
+        user = User.objects.get(email='leader@example.com')
+        user.userprofile.status = UserProfile.INACTIVE
+        user.userprofile.save()
+
+        requested_role = Role.LEADER
+        request_url = f"/api/users/?role={requested_role}&status={UserProfile.INACTIVE}&status={UserProfile.PENDING}"
+        response = self.client.get(request_url, **self.bearer)
+        members = json.loads(response.content)
+        for member in members:
+            member_roles_query = User_Team.objects.values('role__name').filter(user_id=member['id'])
+            member_roles = [member_role['role__name'] for member_role in member_roles_query]
+            self.assertIn(member['status'], [UserProfile.INACTIVE, UserProfile.PENDING])
+            self.assertIn(requested_role, member_roles)
+
+        user.userprofile.activate()
+        user.userprofile.save()
+
+    # Test get members filtering with multiple role filter values
+    def test_get_members_filtering_with_multiple_role_values(self):
+        requested_roles = set([Role.LEADER, Role.DIRECTOR])
+        request_url = f"/api/users/?role={Role.LEADER}&role={Role.DIRECTOR}&status={UserProfile.ACTIVE}"
+        response = self.client.get(request_url, **self.bearer)
+        members = json.loads(response.content)
+        for member in members:
+            member_roles = {role_team['role_name'] for role_team in member['role_teams']}
+            common_roles = member_roles.intersection(requested_roles)
+            self.assertEqual(member['status'], UserProfile.ACTIVE)
+            self.assertIsNotNone(common_roles)
+            self.assertGreaterEqual(len(common_roles), 1)
 
     # Testing get members filtering with team = 4
     def test_get_members_filtering_with_team(self):
@@ -112,6 +145,22 @@ class GetMembersFilteringTestCase(TransactionTestCase):
             self.assertEqual(member['status'], 'ACTIVE')
             self.assertIn(requested_team, member_teams)
             self.assertIn(requested_team_name, member_team_names)
+
+    # Testing get members filtering with team = 1 and status = ACTIVE
+    def test_get_members_filtering_with_team_and_role(self):
+        requested_team = 1
+        requested_team_name = 'Event Volunteers'
+        requested_role = Role.VOLUNTEER
+        expected_role_team = (requested_team_name, requested_team, requested_role)
+        response = self.client.get(f"/api/users/?team={requested_team}&role={requested_role}", **self.bearer)
+        members = json.loads(response.content)
+        for member in members:
+            member_teams_query = User_Team.objects.values('team_id', 'team__name', 'role__name').filter(user_id=member['id'])
+            member_role_teams = []
+            for member_team in member_teams_query:
+                member_role_teams.append(
+                    (member_team['team__name'], member_team['team_id'], member_team['role__name']))
+            self.assertIn(expected_role_team, member_role_teams)
 
     # TODO : Write test to unsure PENDING members are not retured in response when the non-director is logged-in
     # logging as a non-director and the output should not have any pending users.

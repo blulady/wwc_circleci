@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourcesLinks it renders without crashing 1`] = `
+<div>
+  <div
+    class="row"
+  >
+    <div
+      class="col-12 col-md-8"
+    >
+      <div
+        class="input-container"
+      >
+        <div
+          class="input-label mb-2"
+        >
+          Edit URL:
+        </div>
+        <input
+          class="form-control-plaintext input-text"
+          data-testid="editLink"
+          readonly=""
+          type="text"
+          value="http://test.edit.com"
+        />
+      </div>
+      <div
+        class="input-container"
+      >
+        <div
+          class="input-label mb-2"
+        >
+          Published Embedded URL:
+        </div>
+        <input
+          class="form-control-plaintext input-text"
+          data-testid="publishLink"
+          readonly=""
+          type="text"
+          value="http://test.publish.com"
+        />
+      </div>
+    </div>
+    <div
+      class="col-12 col-md-4"
+    >
+      <div
+        class="d-flex justify-content-around"
+      >
+        <button
+          class="wwc-action-button"
+          data-testid="saveBtn"
+        >
+          <div
+            class="d-flex"
+          >
+            <span
+              class="icon edit-purple-icon mr-2"
+            />
+            Edit Links
+          </div>
+        </button>
+        <button
+          class="wwc-action-button"
+        >
+          <div
+            class="d-flex"
+          >
+            <span
+              class="icon edit-purple-icon mr-2"
+            />
+            Edit Document
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

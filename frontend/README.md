@@ -73,6 +73,7 @@
    To commit changes- `git commit . -m "<message>"`
    
    Commit message should include `fix #<issue_number>`
+   [https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
 
 6. When the feature is ready, push changes up.
 

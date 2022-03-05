@@ -142,6 +142,13 @@ class WwcApi {
     return res.data;
   }
 
+  static async updateVolunteerResources(slug, links) {
+    let res = await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
+      headers: getConfig(),
+    });
+    return res.data;
+  }
+
   static async changeMemberStatus(userId,data){
     return await axios.post(`${BASE_URL}/user/edit/${userId}/status`, data, {
       headers: getConfig(),

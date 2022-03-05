@@ -1,3 +1,44 @@
 .hidden {
     display: none;
 }
+
+.wwc-text-input {
+    border: 1px solid #6B3768;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.wwc-action-button {
+    background: #FFFFFF;
+    border: 1px solid #6B3768;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.wwc-action-button .icon {
+    width: 24px;
+    height: 24px;
+    color: #6B3768;
+
+}
+
+.wwc-action-button .icon:before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+
+.wwc-action-button .icon.save-purple-icon:before {
+    background: url("./images/save_purple_24px.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.wwc-action-button .icon.edit-purple-icon:before {
+    background: url("./images/edit_purple_24px.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}

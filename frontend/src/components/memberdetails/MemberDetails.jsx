@@ -90,12 +90,12 @@ function ViewMemberDetails() {
     let status = checked ? "ACTIVE" : "INACTIVE";
     setUser({ ...user, status: status });
     //TODO: Remove comments to make API call to change status once BE endpoint is ready
-    // try {
-    //   await WwcApi.changeMemberStatus({id, status});
-    // } catch (error) {
-    //   setErrorOnLoading(true);
-    //   console.log(error);
-    // }
+    try {
+      await WwcApi.changeMemberStatus(id, {status: status });
+    } catch (error) {
+      setErrorOnLoading(true);
+      console.log(error);
+    }
   };
 
   let handleRoleChange = async (role) => {
@@ -116,17 +116,28 @@ function ViewMemberDetails() {
     // }
   };
 
-  let handleTeamChange = (role, selectedTeams) => {
+  let handleTeamChange = async (role, selectedTeams) => {
     setEditing(null);
     if (!selectedTeams.size) {
       setUser({ ...user, role_teams: { ...role_teams, [role]: [] } });
     }
     let teams = [];
+    let teamIds = [];
     for (let team of teamsArray) {
-      if (selectedTeams.has(team.name)) teams.push(team.name);
+      if (selectedTeams.has(team.name)) {
+        teams.push(team.name);
+        teamIds.push(team.id);
+      }
     }
     setUser({ ...user, role_teams: { ...role_teams, [role]: teams } });
     //TODO Make API call to change teams when endpoint ready
+    try {
+      await WwcApi.editMemberRoleTeams(id, { role: role, teams: teamIds })
+      //await WwcApi.editMember(id, { status: user.status, role: role, teams: teamIds });
+    } catch (error) {
+      setErrorOnLoading(true);
+      console.log(error);
+    }
   };
 
   const handleAddNewMember = () => {
@@ -134,7 +145,6 @@ function ViewMemberDetails() {
   };
 
   const handleAddNewRole = (role) => {
-    console.log(role);
     setNewRoleTeam({ ...newRoleTeam, role: role });
   };
 
@@ -168,8 +178,14 @@ function ViewMemberDetails() {
     const getMemberData = async (userId) => {
       try {
         let usr = await WwcApi.getMember(userId);
-        let currentTeams = usr.teams.map((t) => t.name);
-        usr["role_teams"] = { [usr.role]: currentTeams };
+        let role_teams = {};
+        usr.role_teams.forEach((t) => {
+          (t.role_name in role_teams) || (role_teams[t.role_name] = []);
+          if (t.team_name) {
+            role_teams[t.role_name].push(t.team_name);
+          }
+        });
+        usr["role_teams"] = role_teams;
         setUser(usr);
       } catch (error) {
         setErrorOnLoading(true);
@@ -194,7 +210,7 @@ function ViewMemberDetails() {
         <ChapterMembersButton />
         <div className={styles["member-container"]}>
           <BackToMemberPortal />
-          <div className={cx(styles["member-details-container"])}>
+          <div className={cx(styles["member-details-container"], "align-items-center")}>
             {errorOnLoading && (
               <MessageBox
                 type="Error"
@@ -257,8 +273,8 @@ function ViewMemberDetails() {
                         />
                       </>
                     ) : (
-                      Object.keys(user.role_teams).length <
-                        memberRoleArray.length && (
+                      (Object.keys(user.role_teams).length <
+                        memberRoleArray.length && userInfo.role == "DIRECTOR") && (
                         <p
                           className={cx(
                             "mt-2",

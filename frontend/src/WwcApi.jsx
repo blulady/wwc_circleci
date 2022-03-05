@@ -87,14 +87,27 @@ class WwcApi {
     );
   }
 
-  static async getMembers(orderBy, search) {
-    let url = `${BASE_URL}/users/`;
+  static async getMembers(orderBy, search, filters) {
+    let url = `${BASE_URL}/users/?`;
+
+    const searchParams = new URLSearchParams();
+
     if (orderBy) {
-      url += "?ordering=" + orderBy;
+      searchParams.set("ordering", orderBy);
     }
     if (search) {
-      url += (orderBy ? "&" : "?") + "search=" + search
+      searchParams.set("search", search)
     }
+    if (filters) {
+      for(const prop in filters) {
+        for(const filterVal of filters[prop]) {
+          searchParams.append(prop, filterVal);
+        }
+      }
+    }
+
+    url += searchParams.toString();
+    console.log(url)
     let res = await axios.get(url, {
       headers: getConfig(),
     });
@@ -129,10 +142,23 @@ class WwcApi {
     return res.data;
   }
 
-  static async editMember(data, userId) {
+  static async editMember(userId, data) {
     return await axios.post(`${BASE_URL}/user/edit/${userId}`, data,{
       headers: getConfig(),
     });
+  }
+
+  static async editMemberRoleTeams(userId, data) {
+    return await axios.put(`${BASE_URL}/user/edit/${userId}/role_teams`, data, {
+      headers: getConfig(),
+    });
+  }
+
+  static async getUserProfile() {
+    let res = await axios.get(`${BASE_URL}/user/profile`, {
+      headers: getConfig(),
+    });
+    return res.data;
   }
 
   static async getVolunteerResources(slug) {
@@ -149,14 +175,14 @@ class WwcApi {
     return res.data;
   }
 
-  static async changeMemberStatus(userId,data){
-    return await axios.post(`${BASE_URL}/user/edit/${userId}/status`, data, {
+  static async changeMemberStatus(userId, data){
+    return await axios.post(`${BASE_URL}/user/edit/${userId}/status/`, data, {
       headers: getConfig(),
     });
   }
 
   static async deleteMemberRole(userId,data){
-    return await axios.delete(`${BASE_URL}/user/edit/${userId}/role`, data, {
+    return await axios.delete(`${BASE_URL}/user/edit/${userId}/role/`, data, {
       headers: getConfig(),
     });
   }

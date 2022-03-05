@@ -30,7 +30,8 @@ const MemberRole = ({role, status, numRoles, modifyRole = null}) => {
             {role?.toLowerCase()}
           </div>
         </div>
-        <div id="role-delete" className={styles["icon-wrapper"]} onClick={status === 'ACTIVE' && numRoles>1 ? handleIconClick : null}>
+        {/* TODO: Enable remove once BE is ready */}
+        {/* <div id="role-delete" className={styles["icon-wrapper"]} onClick={status === 'ACTIVE' && numRoles>1 ? handleIconClick : null}>
           {status === "PENDING" || !modifyRole ? (
             ""
           ) : (
@@ -39,7 +40,7 @@ const MemberRole = ({role, status, numRoles, modifyRole = null}) => {
             <p className={styles["change-status-text"]}>Remove Role</p>
             </>
           )}
-        </div>
+        </div> */}
         {showModal? <ConfirmDeleteRoleModal role={role}  deleteRole={handleDeleteRole} closeModal={handleCloseRoleModal}/> : null }
       </section>
   )

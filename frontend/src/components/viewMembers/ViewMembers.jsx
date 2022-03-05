@@ -74,9 +74,9 @@ const ViewMembers = (props) => {
     setSort(sortOptions[val.toUpperCase()]);
   };
 
-  const getMembersData = async (sort, search) => {
+  const getMembersData = async (sort, search, filters) => {
     try {
-      let _users = await WwcApi.getMembers(sort, search);
+      let _users = await WwcApi.getMembers(sort, search, filters);
       return _users;
     } catch (error) {
       setErrorOnLoading(true);
@@ -84,41 +84,14 @@ const ViewMembers = (props) => {
     }
   };
 
-  // TODO: temp function for filtering
-  const filterMembers = (users) => {
-    const nonemptyFilters = {};
-    for (let key in filters) {
-      if (filters[key].length) {
-        nonemptyFilters[key] = filters[key];
-      }
-    }
-    // no filter applied
-    if (!Object.keys(nonemptyFilters).length) {
-      return users;
-    }
-    return users.filter((user) => {
-      let match = true;
-      Object.keys(nonemptyFilters).forEach((key) => {
-        if (match) {
-          if (
-            user[key] &&
-            !nonemptyFilters[key].includes(user[key].toLowerCase())
-          ) {
-            match = false;
-          }
-        }
-      });
-      return match;
-    });
-  };
-
   const [isOpenSuggestionBox, setIsOpenSuggestionBox] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [search, setSearch] = useState("");
   const onSearch = async (query) => {
+    setSearch(query);
     if (query.length === 3) {
       // Get suggestion
-      let users = await getMembersData(null, query);
+      let users = await getMembersData(null, query, null);
       let suggestOptions = users.map((user) => {
         return {
           id: user.id,
@@ -143,19 +116,22 @@ const ViewMembers = (props) => {
     }
   };
 
-  const onEnterSearch = (searchStr) => {
+  const onEnterSearch = async (searchStr) => {
     setIsApplyingFilter(false);
     setIsOpenSuggestionBox(false);
     setSearch(searchStr);
+    getUsers();
   };
 
-  const onSelectSuggestion = (selectedUser) => {
-    const match = users.find((user) => {
-      return user.first_name + " " + user.last_name === selectedUser;
-    });
-    if (match) {
-      setUsers([match]);
-    }
+  const onSelectSuggestion = async (selectedUser) => {
+    // const match = users.find((user) => {
+    //   return user.first_name + " " + user.last_name === selectedUser;
+    // });
+    // if (match) {
+    //   setUsers([match]);
+    // }
+    setSearch(selectedUser);
+    getUsers();
   };
 
   const [isApplyingFilter, setIsApplyingFilter] = useState(false);
@@ -169,9 +145,9 @@ const ViewMembers = (props) => {
       label: "Role",
       type: "button",
       options: [
-        { label: "Director", value: "director", enable: true },
-        { label: "Leader", value: "leader", enable: true },
-        { label: "Volunteer", value: "volunnteer", enable: true },
+        { label: "Director", value: "DIRECTOR", enable: true },
+        { label: "Leader", value: "LEADER", enable: true },
+        { label: "Volunteer", value: "VOLUNTEER", enable: true },
       ],
     },
     {
@@ -179,9 +155,9 @@ const ViewMembers = (props) => {
       label: "Status",
       type: "button",
       options: [
-        { label: "Active", value: "active", enable: true },
-        { label: "Inactive", value: "inactive", enable: true },
-        { label: "Pending", value: "pending", enable: isDirector },
+        { label: "Active", value: "ACTIVE", enable: true },
+        { label: "Inactive", value: "INACTIVE", enable: true },
+        { label: "Pending", value: "PENDING", enable: isDirector },
       ],
     },
     {
@@ -195,10 +171,10 @@ const ViewMembers = (props) => {
       label: "Date Added",
       type: "selection",
       options: [
-        { label: "Any time", value: "anytime" },
-        { label: "3 months", value: "3" },
-        { label: "6 months", value: "6" },
-        { label: "2020", value: "year" },
+        { label: "Any time", value: "" },
+        { label: "3 months", value: "3months" },
+        { label: "6 months", value: "6months" },
+        { label: "2020", value: "current_year" },
       ],
     },
   ]);
@@ -219,7 +195,7 @@ const ViewMembers = (props) => {
     getTeams();
   }, []);
 
-  const [filters, setFilters] = useState({ role: [], status: [], date: [] });
+  const [filters, setFilters] = useState({ role: [], status: [], date_joined: [], team: [] });
   const onFilterApply = (vals) => {
     setFilters(vals);
     toggleFilterBox();
@@ -242,13 +218,14 @@ const ViewMembers = (props) => {
   };
 
   useEffect(() => {
-    async function getUsers() {
-      let sortProp = sortKey.prop;
-      let members = await filterMembers(getMembersData(sortProp, search));
-      setUsers(members || []);
-    }
     getUsers();
-  }, [sortKey, filters, search]);
+  }, [sortKey, filters]);
+
+  const getUsers = async () => {
+    let sortProp = sortKey.prop;
+    let members = await getMembersData(sortProp, search, filters);
+    setUsers(members || []);
+  };
 
   return (
     <div
@@ -272,6 +249,7 @@ const ViewMembers = (props) => {
                 onBlur={onBlurSearch}
                 onFocus={onFocusSearch}
                 onEnter={onEnterSearch}
+                value={search}
               ></SearchBox>
             </div>
             <div className={styles["filter-suggestion-box"]}>

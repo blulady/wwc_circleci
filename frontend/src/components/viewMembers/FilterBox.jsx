@@ -19,11 +19,12 @@ const FilterBox = (props) => {
         return () => window.removeEventListener("mousedown", clickBlur);
     }, []);
 
-    const onFilterSelect = (group, filterVal) => {
+    const onFilterSelect = (group) => {
         return (ev) => {
-            const index = filters[group].indexOf(filterVal);
+            const selectedVal = ev.target.value;
+            const index = filters[group].indexOf(selectedVal);
             if(index === -1) {
-                filters[group].push(filterVal);
+                filters[group].push(selectedVal);
                 setFilters({ ...filters });
             } else {
                 filters[group].splice(index, 1);
@@ -54,7 +55,7 @@ const FilterBox = (props) => {
             return renderButtonOption(option.group, option.options);
         }
         if (option.type === "selection") {
-            return renderSelectionOption(option.options);
+            return renderSelectionOption(option.group, option.options);
         }
     };
 
@@ -62,18 +63,18 @@ const FilterBox = (props) => {
         return (
           buttonOptions.map((button) => {
               if (button.enable) {
-                return <button type="button" className={cx(styles["filter-option-button"], (filters[group]|| []).indexOf(button.value) > -1 ? styles["selected"] : "")} value={button.value} onClick={onFilterSelect(group, button.value)}>{button.label}</button>
+                return <button type="button" key={button.value} className={cx(styles["filter-option-button"], (filters[group]|| []).indexOf(button.value) > -1 ? styles["selected"] : "")} value={button.value} onClick={onFilterSelect(group)}>{button.label}</button>
               } else {
                   return null;
               }
           }));
     }
 
-    const renderSelectionOption = (selectionOptions) => {
+    const renderSelectionOption = (group, selectionOptions) => {
         return (
-            <select className={cx(styles["filter-selection"], "form-control")}>
+            <select className={cx(styles["filter-selection"], "form-control")} onChange={onFilterSelect(group)}>
                 {selectionOptions.map((select) => {
-                    return (<option value={select.value}>{select.label}</option>);
+                    return (<option value={select.value} key={select.value}>{select.label}</option>);
                 })}
             </select>
         )
@@ -83,7 +84,7 @@ const FilterBox = (props) => {
         <div className={cx(styles["filter-box"])} ref={boxRef}>
             {props.options.map((option, index) => {
                 return (
-                    <div className={cx(styles["filter-group"], "form-group d-flex align-items-center")}>
+                    <div className={cx(styles["filter-group"], "form-group d-flex align-items-center")} key={option.label + "-" + index}>
                         <div className={styles["filter-category"]}>{option.label}:</div>
                         {renderOption(option)}
                         {index === props.options.length - 1 && 

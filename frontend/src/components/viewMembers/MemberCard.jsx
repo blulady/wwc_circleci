@@ -23,9 +23,9 @@ const MemberCard = (props) => {
   const history = useHistory();
 
   // Show only first team if multiple teams
-  const hasTeams = !!(cardUserInfo.teams.length && cardUserInfo.teams[0].name);
+  const hasTeams = !!cardUserInfo.role_teams.length;
   const teamsStr =
-    (cardUserInfo.teams.length && cardUserInfo.teams[0].name) || "No Team";
+    (cardUserInfo.role_teams.length && cardUserInfo.role_teams[0].team_name) || "No Team";
 
   useEffect(() => {
     const nameElt = nameEltRef.current;
@@ -98,7 +98,7 @@ const MemberCard = (props) => {
               )}
             >
               {teamsStr}
-              {cardUserInfo.teams.length > 1 && (
+              {cardUserInfo.role_teams.length > 1 && (
                 <React.Fragment>
                   <div
                     className={styles["multi-dots"]}
@@ -117,8 +117,8 @@ const MemberCard = (props) => {
                     globalEventOff="click"
                   >
                     <span>
-                      Also part of {cardUserInfo.teams.length - 1} other team
-                      {cardUserInfo.teams.length - 1 > 1 ? "s" : ""}
+                      Also part of {cardUserInfo.role_teams.length - 1} other team
+                      {cardUserInfo.role_teams.length - 1 > 1 ? "s" : ""}
                     </span>
                   </ReactTooltip>
                 </React.Fragment>
@@ -204,7 +204,7 @@ const MemberCard = (props) => {
               )}
             >
               {teamsStr}
-              {cardUserInfo.teams.length > 1 && (
+              {cardUserInfo.role_teams.length > 1 && (
                 <React.Fragment>
                   <div
                     className={styles["multi-dots"]}
@@ -220,8 +220,8 @@ const MemberCard = (props) => {
                     type="light"
                   >
                     <span>
-                      Also part of {cardUserInfo.teams.length - 1} other team
-                      {cardUserInfo.teams.length - 1 > 1 ? "s" : ""}
+                      Also part of {cardUserInfo.role_teams.length - 1} other team
+                      {cardUserInfo.role_teams.length - 1 > 1 ? "s" : ""}
                     </span>
                   </ReactTooltip>
                 </React.Fragment>

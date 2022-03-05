@@ -31,24 +31,33 @@ export const UserProfile = () => {
       // 'VOLUNTEER': ["Partnership Management","Social Media","Host Management"]
     }
   })
-  const { userInfo } = useContext(AuthContext);
 
   const [errorOnLoading, setErrorOnLoading] = useState(false);
 
   useEffect(() => {
     const getMyMemberData = async () => {
       try {
-      let myMembership = await WwcApi.getMember(userInfo.id);
-      //TODO fix based on str returned once BE endpoint is ready
-      let currentTeams = myMembership.teams.map(t=>t.name);
-      myMembership['role_teams'] = {[myMembership.role]: currentTeams};
+      let myMembership = await WwcApi.getUserProfile();
+      let role_teams = {};
+      myMembership.role_teams.forEach((t) => {
+        // {
+        //   "team_id": 5,
+        //   "team_name": "Social Media",
+        //   "role_name": "DIRECTOR"
+        // },
+        (t.role_name in role_teams) || (role_teams[t.role_name] = []);
+        if (t.team_name) {
+          role_teams[t.role_name].push(t.team_name);
+        }
+      });
+      myMembership['role_teams'] = role_teams;
       setProfileData(myMembership);
       } catch (e) {
         setErrorOnLoading(true);
       }
     };
     getMyMemberData()
-  }, [userInfo.id])
+  }, [])
 
   const {date_joined, email, first_name, last_name,status, role_teams} = profileData;
   const roles = Object.keys(role_teams);

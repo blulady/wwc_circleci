@@ -195,7 +195,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True
 }
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://wwcode-chtools-fe.herokuapp.com']
+CORS_ALLOWED_ORIGINS = [env('FRONTEND_APP_URL'), 'http://localhost:3000'] if env('LOCAL_FRONTEND_ALLOWED') == 'True' else [env('FRONTEND_APP_URL')]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True

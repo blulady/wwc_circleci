@@ -21,6 +21,7 @@ jobs:
         EMAIL_HOST_USER: 'apikey'
         EMAIL_SENDER: 'WWCodeSV@gmail.com'
         FRONTEND_APP_URL: 'https://wwcode-chtools-fe.herokuapp.com'
+        LOCAL_FRONTEND_ALLOWED: True
         DATABASES['default']['ENGINE']: django.db.backends.postgresql
         DATABASES['default']['NAME']: postgres_test
         DATABASES['default']['USER']: postgres

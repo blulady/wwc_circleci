@@ -10,12 +10,16 @@ import TextAreaInput from "./TextAreaInput";
 import ConfirmationModal from "./ConfirmationModal";
 import { useHistory } from "react-router-dom";
 import WwcApi from "../../WwcApi";
+import MessageBox from "../messagebox/MessageBox";
+import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 function ReviewMember(props) {
   const history = useHistory();
   const location = useLocation();
   const data = location.state.memberinfo;
   const roleinfo = location.state.roleinfo;
+  const [errorOnRequest, setErrorOnRequest] = useState(false);
+
   const [member, setMember] = useState({
     Email: data.Email,
     Role: data.Role,
@@ -71,13 +75,15 @@ function ReviewMember(props) {
         message: member.Message,
       };
       try {
+        setErrorOnRequest(false);
         const results = await WwcApi.createMember(memberInfo);
         history.push({
           pathname: "/member/add",
           state: { fromReview: true },
         });
       } catch (error) {
-        alert(error + ':\n'+ JSON.stringify(error.response.data))
+        setErrorOnRequest(true);
+        console.log(error + ':\n'+ JSON.stringify(error.response.data));
       }
     }
   };
@@ -143,6 +149,9 @@ function ReviewMember(props) {
               </button>
             </div>
             <div className='row justify-content-center form-div-spacing'>
+            <div className={errorOnRequest ? "show padded" : "hide"}>
+              <MessageBox type="Error" title={"Sorry!"} message={ERROR_REQUEST_MESSAGE}></MessageBox>
+            </div>
               <div>
                 <div className='header'>Review Member to Be</div>
                 <div className='header'>Added</div>

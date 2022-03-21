@@ -14,7 +14,13 @@ it('Should render Member Card', () => {
         "date_joined": "2020-09-14T20:13:30.451000Z",
         "email": "emailaddress@womenwhocode.com",
         "status": "active",
-        "teams": []
+        "role_teams": [
+            {
+            "team_id": 1,
+            "team_name": "Event Volunteers",
+            "role_name": "VOLUNTEER"
+            }
+        ]
     };
 const { queryAllByText } = render(<MemberCard userInfo={memeberInfo}></MemberCard>);
   expect(queryAllByText(memeberInfo.first_name + " " + memeberInfo.last_name)).toBeTruthy();

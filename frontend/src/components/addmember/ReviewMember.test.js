@@ -143,13 +143,12 @@ describe('ReviewMember', () => {
         const apiSpy = jest.spyOn(WwcApi, 'createMember').mockImplementation(() => {
             throw exception;
         });
-        const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const { container } = render(<ReviewMember />);
+        const { container, getByTestId } = render(<ReviewMember />);
         const sendInvite = container.querySelector('.sendinvite-btn');
 
         fireEvent.click(sendInvite);
 
         expect(apiSpy).toHaveBeenCalled();
-        expect(alertSpy).toHaveBeenCalledWith(exception + ':\n' + JSON.stringify(exception.response.data));
+        expect(getByTestId('message-box')).toBeInTheDocument();
     });
 });

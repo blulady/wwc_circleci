@@ -114,6 +114,26 @@ exports[`ReviewMember it renders without crashing 1`] = `
             <div
               class="row justify-content-center form-div-spacing"
             >
+              <div
+                class="hide"
+              >
+                <div
+                  class="error message-box d-flex align-items-center justify-content-center flex-column"
+                  data-testid="message-box"
+                >
+                  <div
+                    class="title"
+                  >
+                    Sorry!
+                  </div>
+                  <div
+                    class="message"
+                  >
+                    We could not process your request. 
+Please try again.
+                  </div>
+                </div>
+              </div>
               <div>
                 <div
                   class="header"

@@ -20,9 +20,14 @@ jest.mock("react-router-dom", () => ({
       first_name: "TestVolunteer",
       id: 64,
       last_name: "Volunteer1",
-      role: "VOLUNTEER",
       status: "ACTIVE",
-      teams: [],
+      role_teams: [
+        {
+          "team_id": 1,
+          "team_name": "Event Volunteers",
+          "role_name": "VOLUNTEER"
+        }
+      ]
     },
   }),
 }));
@@ -39,7 +44,13 @@ jest.mock("../../WwcApi", () => {
         last_name: "Doe",
         role: "VOLUNTEER",
         status: "ACTIVE",
-        teams: [{ id: 1, name: "Event Volunteers" }],
+        role_teams: [
+          {
+            "team_id": 1,
+            "team_name": "Event Volunteers",
+            "role_name": "VOLUNTEER"
+          }
+        ]
       });
     },
     getTeams: async () => {
@@ -55,6 +66,9 @@ jest.mock("../../WwcApi", () => {
         ],
       ]);
     },
+    changeMemberStatus: async () => {
+      return await Promise.resolve();
+    }
   };
 });
 

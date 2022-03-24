@@ -89,7 +89,7 @@ const MemberCard = (props) => {
               {cardUserInfo.first_name + " " + cardUserInfo.last_name}
             </div>
             <div className={styles["membercard-type"]}>
-              {cardUserInfo.role?.toLowerCase()}
+              {cardUserInfo.highest_role?.toLowerCase()}
             </div>
             <div
               className={cx(
@@ -195,7 +195,7 @@ const MemberCard = (props) => {
             )}
           >
             <div className={styles["membercard-type"]}>
-              {cardUserInfo.role?.toLowerCase()}
+              {cardUserInfo.highest_role?.toLowerCase()}
             </div>
             <div
               className={cx(

@@ -1,7 +1,7 @@
 .filter-box {
     width: 639.12px;
     position: absolute;
-    top: 100%;
+    top: 110%;
     z-index: 1000;
     float: left;
     min-width: 10rem;

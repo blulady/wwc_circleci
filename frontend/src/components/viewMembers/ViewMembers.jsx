@@ -119,8 +119,11 @@ const ViewMembers = (props) => {
   const onEnterSearch = async (searchStr) => {
     setIsApplyingFilter(false);
     setIsOpenSuggestionBox(false);
+    if (!searchStr) {
+      setSuggestions([]);
+    }
     setSearch(searchStr);
-    getUsers();
+    getUsers(searchStr);
   };
 
   const onSelectSuggestion = async (selectedUser) => {
@@ -131,7 +134,7 @@ const ViewMembers = (props) => {
     //   setUsers([match]);
     // }
     setSearch(selectedUser);
-    getUsers();
+    getUsers(selectedUser);
   };
 
   const [isApplyingFilter, setIsApplyingFilter] = useState(false);
@@ -188,6 +191,7 @@ const ViewMembers = (props) => {
           label: team.name
         }
       });
+      teams.unshift({ value: 0, label: "All Teams" });
       let options = [...filterOptions];
       options[2].options = teams;
       setFilterOptions(options);
@@ -197,13 +201,17 @@ const ViewMembers = (props) => {
 
   const [filters, setFilters] = useState({ role: [], status: [], date_joined: [], team: [] });
   const onFilterApply = (vals) => {
+    const teams = vals.team || [];
+    vals.team = teams.filter((val) => {
+      return val != 0;
+    });
     setFilters(vals);
     toggleFilterBox();
   };
 
   const onFilterReset = (_filters) => {
     setFilters(_filters);
-    //toggleFilterBox();
+    toggleFilterBox();
   };
 
   const onFilterBoxBlur = () => {
@@ -218,12 +226,12 @@ const ViewMembers = (props) => {
   };
 
   useEffect(() => {
-    getUsers();
+    getUsers(search);
   }, [sortKey, filters]);
 
-  const getUsers = async () => {
+  const getUsers = async (searchKey) => {
     let sortProp = sortKey.prop;
-    let members = await getMembersData(sortProp, search, filters);
+    let members = await getMembersData(sortProp, searchKey, filters);
     setUsers(members || []);
   };
 
@@ -367,6 +375,12 @@ const ViewMembers = (props) => {
                   title="Sorry!"
                   message={ERROR_REQUEST_MESSAGE}
                 ></MessageBox>
+              </div>
+            )}
+
+            {!users.length && (
+              <div className={styles["empty-users-msg"]}>
+                No name matching: {search}
               </div>
             )}
 

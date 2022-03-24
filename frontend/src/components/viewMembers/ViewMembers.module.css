@@ -119,11 +119,10 @@
 
 .filter-container {
   position: relative;
-}
-
-.filter-container .filter-search-box input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  border: 1px solid #6B3768;
+  border-radius: 5px;
+  height: 42px;
+  background-color: #FFFFFF;
 }
 
 .filter-container .filter-suggestion-box {
@@ -135,11 +134,13 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   width: 93px;
-  background-color: #FFFFFF;
-  border: 1px solid #6B3768;
   border-left: none;
   color: #6B3768;
-  height: 42px;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-left: 1px solid #6B3768;
+  /* height: 42px; */
 }
 
 .filter-container .btn-group-append:focus {
@@ -252,6 +253,16 @@
   margin-top: 30px;
 }
 
+.empty-users-msg {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  color: #48484A;
+  text-align: center;
+  width: 100%;
+  margin-top: 10vh;
+}
+
 @media only screen and (max-width: 576px) {
   .view-member-page {
     position: relative;
@@ -288,6 +299,10 @@
 
   .view-member-page .filter-container .filter-suggestion-box {
     top: 32px;
+  }
+
+  .filter-container {
+    height: 32px;
   }
 
   .filter-container .filter-search-box input {

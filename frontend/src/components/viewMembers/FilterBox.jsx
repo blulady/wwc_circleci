@@ -19,7 +19,7 @@ const FilterBox = (props) => {
         return () => window.removeEventListener("mousedown", clickBlur);
     }, []);
 
-    const onFilterSelect = (group) => {
+    const onFilterButtonSelect = (group) => {
         return (ev) => {
             const selectedVal = ev.target.value;
             const index = filters[group].indexOf(selectedVal);
@@ -30,6 +30,14 @@ const FilterBox = (props) => {
                 filters[group].splice(index, 1);
                 setFilters({ ...filters });
             }
+        };
+    }
+
+    const onFilterDropdownSelect = (group) => {
+        return (ev) => {
+            const selectedVal = ev.target.value;
+            filters[group] = [selectedVal];
+            setFilters({ ...filters });
         };
     }
 
@@ -63,7 +71,7 @@ const FilterBox = (props) => {
         return (
           buttonOptions.map((button) => {
               if (button.enable) {
-                return <button type="button" key={button.value} className={cx(styles["filter-option-button"], (filters[group]|| []).indexOf(button.value) > -1 ? styles["selected"] : "")} value={button.value} onClick={onFilterSelect(group)}>{button.label}</button>
+                return <button type="button" key={button.value} className={cx(styles["filter-option-button"], (filters[group]|| []).indexOf(button.value) > -1 ? styles["selected"] : "")} value={button.value} onClick={onFilterButtonSelect(group)}>{button.label}</button>
               } else {
                   return null;
               }
@@ -71,8 +79,9 @@ const FilterBox = (props) => {
     }
 
     const renderSelectionOption = (group, selectionOptions) => {
+        const selectedVal = filters[group]?.[0] || 0;
         return (
-            <select className={cx(styles["filter-selection"], "form-control")} onChange={onFilterSelect(group)}>
+            <select className={cx(styles["filter-selection"], "form-control")} onChange={onFilterDropdownSelect(group)} value={selectedVal}>
                 {selectionOptions.map((select) => {
                     return (<option value={select.value} key={select.value}>{select.label}</option>);
                 })}

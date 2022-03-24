@@ -162,5 +162,14 @@ class GetMembersFilteringTestCase(TransactionTestCase):
                     (member_team['team__name'], member_team['team_id'], member_team['role__name']))
             self.assertIn(expected_role_team, member_role_teams)
 
+    # Test get members filtering with role for duplicate rows
+    def test_get_members_filtering_with_role_for_duplicate_rows(self):
+        requested_role = Role.LEADER
+        response = self.client.get(f"/api/users/?role={requested_role}", **self.bearer)
+        members = json.loads(response.content)
+        membersCount = len(members)
+        uniqueMemberIds = set([member['id'] for member in members])
+        self.assertEqual(len(uniqueMemberIds), membersCount)
+
     # TODO : Write test to unsure PENDING members are not retured in response when the non-director is logged-in
     # logging as a non-director and the output should not have any pending users.

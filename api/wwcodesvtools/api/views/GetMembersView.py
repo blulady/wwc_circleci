@@ -64,6 +64,15 @@ class GetMembersView(ListAPIView):
 
     def get_queryset(self):
         queryset = User.objects.all()
+        # get the ordering fields for the queryset
+        order_fields = OrderingFilter().get_ordering(self.request, queryset, self)
+        # remove the prefix '-' for distinct clause
+        distinct_fields = [field.strip('-') for field in order_fields]
+        order_fields.append('id')
+        distinct_fields.append('id')
+        # add distinct clause on user id to eliminate duplicate rows from the query results.
+        # DISTINCT ON expression matches the ORDER BY clause
+        queryset = User.objects.order_by(*order_fields).distinct(*distinct_fields)
 
         if not self.is_user_director_or_superuser:
             queryset = User.objects.exclude(userprofile__status="PENDING")

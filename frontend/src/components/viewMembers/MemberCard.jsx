@@ -14,6 +14,9 @@ import ReactTooltip from "react-tooltip";
 
 const MemberCard = (props) => {
   const cardUserInfo = props.userInfo;
+  cardUserInfo.numTeams = new Set(cardUserInfo.role_teams
+                          .filter(team => team.hasOwnProperty("team_id"))
+                          .map(team => team.team_id)).size;
   const isDirector = props.isDirector;
   const userRole = props.userRole;
   const memberCardAllowance = ["DIRECTOR", "LEADER", "VOLUNTEER"];
@@ -98,15 +101,15 @@ const MemberCard = (props) => {
               )}
             >
               {teamsStr}
-              {cardUserInfo.role_teams.length > 1 && (
+              {cardUserInfo.numTeams > 1 && (
                 <React.Fragment>
                   <div
                     className={styles["multi-dots"]}
                     data-tip
                     data-for={"team-tooltip-" + random}
-                    data-event="click"
-                    data-event-off="mouseup"
-                    data-scroll-hide="true"
+                    onClick={(evt) => {
+                      evt.stopPropagation();
+                    }}
                   >
                     ...
                   </div>
@@ -114,11 +117,11 @@ const MemberCard = (props) => {
                     id={"team-tooltip-" + random}
                     effect="solid"
                     type="light"
-                    globalEventOff="click"
+                    place="bottom"
                   >
                     <span>
-                      Also part of {cardUserInfo.role_teams.length - 1} other team
-                      {cardUserInfo.role_teams.length - 1 > 1 ? "s" : ""}
+                      Also part of {cardUserInfo.numTeams - 1} other team
+                      {cardUserInfo.numTeams - 1 > 1 ? "s" : ""}
                     </span>
                   </ReactTooltip>
                 </React.Fragment>
@@ -204,7 +207,7 @@ const MemberCard = (props) => {
               )}
             >
               {teamsStr}
-              {cardUserInfo.role_teams.length > 1 && (
+              {cardUserInfo.numTeams > 1 && (
                 <React.Fragment>
                   <div
                     className={styles["multi-dots"]}
@@ -220,8 +223,8 @@ const MemberCard = (props) => {
                     type="light"
                   >
                     <span>
-                      Also part of {cardUserInfo.role_teams.length - 1} other team
-                      {cardUserInfo.role_teams.length - 1 > 1 ? "s" : ""}
+                      Also part of {cardUserInfo.numTeams - 1} other team
+                      {cardUserInfo.numTeams - 1 > 1 ? "s" : ""}
                     </span>
                   </ReactTooltip>
                 </React.Fragment>

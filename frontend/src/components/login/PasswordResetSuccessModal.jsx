@@ -1,3 +1,5 @@
+// THIS COMPONENT IS NOT USED AND CAN BE REMOVED.
+
 import React from "react";
 import classes from "./PasswordResetSuccessModal.module.css";
 

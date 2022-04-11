@@ -28,6 +28,9 @@ exports[`renders learn react link 1`] = `
                   Chapter Tools Login
                 </div>
               </div>
+              <div
+                class="message-container"
+              />
               <form
                 class="LoginForm"
                 data-testid="login-form"

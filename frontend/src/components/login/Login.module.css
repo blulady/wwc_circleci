@@ -30,8 +30,14 @@ main {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+}
+
+.message-container {
+  width: 270px;
+  padding: 0px 15px;
+  margin: 15px;
+  box-sizing: border-box;
 }
 
 .h1Login {
@@ -45,7 +51,6 @@ main {
 
 .LoginForm {
   width: 270px;
-  margin: 66px auto 0;
 }
 
 .form-group {
@@ -162,10 +167,6 @@ div.input-group-append {
     font-weight: 550;
     line-height: 35px;
     width: 85%;
-    margin: auto;
-  }
-
-  .LoginForm {
     margin: auto;
   }
 

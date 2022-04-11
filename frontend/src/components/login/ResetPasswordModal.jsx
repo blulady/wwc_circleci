@@ -7,11 +7,6 @@ const ResetPasswordModal = (props) => {
     email: "",
   });
 
-  /*
-   * on submit sets success state to true
-   * stores token in session
-   * and redirects to logout page
-   */
   const handleSubmit = (event) => {
     event.preventDefault();
     props.send(emailData);

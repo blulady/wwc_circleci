@@ -4,3 +4,5 @@ export const ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE ="No resources avai
 export const ERROR_REGISTER_LINK_USED ="This link has already been used.\nIf you didn't use the link, please contact a Director.";
 export const ERROR_REGISTER_LINK_EXPIRED ="This link has expired.\nPlease contact a Director.";
 export const ERROR_REGISTER_LINK_INVALID ="This link is invalid.\nPlease contact a Director.";
+export const SUCCESS_REQUEST_PASSWORD_RESET = "Please check your email inbox for password reset instructions.";
+export const SUCCESS_PASSWORD_RESET = "You may now log in with your new password.";

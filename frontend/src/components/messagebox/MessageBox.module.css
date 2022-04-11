@@ -1,9 +1,12 @@
 .message-box {
-    width: 448px;
-    Height: 95px;
+    width: 100%;
+    max-width: 448px;
+    height: 100%;
+    max-height: 95px;
+    padding: 5px;
     box-sizing: border-box;
     border: 1px solid #000000;
-    padding: 14px 0;
+    margin: 15px auto;
 }
 
 .message-box.success {
@@ -20,16 +23,23 @@
     line-height: 25px;
 }
 
+.message-box.success .title {
+    color: #007A7C;
+}
+
 .message-box .message {
     font-size: 14px;
     line-height: 17px;
     white-space: pre-line;
     text-align: center;
+    padding: 5px;
 }
 
 @media only screen and (max-width: 576px) {
     .message-box {
-        width: 270px;
-        Height: 121px;
+        width: 100%;
+        max-width: 270px;
+        height: 100%;
+        max-height: 121px;
     }
 }

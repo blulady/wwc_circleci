@@ -5,12 +5,13 @@ import WwcBackground from "./WwcBackground";
 import AuthContext from "../../context/auth/AuthContext";
 import { useHistory } from "react-router-dom";
 import ResetPasswordModal from "./ResetPasswordModal";
-import RequestSentModal from "./RequestSentModal";
-import PasswordResetSuccess from "./PasswordResetSuccessModal";
 import WwcApi from "../../WwcApi";
+import MessageBox from "../messagebox/MessageBox";
+import { ERROR_REQUEST_MESSAGE, SUCCESS_REQUEST_PASSWORD_RESET } from "../../Messages";
+
 
 /*
- * sets session on submit and redirects to logout page on success
+ * sets session on submit and redirects to "/" on success
  */
 const Login = () => {
   const history = useHistory();
@@ -22,10 +23,16 @@ const Login = () => {
     username: "",
     password: "",
   });
+  
+  let passwordReset = JSON.parse(sessionStorage.getItem('password-reset'));
 
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
-  const [showRequestSentModal, setShowRequestSentModal] = useState(false);
-  const [showResetsuccessModal, setShowResetSuccessModal] = useState(sessionStorage.getItem('password-reset') || false);
+  const [showRequestStatus, setShowRequestStatus] = useState({type: null});
+
+  const clearPasswordResetInfo = () => {
+    sessionStorage.removeItem('password-reset');
+    passwordReset = null;
+  }
 
   useEffect(() => {
     /*
@@ -46,7 +53,7 @@ const Login = () => {
   /*
    * on submit sets success state to true
    * stores token in session
-   * and redirects to logout page
+   * and redirects to "/"
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -77,6 +84,7 @@ const Login = () => {
     } catch (err) {
       form.classList.add(styles["was-validated"]);
     }
+    clearPasswordResetInfo();
   };
 
   // Handle show/hide toggle on password field
@@ -100,18 +108,17 @@ const Login = () => {
 
   const handleSendResetPasswordEmail = async ({ email }) => {
     // make axios call to send request
-    await WwcApi.sendResetEmail(email);
-    setShowResetPasswordModal(false);
-    setShowRequestSentModal(true);
-  };
-
-  const handleClosePwdResetSuccessModal = () => {
-    sessionStorage.removeItem('password-reset');
-    setShowResetSuccessModal(false);
-  }
-
-  const handleCloseRequestSentModal = () => {
-    setShowRequestSentModal(false);
+    try {
+      await WwcApi.sendResetEmail(email);
+      // Show success message
+      setShowRequestStatus({type: "Success", title: "Request sent", message: SUCCESS_REQUEST_PASSWORD_RESET});
+    } catch (error) { // error with resetting email
+      // Show error message
+      setShowRequestStatus({type: "Error", title: "Sorry!", message: ERROR_REQUEST_MESSAGE}); // generic error
+    } finally {
+      setShowResetPasswordModal(false);
+      clearPasswordResetInfo();
+    }    
   };
 
   return (
@@ -124,6 +131,16 @@ const Login = () => {
               <div className={cx('header', styles['header'])}>
                 <div className={styles['h1Login']}>Chapter Tools Login</div>
               </div>
+
+              <div className={cx(styles['message-container'])}>
+                {showRequestStatus.type === null && passwordReset !== null && (
+                  <MessageBox type={passwordReset.type} title={passwordReset.title} message={passwordReset.message}></MessageBox>
+                )}
+                {showRequestStatus.type !== null && (
+                <MessageBox type={showRequestStatus.type} title={showRequestStatus.title} message={showRequestStatus.message}></MessageBox>
+                )}
+              </div>
+              
               <form
                 className={styles['LoginForm']}
                 onSubmit={handleSubmit}
@@ -194,12 +211,6 @@ const Login = () => {
           send={handleSendResetPasswordEmail}
           close={handleCloseResetPasswordModal}
         />
-      ) : null}
-      {showRequestSentModal ? (
-        <RequestSentModal close={handleCloseRequestSentModal} />
-      ) : null}
-      {showResetsuccessModal ? (
-        <PasswordResetSuccess close={handleClosePwdResetSuccessModal} />
       ) : null}
     </div>
   );

@@ -5,6 +5,7 @@ import Password from "../layout/Password"
 import classes from "./ResetPasswordForm.module.css";
 import ContainerWithNav from "../layout/ContainerWithNav";
 import WwcApi from "../../WwcApi";
+import { ERROR_REQUEST_MESSAGE, SUCCESS_PASSWORD_RESET } from "../../Messages";
 
 
 const ConfirmResetPassword = (props) => {
@@ -19,15 +20,19 @@ const ConfirmResetPassword = (props) => {
  const handleSubmit = async (e) => {
   e.preventDefault();
   let data = {email,token,password};
+  let passwordResetInfo;
   try {
     await WwcApi.resetPassword(data);
-    sessionStorage.setItem('password-reset', true);
+    passwordResetInfo = {type: "Success",
+                               title: "Password Reset Successful",
+                               message: SUCCESS_PASSWORD_RESET};
   } catch (error) {
-    alert(error.response.data.error);
+    passwordResetInfo = {type: "Error", 
+                         title: "Sorry!",
+                         message: ERROR_REQUEST_MESSAGE};
   }
+  sessionStorage.setItem('password-reset', JSON.stringify(passwordResetInfo));
   setSubmitted(true);
-
- 
 };
 
 return submitted 

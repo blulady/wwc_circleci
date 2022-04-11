@@ -1,3 +1,5 @@
+// THIS COMPONENT IS NOT USED AND CAN BE REMOVED.
+
 import React from "react";
 
 const ResetModal = (props) => {

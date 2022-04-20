@@ -72,9 +72,10 @@ class WwcApi {
     );
   }
 
-  static async resetPassword(data){
+  static async resetPassword(data) {
     return await axios.patch(`${BASE_URL}/user/reset_password/confirm/`, data, {
-      headers: { "Content-Type": "application/json" }});
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   static async logout() {
@@ -96,18 +97,18 @@ class WwcApi {
       searchParams.set("ordering", orderBy);
     }
     if (search) {
-      searchParams.set("search", search)
+      searchParams.set("search", search);
     }
     if (filters) {
-      for(const prop in filters) {
-        for(const filterVal of filters[prop]) {
+      for (const prop in filters) {
+        for (const filterVal of filters[prop]) {
           searchParams.append(prop, filterVal);
         }
       }
     }
 
     url += searchParams.toString();
-    console.log(url)
+    console.log(url);
     let res = await axios.get(url, {
       headers: getConfig(),
     });
@@ -136,14 +137,14 @@ class WwcApi {
   }
 
   static async getTeams() {
-    let res = await axios.get(`${BASE_URL}/teams/`,{
-      headers: getConfig(), 
+    let res = await axios.get(`${BASE_URL}/teams/`, {
+      headers: getConfig(),
     });
     return res.data;
   }
 
   static async editMember(userId, data) {
-    return await axios.post(`${BASE_URL}/user/edit/${userId}`, data,{
+    return await axios.post(`${BASE_URL}/user/edit/${userId}`, data, {
       headers: getConfig(),
     });
   }
@@ -162,26 +163,26 @@ class WwcApi {
   }
 
   static async getVolunteerResources(slug) {
-    let res = await axios.get(`${BASE_URL}/resources/${slug}`, {
+    return await axios.get(`${BASE_URL}/resources/${slug}`, {
       headers: getConfig(),
     });
-    return res.data;
+    // return res.data;
   }
 
   static async updateVolunteerResources(slug, links) {
-    let res = await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
+    return await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
       headers: getConfig(),
     });
-    return res.data;
+    // return res.data;
   }
 
-  static async changeMemberStatus(userId, data){
+  static async changeMemberStatus(userId, data) {
     return await axios.post(`${BASE_URL}/user/edit/${userId}/status/`, data, {
       headers: getConfig(),
     });
   }
 
-  static async deleteMemberRole(userId,data){
+  static async deleteMemberRole(userId, data) {
     return await axios.delete(`${BASE_URL}/user/edit/${userId}/role/`, data, {
       headers: getConfig(),
     });

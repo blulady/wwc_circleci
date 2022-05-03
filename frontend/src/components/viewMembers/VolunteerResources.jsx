@@ -12,8 +12,6 @@ import {
 import ResourcesLinks from "./ResourcesLinks";
 
 const VolunteerResources = (props) => {
-  let runs = 0;
-
   const errorTitle = "Sorry!";
   const [errorOnLoading, setErrorOnLoading] = useState(false);
   const [errorNoDocument, setErrorNoDocument] = useState(false);
@@ -32,7 +30,6 @@ const VolunteerResources = (props) => {
   }, []);
 
   const getVolunteerResources = async () => {
-    console.log(`blya runs ${runs}`);
     try {
       let volunteerResources = await WwcApi.getVolunteerResources(slug);
       setVolunteerResource(volunteerResources.data);
@@ -45,7 +42,6 @@ const VolunteerResources = (props) => {
   };
 
   const updateResources = async (editLink, publishedLink) => {
-    console.log(`hui runs ${runs}`);
     try {
       await WwcApi.updateVolunteerResources(slug, {
         edit_link: editLink,
@@ -54,7 +50,6 @@ const VolunteerResources = (props) => {
     } catch (error) {
       console.log(error);
       if (error.response.status === 404) {
-        console.log("setting shit to no document");
         setErrorNoDocument(true);
       } else setErrorOnLoading(true);
     }

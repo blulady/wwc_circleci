@@ -33,14 +33,14 @@ describe("Register Component Validation Tests", () => {
       });
     });
 
-    WwcApi.updateVolunteerResources.mockImplementation(async () => {
-      return await Promise.resolve({
-        data: {
-          edit_link: "test edit link",
-          published_link: "test published link",
-        },
-      });
-    });
+    // WwcApi.updateVolunteerResources.mockImplementation(async () => {
+    //   return await Promise.resolve({
+    //     data: {
+    //       edit_link: "test edit link",
+    //       published_link: "test published link",
+    //     },
+    //   });
+    // });
 
     await act(async () => {
       render(
@@ -114,6 +114,8 @@ describe("Register Component Validation Tests", () => {
     expect(
       screen.getByText(ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE)
     ).toBeInTheDocument();
+    expect(editLink.value).toBe("test edit link");
+    expect(publishedLink.value).toBe("test published link");
   });
 
   test("Tests VolunteerResources component behavior for fetch failure", async () => {

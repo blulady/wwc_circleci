@@ -34,7 +34,6 @@ const VolunteerResources = (props) => {
       let volunteerResources = await WwcApi.getVolunteerResources(slug);
       setVolunteerResource(volunteerResources.data);
     } catch (error) {
-      console.log(error);
       if (error.response.status === 404) {
         setErrorNoDocument(true);
       } else setErrorOnLoading(true);
@@ -48,7 +47,6 @@ const VolunteerResources = (props) => {
         published_link: publishedLink,
       });
     } catch (error) {
-      console.log(error);
       if (error.response.status === 404) {
         setErrorNoDocument(true);
       } else setErrorOnLoading(true);

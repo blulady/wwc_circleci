@@ -17,39 +17,47 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
-    
-    const {detail,code, error: err} = error.response.data
+    const { detail, code, error: err } = error.response.data;
     console.log(err);
-    console.log('Interceptor error:',detail,':',code)
-     
+    console.log("Interceptor error:", detail, ":", code);
+
     const originalRequest = error.config;
-    
-    if (error.response.status === 401 && !originalRequest._retry && code==='token_not_valid'){
+
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      code === "token_not_valid"
+    ) {
       // Access Token expired, get new token using the existing Refresh token
-      if (sessionStorage.getItem("token") && detail==='Given token not valid for any token type'){
-          originalRequest._retry = true;
-          const { refresh } = JSON.parse(sessionStorage.getItem("token"));
-          return axios
-            .post(`${BASE_URL}/login/refresh`, { refresh: refresh })
-            .then((res) => {
-              if (res.status === 200) {
-                console.log(res);
-                let { access, refresh } = res.data;
-                let token = { access, refresh };
-                sessionStorage.setItem("token", JSON.stringify(token));
-                console.log("Access token has been refreshed");
-                originalRequest.headers = getConfig();
-                return axios(originalRequest);
-              } 
-            });   
-          } 
-          // Refresh Token expired. clean up the tokens stored in sessionStorage
-          if (detail==='Token is invalid or expired'){
-            console.log("Refresh token expired, cleanup tokens and navigate to Login page")
-            sessionStorage.removeItem("token");
-            sessionStorage.removeItem("user");
-            return window.location.href = `${BASE_URL}/login`;
-          }   
+      if (
+        sessionStorage.getItem("token") &&
+        detail === "Given token not valid for any token type"
+      ) {
+        originalRequest._retry = true;
+        const { refresh } = JSON.parse(sessionStorage.getItem("token"));
+        return axios
+          .post(`${BASE_URL}/login/refresh`, { refresh: refresh })
+          .then((res) => {
+            if (res.status === 200) {
+              console.log(res);
+              let { access, refresh } = res.data;
+              let token = { access, refresh };
+              sessionStorage.setItem("token", JSON.stringify(token));
+              console.log("Access token has been refreshed");
+              originalRequest.headers = getConfig();
+              return axios(originalRequest);
+            }
+          });
+      }
+      // Refresh Token expired. clean up the tokens stored in sessionStorage
+      if (detail === "Token is invalid or expired") {
+        console.log(
+          "Refresh token expired, cleanup tokens and navigate to Login page"
+        );
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        return (window.location.href = `${BASE_URL}/login`);
+      }
     }
     return Promise.reject(error);
   }
@@ -166,14 +174,12 @@ class WwcApi {
     return await axios.get(`${BASE_URL}/resources/${slug}`, {
       headers: getConfig(),
     });
-    // return res.data;
   }
 
   static async updateVolunteerResources(slug, links) {
     return await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
       headers: getConfig(),
     });
-    // return res.data;
   }
 
   static async changeMemberStatus(userId, data) {

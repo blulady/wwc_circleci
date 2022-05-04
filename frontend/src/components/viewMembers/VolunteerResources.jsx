@@ -5,17 +5,19 @@ import cx from "classnames";
 import WwcApi from "../../WwcApi";
 import MessageBox from "../messagebox/MessageBox";
 
-import { ERROR_VOLUNTEER_RESOURCES_DOCUMENT_NOT_LOADED, ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE  } from "../../Messages";
+import {
+  ERROR_VOLUNTEER_RESOURCES_DOCUMENT_NOT_LOADED,
+  ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE,
+} from "../../Messages";
 import ResourcesLinks from "./ResourcesLinks";
 
 const VolunteerResources = (props) => {
-
-  const errorTitle = 'Sorry!';
+  const errorTitle = "Sorry!";
   const [errorOnLoading, setErrorOnLoading] = useState(false);
   const [errorNoDocument, setErrorNoDocument] = useState(false);
   const [volunteerResource, setVolunteerResource] = useState({
     edit_link: "",
-    published_link: ""
+    published_link: "",
   });
   const { userInfo } = useContext(AuthContext);
   const isDirector = userInfo.role === "DIRECTOR";
@@ -30,47 +32,83 @@ const VolunteerResources = (props) => {
   const getVolunteerResources = async () => {
     try {
       let volunteerResources = await WwcApi.getVolunteerResources(slug);
-      setVolunteerResource(volunteerResources)
+      setVolunteerResource(volunteerResources.data);
     } catch (error) {
-      console.log(error);
       if (error.response.status === 404) {
         setErrorNoDocument(true);
-      } else
-        setErrorOnLoading(true);
+      } else setErrorOnLoading(true);
     }
   };
 
-  const updateResources = (editLink, publishedLink) => {
-    WwcApi.updateVolunteerResources(slug, {
-      edit_link: editLink,
-      published_link: publishedLink
-    });
+  const updateResources = async (editLink, publishedLink) => {
+    try {
+      await WwcApi.updateVolunteerResources(slug, {
+        edit_link: editLink,
+        published_link: publishedLink,
+      });
+    } catch (error) {
+      if (error.response.status === 404) {
+        setErrorNoDocument(true);
+      } else setErrorOnLoading(true);
+    }
   };
 
   return (
-    <div id='volunteerResourcesPage'
+    <div
+      id="volunteerResourcesPage"
       className={cx(styles["view-member-page"], "d-flex flex-column")}
     >
       <div className={styles["view-member-page-list-wrapper"]}>
         <div className={styles["page-label-wrapper"]}>
           {isDirector && (
-            <ResourcesLinks editUrl={volunteerResource.edit_link} publishUrl={volunteerResource.published_link} onSave={updateResources}></ResourcesLinks>
+            <ResourcesLinks
+              editUrl={volunteerResource.edit_link}
+              publishUrl={volunteerResource.published_link}
+              onSave={updateResources}
+            ></ResourcesLinks>
           )}
         </div>
         {errorOnLoading && (
-          <div className={cx(styles["error-container"], "d-flex justify-content-center")}>
-            <MessageBox type="Error" title={errorTitle} message={ERROR_VOLUNTEER_RESOURCES_DOCUMENT_NOT_LOADED}></MessageBox>
+          <div
+            className={cx(
+              styles["error-container"],
+              "d-flex justify-content-center"
+            )}
+          >
+            <MessageBox
+              type="Error"
+              title={errorTitle}
+              message={ERROR_VOLUNTEER_RESOURCES_DOCUMENT_NOT_LOADED}
+            ></MessageBox>
           </div>
         )}
         {errorNoDocument && (
-          <div className={cx(styles["error-container"], "d-flex justify-content-center")}>
-            <MessageBox type="Error" title={errorTitle} message={ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE}></MessageBox>
+          <div
+            className={cx(
+              styles["error-container"],
+              "d-flex justify-content-center"
+            )}
+          >
+            <MessageBox
+              type="Error"
+              title={errorTitle}
+              message={ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE}
+            ></MessageBox>
           </div>
         )}
         {!errorNoDocument && !errorOnLoading && (
-          <iframe style={{ width: '100%', height: '100%', background: "#FFFFFF", margin: 0, padding: 0, border: 'none' }}
-            src={volunteerResource.published_link} title="Volunteer Resources">
-          </iframe>
+          <iframe
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "#FFFFFF",
+              margin: 0,
+              padding: 0,
+              border: "none",
+            }}
+            src={volunteerResource.published_link}
+            title="Volunteer Resources"
+          ></iframe>
         )}
       </div>
     </div>

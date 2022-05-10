@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Register.module.css";
 import cx from 'classnames';
 import queryString from "query-string";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Password from "../layout/Password";
 import Spinner from "../layout/Spinner";
 import WwcApi from "../../WwcApi";
@@ -12,7 +12,7 @@ import { ERROR_REQUEST_MESSAGE, ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EX
 
 
 function Register(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { email, token } = queryString.parse(props.location.search);
   const [errorOnLoading, setErrorOnLoading] = useState({ hasError: false });
   const [processing, setProcessing] = useState(true);
@@ -63,7 +63,7 @@ function Register(props) {
     const userData = { ...userInfo };
     try {
       await WwcApi.activateMember(userData); // activate new member
-      history.push("/login");
+      navigate("/login");
     } catch (error) { // error with activation
       setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REQUEST_MESSAGE }); // generic error
     } finally {

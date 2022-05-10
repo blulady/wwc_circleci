@@ -3,12 +3,13 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MemberDetails from "./MemberDetails";
 import AuthContext from "../../context/auth/AuthContext";
-import { useLocation } from "react-router";
-import WwcApi from "../../WwcApi";
+
+const mockNavigation = jest.fn();
 
 const userInfo = { userInfo: {} };
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigation,
   useLocation: () => ({
     pathname: "/member/view",
     hash: "",

@@ -5,7 +5,7 @@ import { ReactComponent as MemberImg } from "../../images/open_person_icon.svg";
 import { ReactComponent as MemberSmImg } from "../../images/open_person_sm_icon.svg";
 //import "./MemberCard.css";
 import { isBrowser, isMobile } from "react-device-detect";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./MemberCard.module.css";
 import cx from "classnames";
@@ -23,7 +23,7 @@ const MemberCard = (props) => {
 
   const nameEltRef = React.createRef();
   const [isNameLong, setNameLong] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Show only first team if multiple teams
   const hasTeams = !!cardUserInfo.role_teams.length;
@@ -46,8 +46,7 @@ const MemberCard = (props) => {
   };
 
   const handleClick = (a) => {
-    history.push({
-      pathname: "/member/view",
+    navigate("/member/view",{
       state: cardUserInfo,
     });
   };

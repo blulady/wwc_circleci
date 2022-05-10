@@ -3,7 +3,8 @@ import styles from "./Login.module.css";
 import cx from "classnames";
 import WwcBackground from "./WwcBackground";
 import AuthContext from "../../context/auth/AuthContext";
-import { useHistory } from "react-router-dom";
+import TeamContext from "../../context/team/TeamContext";
+import { useNavigate } from "react-router-dom";
 import ResetPasswordModal from "./ResetPasswordModal";
 import WwcApi from "../../WwcApi";
 import MessageBox from "../messagebox/MessageBox";
@@ -14,7 +15,7 @@ import { ERROR_REQUEST_MESSAGE, SUCCESS_REQUEST_PASSWORD_RESET } from "../../Mes
  * sets session on submit and redirects to "/" on success
  */
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { handleSetAuth } = useContext(AuthContext);
   const pwdInput = React.createRef();
   const [loginData, setLoginData] = useState({
@@ -39,9 +40,9 @@ const Login = () => {
      * Reroute if token present
      */
     if (sessionStorage.getItem("token")) {
-      history.push("/");
+      navigate("/");
     }
-  });
+  }, []);
 
   // updates login state
   const handleChange = (event) => {
@@ -80,7 +81,7 @@ const Login = () => {
       // stores access token returned in session storage
       // as {token: {access:...,refresh:...}}
       handleSetAuth(token, user);
-      history.push("/");
+      navigate("/");
     } catch (err) {
       form.classList.add(styles["was-validated"]);
     }

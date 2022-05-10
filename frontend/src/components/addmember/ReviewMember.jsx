@@ -8,13 +8,14 @@ import RoleRadioInput from "./RoleRadioField";
 import InputLabel from "./InputLabel";
 import TextAreaInput from "./TextAreaInput";
 import ConfirmationModal from "./ConfirmationModal";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import WwcApi from "../../WwcApi";
 import MessageBox from "../messagebox/MessageBox";
 import { ERROR_REQUEST_MESSAGE } from "../../Messages";
+import BackToMemberPortal from "../layout/BackToMemberPortal";
 
 function ReviewMember(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const data = location.state.memberinfo;
   const roleinfo = location.state.roleinfo;
@@ -77,10 +78,8 @@ function ReviewMember(props) {
       try {
         setErrorOnRequest(false);
         const results = await WwcApi.createMember(memberInfo);
-        history.push({
-          pathname: "/member/add",
-          state: { fromReview: true },
-        });
+        navigate("/member/add",
+          { state: { fromReview: true }});
       } catch (error) {
         setErrorOnRequest(true);
         console.log(error + ':\n'+ JSON.stringify(error.response.data));
@@ -125,29 +124,14 @@ function ReviewMember(props) {
             <button
               className='chapter-member-btn'
               onClick={() => {
-                history.push({ pathname: "/home" });
+                navigate("/home");
               }}
             >
               Chapter Members
             </button>
           </div>
           <div className='form-div'>
-            <div className='back-member-img-btn-div'>
-              <img
-                src={BackButton}
-                className='back-btn-img'
-                style={{ width: "auto", height: "auto" }}
-                alt='Back Button'
-              />
-              <button
-                className='back-member-btn'
-                onClick={() => {
-                  history.push({ pathname: "/viewMembers" });
-                }}
-              >
-                Back to Member Portal
-              </button>
-            </div>
+            <BackToMemberPortal />
             <div className='row justify-content-center form-div-spacing'>
             <div className={errorOnRequest ? "show padded" : "hide"}>
               <MessageBox type="Error" title={"Sorry!"} message={ERROR_REQUEST_MESSAGE}></MessageBox>

@@ -2,9 +2,8 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import Register from './Register';
 import { createMemoryHistory } from 'history';
-import { Router} from "react-router";
+import { Router } from "react-router";
 import WwcApi from "../../WwcApi";
-
 
 jest.mock("../../WwcApi", () => {
   return {
@@ -13,8 +12,7 @@ jest.mock("../../WwcApi", () => {
   };
 });
 
-
-describe('Register Component Validation Tests', () =>{
+describe('Register Component Validation Tests', () => {
   const history = createMemoryHistory({initialEntries: ['/register?email=a@b.com&token=test']});
   let loc;
   
@@ -39,7 +37,7 @@ describe('Register Component Validation Tests', () =>{
     );
     await act(async () => {
       render(
-        <Router history={history}>
+        <Router navigator={history} location={history.location}>
           <Register location={loc}/>
         </Router>
       );
@@ -71,7 +69,7 @@ describe('Register Component Validation Tests', () =>{
       );
     await act(async () => {
       render(
-        <Router history={history}>
+        <Router navigator={history} location={history.location}>
           <Register location={loc}/>
         </Router>
       );
@@ -98,7 +96,7 @@ describe('Register Component Validation Tests', () =>{
       );
     await act(async () => {
       render(
-        <Router history={history}>
+        <Router navigator={history} location={history.location}>
           <Register location={loc}/>
         </Router>
       );
@@ -125,7 +123,7 @@ describe('Register Component Validation Tests', () =>{
       );
     await act(async () => {
       render(
-        <Router history={history}>
+        <Router navigator={history} location={history.location}>
           <Register location={loc}/>
         </Router>
       );
@@ -149,7 +147,7 @@ describe('Register Component Validation Tests', () =>{
       );
     await act(async () => {
       render(
-        <Router history={history}>
+        <Router navigator={history} location={history.location}>
           <Register location={loc}/>
         </Router>
       );

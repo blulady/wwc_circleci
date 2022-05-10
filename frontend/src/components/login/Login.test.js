@@ -1,12 +1,18 @@
 import React from 'react';
-import { render, fireEvent} from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Login from './Login';
 import AuthProvider from "../../context/auth/AuthProvider";
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
 
 it(' it should render  login form', () => {
   const handleSetAuth = jest.fn();
-  const {asFragment, getByTestId ,getByText, findByLabelText} = render(
+  const {getByTestId ,getByText, findByLabelText} = render(
     <AuthProvider value={{handleSetAuth,}}> 
       <Login />
     </AuthProvider>

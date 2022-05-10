@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
-import { Route, Redirect } from "react-router-dom";
-import AuthContext from "./context/auth/AuthContext";
+import { Navigate } from "react-router-dom";
+import { useAuthContext } from "./context/auth/AuthContext";
+import TeamProvider from "./context/team/TeamProvider";
 
-const PrivateRoute = ({ exact, path, children }) => {
-  const { token } = useContext(AuthContext);
+const PrivateRoute = ({ element }) => {
+  //const { token } = useContext(AuthContext);
+  const { token } = useAuthContext();
 
   if (!token) {
-    return <Redirect to='/login' />;
+    return <Navigate to='/login' />;
   }
 
   return (
-    <Route exact={exact} path={path}>
-      {children}
-    </Route>
+    <TeamProvider>{element}</TeamProvider>   
   );
 };
 

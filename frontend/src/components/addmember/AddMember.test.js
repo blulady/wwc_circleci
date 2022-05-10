@@ -2,17 +2,14 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import AddMember from './AddMember';
 
-const mockHistoryPush = jest.fn();
+const mockNavigation = jest.fn();
 let mockFromReview = false;
 
 jest.mock('react-router-dom', () => {
     const ActualReactRouterDom = jest.requireActual('react-router-dom');
     return {
         ...ActualReactRouterDom,
-        useHistory: () => ({
-        push: mockHistoryPush,
-        replace: jest.fn()
-        }),
+        useNavigate: () => mockNavigation,
         useLocation: () => ({
             state: {
                 fromReview: mockFromReview
@@ -73,7 +70,7 @@ describe('AddMember', () => {
         fireEvent.click(getByText('Confirm'));
         fireEvent.submit(getByText('Review'));
 
-        expect(mockHistoryPush).toHaveBeenCalledTimes(1);
+        expect(mockNavigation).toHaveBeenCalledTimes(1);
     });
 
 

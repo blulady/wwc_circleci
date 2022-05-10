@@ -3,14 +3,12 @@ import { render, fireEvent } from '@testing-library/react';
 import ContainerWithNav from './ContainerWithNav';
 import WwcApi from '../../WwcApi';
 
-const mockHistoryPush = jest.fn();
+const mockNavigation = jest.fn();
 const mockHandleRemoveAuth = jest.fn();
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
-    useHistory: () => ({
-      push: mockHistoryPush
-    })
+    useNavigate: () => mockNavigation
 }));
 
 jest.mock('react', () => {
@@ -32,7 +30,7 @@ jest.mock('react', () => {
 
 describe('ContainerWithNav', () => {
     afterEach(() => {
-        mockHistoryPush.mockClear();
+        mockNavigation.mockClear();
     });
 
     test('it renders without crashing', () => {
@@ -47,7 +45,7 @@ describe('ContainerWithNav', () => {
 
         fireEvent.click(profileButton);
 
-        expect(mockHistoryPush).toBeCalledWith({ pathname: '/member/profile' });
+        expect(mockNavigation).toBeCalledWith('/member/profile');
     });
 
     test('it logs out on logout button click', async () => {
@@ -59,7 +57,7 @@ describe('ContainerWithNav', () => {
 
         await expect(apiSpy).toHaveBeenCalledTimes(1);
         expect(mockHandleRemoveAuth).toHaveBeenCalledTimes(1);
-        expect(mockHistoryPush).toBeCalledWith('/login');
+        expect(mockNavigation).toBeCalledWith('/login');
         //done();
         return Promise.resolve()
     });

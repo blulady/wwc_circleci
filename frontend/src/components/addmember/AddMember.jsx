@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AddMember.css";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ContainerWithNav from "../layout/ContainerWithNav";
 import BackButton from "../../images/arrow_back_24px.png";
 import EmailInput from "./EmailInput";
@@ -9,9 +9,10 @@ import InputLabel from "./InputLabel";
 import TextAreaInput from "./TextAreaInput";
 import ConfirmationModal from "./ConfirmationModal";
 import SuccessModal from "./SuccessModal";
+import BackToMemberPortal from "../layout/BackToMemberPortal";
 
 function AddMember(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   let successFlag = false;
   if (location.state) {
@@ -64,8 +65,7 @@ function AddMember(props) {
   };
 
   const handleSubmit = (event) => {
-    history.push({
-      pathname: "/member/review",
+    navigate( "/member/review", {
       state: { memberinfo: newMember, roleinfo: memberRole },
     });
   };
@@ -78,7 +78,7 @@ function AddMember(props) {
             <button
               className='chapter-member-btn'
               onClick={() => {
-                history.push({ pathname: "/home" });
+                navigate("/home");
               }}
             >
               {" "}
@@ -86,23 +86,7 @@ function AddMember(props) {
             </button>
           </div>
           <div className='form-div'>
-            <div className='back-member-img-btn-div'>
-              <img
-                src={BackButton}
-                className='back-btn-img'
-                style={{ width: "auto", height: "auto" }}
-                alt='Back Button'
-              />
-              <button
-                className='back-member-btn'
-                onClick={() => {
-                  history.push({ pathname: "/viewMembers" });
-                }}
-              >
-                {" "}
-                Back to Member Portal{" "}
-              </button>
-            </div>
+            <BackToMemberPortal />
             <div className='row justify-content-center form-div-spacing'>
               <div>
                 <div className='header'>Add New Member</div>
@@ -190,7 +174,7 @@ function AddMember(props) {
                   <SuccessModal
                     onClick={() => {
                       setShowSuccessModal(false);
-                      history.replace();
+                      navigate("", { replace: true })
                     }}
                   />
                 ) : null}

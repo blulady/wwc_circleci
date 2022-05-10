@@ -3,7 +3,8 @@ import { render, fireEvent } from '@testing-library/react';
 import ReviewMember from './ReviewMember';
 import WwcApi from '../../WwcApi';
 
-const mockHistoryPush = jest.fn();
+const mockNavigation = jest.fn();
+
 let mockMemberInfo = {
     Email: '',
     Role: '',
@@ -19,9 +20,7 @@ jest.mock('react-router-dom', () => {
     const ActualReactRouterDom = jest.requireActual('react-router-dom');
     return {
         ...ActualReactRouterDom,
-        useHistory: () => ({
-        push: mockHistoryPush,
-        }),
+        useNavigate: () => mockNavigation,
         useLocation: () => ({
             state: {
                 memberinfo: mockMemberInfo,
@@ -118,9 +117,8 @@ describe('ReviewMember', () => {
         fireEvent.click(sendInvite);
 
         await expect(apiSpy).toHaveBeenCalledTimes(1);
-        expect(mockHistoryPush).toHaveBeenCalledWith({
-            pathname: '/member/add',
-            state: {
+        expect(mockNavigation).toHaveBeenCalledWith('/member/add',
+            {state: {
                 fromReview: true
             }
         });

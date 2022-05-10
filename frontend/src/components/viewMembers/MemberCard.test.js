@@ -2,6 +2,13 @@ import React from "react";
 import { render } from "@testing-library/react";
 import MemberCard from './MemberCard';
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
+
 it('Should render Member Card', () => {
     const memeberInfo = {
         "id": 1,

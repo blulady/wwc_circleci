@@ -98,21 +98,16 @@ exports[`AddMember it renders without crashing 1`] = `
           <div
             class="form-div"
           >
-            <div
-              class="back-member-img-btn-div"
-            >
-              <img
-                alt="Back Button"
-                class="back-btn-img"
-                src="arrow_back_24px.png"
-                style="width: auto; height: auto;"
-              />
+            <div>
               <button
                 class="back-member-btn"
               >
-                 
+                <img
+                  alt="Back Button"
+                  class="back-btn-img"
+                  src="arrow_back_24px.png"
+                />
                 Back to Member Portal
-                 
               </button>
             </div>
             <div

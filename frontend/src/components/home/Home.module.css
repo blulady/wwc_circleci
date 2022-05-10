@@ -1,15 +1,17 @@
-/* Group/Card/ChapterMembers */
-.chaptermembers {
-  position: absolute;
-  left: 180px;
-  top: 152px;
+.home-container {
+  padding-top: 47px;
+}
+
+/* Group/Card/home-card */
+.home-card {
   width: 320px;
   height: 232px;
   border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 47px;
 }
 
-.chaptermembers:hover{
+.home-card:hover{
   cursor: pointer;
 }
 
@@ -17,7 +19,19 @@
 .cardimgtop {
   width: 100%;
   height: 176px;
-  background: url(../../images/anna-earl-J-Jb1niw1j0-unsplash.png);
+  
+}
+
+.chapter-members  .cardimgtop{
+  background: url(../../images/chapter-members.png);
+}
+
+.social-media .cardimgtop {
+  background: url(../../images/social-media.png);
+}
+
+.tech-bloggers .cardimgtop {
+  background: url(../../images/tech-bloggers.png);
 }
 
 .cardbody {
@@ -36,11 +50,13 @@
 
 @media only screen and (max-width: 768px) {
 
-  .chaptermembers{
+  .home-container {
+    padding-top: 25px;
+  }
+
+  .home-card{
     width: 95%;
     height: 211px;
-    left: 8px;
-    top: 85px;
   }
 
   .cardimgtop{

@@ -1,16 +1,16 @@
 import React from 'react';
 import BackButton from "../../images/arrow_back_24px.png";
 import styles from "./BackToMemberPortal.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BackToMemberPortal = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <div>
       <button
         className={styles["back-member-btn"]}
         onClick={() => {
-          history.push({ pathname: "/viewMembers" });
+          navigate("/home");
         }}
       >
         <img

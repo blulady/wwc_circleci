@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Reroute from "./components/reroute/Reroute";
 import Register from "./components/register/Register";
 import Login from "./components/login/Login";
@@ -20,37 +20,21 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Switch>
-          <Route exact path='/' component={Reroute} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/password/reset' component={ResetPasswordForm} />
-          <PrivateRoute exact path='/home'>
-            <Home />
-          </PrivateRoute>
-          <Route path='/register' component={Register} />
-          <PrivateRoute exact path='/members/volunteerresources'>
-            <VolunteerResources />
-          </PrivateRoute>
-          <PrivateRoute exact path='/members/chaptermembers'>
-            <ChapterMembersContainer />
-          </PrivateRoute>
-          <PrivateRoute exact path='/members/viewall'>
-            <ViewMembers />
-          </PrivateRoute>
-          <PrivateRoute exact path='/member/view'>
-            <MemberDetails />
-          </PrivateRoute>
-          <PrivateRoute exact path='/member/add'>
-            <AddMember />
-          </PrivateRoute>
-          <PrivateRoute exact path='/member/review'>
-            <ReviewMember />
-          </PrivateRoute>
-          <PrivateRoute exact path='/member/profile'>
-            <UserProfile />
-          </PrivateRoute>
-          <Route component={NotFound} />
-        </Switch>
+        <Routes>
+          <Route exact path='/' element={<Reroute />} />
+          <Route exact path='/login' element={<Login />} />
+          <Route exact path='/password/reset' element={<ResetPasswordForm />} />
+          <Route exact path='/home' element={<PrivateRoute element={<Home />}/>} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/members/:team/resources' element={<PrivateRoute element={<VolunteerResources />}/>} />
+          <Route path='/members/:team' element={<PrivateRoute element={<ChapterMembersContainer />}/>} />
+          <Route exact path='/members/viewall' element={<PrivateRoute element={<ViewMembers />}/>} />
+          <Route exact path='/member/view' element={<PrivateRoute element={<MemberDetails />}/>} />
+          <Route exact path='/member/add' element={<PrivateRoute element={<AddMember />}/>} />
+          <Route exact path='/member/review' element={<PrivateRoute element={<ReviewMember />}/>} />
+          <Route exact path='/member/profile' element={<PrivateRoute element={<UserProfile />}/>} />
+          <Route element={NotFound} />
+        </Routes>
       </Router>
     </AuthProvider>
   );

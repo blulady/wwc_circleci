@@ -5,7 +5,7 @@ import MemberCard from "./MemberCard";
 import ReactPaginate from "react-paginate";
 import AuthContext from "../../context/auth/AuthContext";
 import { isBrowser } from "react-device-detect";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./ViewMembers.module.css";
 import cx from "classnames";
@@ -26,7 +26,7 @@ const sortOptions = {
 };
 
 const ViewMembers = (props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const defaultUsersPerPage = 12;
   const [users, setUsers] = useState([]);
   const [paginationInfo, setPaginationInfo] = useState({
@@ -67,7 +67,7 @@ const ViewMembers = (props) => {
   };
 
   const handleAddMember = () => {
-    history.push("/member/add");
+    navigate("/member/add");
   };
 
   const onSortSelect = (val) => (e) => {

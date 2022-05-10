@@ -1,17 +1,17 @@
 import React from 'react';
 import styles from "./ChapterMembersButton.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const ChapterMembersButton = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   
   return (
     <div>
     <button
       className={styles['tab-selected-button']}
       onClick={() => {
-        history.push({ pathname: "/members/chaptermembers" });
+        navigate("/members/chaptermembers");
       }}
     >
       Chapter Members

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./ContainerWithNav.module.css";
 import cx from 'classnames';
-import AuthContext from "../../context/auth/AuthContext";
+import { useAuthContext } from "../../context/auth/AuthContext";
 import WwcApi from "../../WwcApi";
 
 /*
@@ -13,8 +13,8 @@ import WwcApi from "../../WwcApi";
  * provides the container and inner container for all its children.
  */
 const ContainerWithNav = ({ children }) => {
-  const history = useHistory();
-  const { userInfo, handleRemoveAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { userInfo, handleRemoveAuth } = useAuthContext();
   const userEmail = userInfo && "email" in userInfo ? userInfo.email : "";
   const firstNameInitial =
     userInfo && "first_name" in userInfo ? userInfo.first_name.slice(0, 1) : "";
@@ -26,14 +26,14 @@ const ContainerWithNav = ({ children }) => {
     try {
       await WwcApi.logout();
       handleRemoveAuth();
-      history.push("/login");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleGoHome = () => {
-    history.push("/home");
+    navigate("/home");
   }
 
   return (
@@ -65,7 +65,7 @@ const ContainerWithNav = ({ children }) => {
                   <p className={cx('font-weight-bold dropdown-item',styles['signed-user'], styles['dropdown-item'])}>{userEmail}</p>
                   <button
                     onClick={() => {
-                      history.push({ pathname: "/member/profile" });
+                      navigate("/member/profile");
                     }}
                     className={cx('dropdown-item', styles['dropdown-item'])}
                   >

@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Home from './Home';
+import * as TeamContext from '../../context/team/TeamContext';
 
 jest.mock('react-router-dom', () => ({
-    useHistory: () => ({
-      push: jest.fn()
+    useNavigate: () => ({
+      navigate: jest.fn()
     })
 }));
 
@@ -27,6 +28,9 @@ jest.mock('react', () => {
 
 describe('Home', () => {
     test('it renders without crashing', () => {
+        const contextTeams = { teams: [{ id: 1, name: 'Team1' }] };
+        jest.spyOn(TeamContext, 'useTeamContext')
+        .mockImplementation(() => contextTeams);
         const { container } = render(<Home />);
         expect(container).toMatchSnapshot();
     });

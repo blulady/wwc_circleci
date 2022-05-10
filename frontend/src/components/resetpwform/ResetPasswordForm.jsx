@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import queryString from "query-string";
 import Password from "../layout/Password"
 import classes from "./ResetPasswordForm.module.css";
@@ -36,7 +36,7 @@ const ConfirmResetPassword = (props) => {
 };
 
 return submitted 
-  ? <Redirect to="/login" /> 
+  ? <Navigate to="/login" /> 
   :(
     <ContainerWithNav>
         <div className={`${classes.ResetPassword} col col-md-6 col-lg-4`}>

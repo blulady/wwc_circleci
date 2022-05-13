@@ -59,9 +59,12 @@
     font-size: 12px;
 }
 
+.membercard-type {
+    text-transform: capitalize;
+}
+
 .membercard-bottom .membercard-type {
     font-size: 14px;
-    text-transform: capitalize;
     font-weight: bolder;
 }
 

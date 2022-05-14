@@ -1,30 +1,43 @@
 import React from "react";
 import { act, render, screen, fireEvent } from "@testing-library/react";
-import VolunteerResources from "./VolunteerResources";
-import AuthContext from "../../context/auth/AuthContext";
+import TeamResources from "./TeamResources";
+import AuthContext from "../../../context/auth/AuthContext";
 import {
-  ERROR_VOLUNTEER_RESOURCES_DOCUMENT_NOT_LOADED,
-  ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE,
-} from "../../Messages";
-import WwcApi from "../../WwcApi";
+  ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED,
+  ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE,
+} from "../../../Messages";
+import WwcApi from "../../../WwcApi";
+import * as TeamContext from "../../../context/team/TeamContext";
+import Router from "react-router-dom";
 
 const userInfo = { userInfo: { role: "DIRECTOR" } };
-jest.mock("../../WwcApi", () => {
+const teams = { teams: [{ id: 1, name: 'Team1', slug: "test" }] }
+jest.mock("../../../WwcApi", () => {
   return {
-    ...jest.requireActual("../../WwcApi"),
-    getVolunteerResources: jest.fn(),
-    updateVolunteerResources: jest.fn(),
+    ...jest.requireActual("../../../WwcApi"),
+    getTeamResources: jest.fn(),
+    updateTeamResources: jest.fn(),
   };
 });
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useParams: jest.fn(),
+ }));
 
 describe("Register Component Validation Tests", () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    jest.spyOn(Router, 'useParams').mockReturnValue({ team: "0" })
+
+    const contextTeams = { teams: [{ id: 1, name: 'Team1', slug: "test" }] };
+    jest.spyOn(TeamContext, 'useTeamContext')
+    .mockImplementation(() => contextTeams);
   });
 
-  test("Tests VolunteerResources component behavior for GET resources", async () => {
+  test("Tests TeamResources component behavior for GET resources", async () => {
     // Mock GET resources
-    WwcApi.getVolunteerResources.mockImplementation(async () => {
+    WwcApi.getTeamResources.mockImplementation(async () => {
       return await Promise.resolve({
         data: {
           edit_link: "test edit link",
@@ -45,7 +58,7 @@ describe("Register Component Validation Tests", () => {
     await act(async () => {
       render(
         <AuthContext.Provider value={userInfo}>
-          <VolunteerResources />
+          <TeamResources />
         </AuthContext.Provider>
       );
     });
@@ -64,9 +77,9 @@ describe("Register Component Validation Tests", () => {
     );
   });
 
-  test("Tests VolunteerResources component behavior for GET resources and fail on save", async () => {
+  test("Tests TeamResources component behavior for GET resources and fail on save", async () => {
     // Mock GET resources
-    WwcApi.getVolunteerResources.mockImplementation(async () => {
+    WwcApi.getTeamResources.mockImplementation(async () => {
       return await Promise.resolve({
         data: {
           edit_link: "test edit link",
@@ -76,7 +89,7 @@ describe("Register Component Validation Tests", () => {
     });
 
     // Mock Update resources
-    WwcApi.updateVolunteerResources.mockImplementation(async () => {
+    WwcApi.updateTeamResources.mockImplementation(async () => {
       return await Promise.reject(
         {
           response: {
@@ -90,7 +103,7 @@ describe("Register Component Validation Tests", () => {
     await act(async () => {
       render(
         <AuthContext.Provider value={userInfo}>
-          <VolunteerResources />
+          <TeamResources />
         </AuthContext.Provider>
       );
     });
@@ -112,15 +125,15 @@ describe("Register Component Validation Tests", () => {
     });
 
     expect(
-      screen.getByText(ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE)
+      screen.getByText(ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE)
     ).toBeInTheDocument();
     expect(editLink.value).toBe("test edit link");
     expect(publishedLink.value).toBe("test published link");
   });
 
-  test("Tests VolunteerResources component behavior for fetch failure", async () => {
+  test("Tests TeamResources component behavior for fetch failure", async () => {
     // Mock GET resources
-    WwcApi.getVolunteerResources.mockImplementation(async () => {
+    WwcApi.getTeamResources.mockImplementation(async () => {
       return await Promise.reject(
         {
           response: {
@@ -133,7 +146,7 @@ describe("Register Component Validation Tests", () => {
     await act(async () => {
       render(
         <AuthContext.Provider value={userInfo}>
-          <VolunteerResources />
+          <TeamResources />
         </AuthContext.Provider>
       );
     });
@@ -142,7 +155,7 @@ describe("Register Component Validation Tests", () => {
     const publishedLink = screen.getByTestId("publishLink");
     const messageBox = screen.getByTestId("message-box");
     expect(
-      screen.getByText(ERROR_VOLUNTEER_RESOURCES_NO_DOCUMENT_AVAILABLE)
+      screen.getByText(ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE)
     ).toBeInTheDocument();
     // expect(editLink.value).toBe("test edit link");
     // expect(publishedLink.value).toBe("test published link");

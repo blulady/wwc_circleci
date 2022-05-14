@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TeamContext from "./TeamContext";
 import WwcApi from "../../WwcApi"
+import data from "./teamInfo.json"
 
 // TODO: Temp variable to filter out teams not yet developed
 const activeTeams = [5]
@@ -17,18 +18,23 @@ const TeamProvider = ({ children }) => {
             } catch (e) {
                 console.log(e);
             }
-            const teamCount = _teams.length - 1
-            _teams = _teams.filter((t) => activeTeams.indexOf(t.id) > -1 );
+            //_teams = _teams.filter((t) => activeTeams.indexOf(t.id) > -1 );
             // TODO: Remove me once backend adds Tech Bloggers team
-            _teams.push({ id: teamCount, name: "Tech Bloggers" })
-            setTeams([...teams, ..._teams]);
+            _teams.unshift({ id: 0, name: "Chapter Members" });
+            _teams.push({ id: 8, name: "Tech Bloggers" });
+            _teams = _teams.map((t, i) => {
+                return { ...t, ...data[i]};
+            });
+            setTeams([..._teams]);
             setFetching(false);
         }
         fetchTeams();
     }, []);
 
     return (
-        <TeamContext.Provider value={ { teams: (fetching ? [] : teams) } }>{children}</TeamContext.Provider>  
+        <TeamContext.Provider value={ { teams: (fetching ? [] : teams) } }>
+            {!fetching && children }
+        </TeamContext.Provider>  
     );
 }
 

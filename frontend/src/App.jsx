@@ -7,14 +7,15 @@ import ResetPasswordForm from "./components/resetpwform/ResetPasswordForm";
 import Home from "./components/home/Home";
 import NotFound from "./components/NotFound";
 import AuthProvider from "./context/auth/AuthProvider";
-import ViewMembers from "./components/viewMembers/ViewMembers";
 import ReviewMember from "./components/addmember/ReviewMember";
 import AddMember from "./components/addmember/AddMember";
 import MemberDetails from "./components/memberdetails/MemberDetails";
 import UserProfile from './components/userprofile/UserProfile'
 import PrivateRoute from "./PrivateRoute";
-import VolunteerResources from "./components/viewMembers/VolunteerResources";
-import ChapterMembersContainer from "./components/viewMembers/ChapterMembersContainer";
+import TeamHomeContainer from "./components/team/TeamHomeContainer";
+import TeamResources from "./components/team/resources/TeamResources";
+import ViewMembers from "./components/team/viewMembers/ViewMembers";
+
 
 function App() {
   return (
@@ -26,9 +27,10 @@ function App() {
           <Route exact path='/password/reset' element={<ResetPasswordForm />} />
           <Route exact path='/home' element={<PrivateRoute element={<Home />}/>} />
           <Route path='/register' element={<Register />} />
-          <Route path='/members/:team/resources' element={<PrivateRoute element={<VolunteerResources />}/>} />
-          <Route path='/members/:team' element={<PrivateRoute element={<ChapterMembersContainer />}/>} />
-          <Route exact path='/members/viewall' element={<PrivateRoute element={<ViewMembers />}/>} />
+          <Route path='/team/:team' element={<PrivateRoute element={<TeamHomeContainer />}/>}>
+            <Route path='members' element={<ViewMembers />} />
+            <Route path='resources' element={<TeamResources />} />
+          </Route>
           <Route exact path='/member/view' element={<PrivateRoute element={<MemberDetails />}/>} />
           <Route exact path='/member/add' element={<PrivateRoute element={<AddMember />}/>} />
           <Route exact path='/member/review' element={<PrivateRoute element={<ReviewMember />}/>} />

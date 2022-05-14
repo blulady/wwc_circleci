@@ -1,0 +1,18 @@
+.team-resources-container {
+    margin-top: 25px;
+}
+
+.resources-frame {
+    width: 100%;
+    height: 100%;
+    background: "#FFFFFF";
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+@media only screen and (max-width: 576px) {
+    .resources-frame {
+        margin-top: 25px;
+    }
+}

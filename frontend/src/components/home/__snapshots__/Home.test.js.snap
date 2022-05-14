@@ -85,32 +85,7 @@ exports[`Home it renders without crashing 1`] = `
       >
         <div
           class="row"
-        >
-          <div
-            class="home-card chapter-members col-12 col-md-4"
-          >
-            <div
-              class="cardimgtop"
-            />
-            <div
-              class="cardbody d-flex justify-content-center align-items-center"
-            >
-              Chapter Members
-            </div>
-          </div>
-          <div
-            class="home-card team1 col-12 col-md-4"
-          >
-            <div
-              class="cardimgtop"
-            />
-            <div
-              class="cardbody d-flex justify-content-center align-items-center"
-            >
-              Team1
-            </div>
-          </div>
-        </div>
+        />
       </div>
     </div>
   </div>

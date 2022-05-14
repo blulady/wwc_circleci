@@ -12,10 +12,9 @@ const Home = () => {
   const navigate = useNavigate();
   const { teams } = useTeamContext();
   let allTeams  = [...teams] || [];
-  allTeams.unshift({ id: 0, name: "Chapter Members" });
 
   const handleClick = (team) => {
-    navigate("/members/" + team.toLowerCase().replace(" ", ""));
+    navigate("/team/" + team + "/members");
   };
 
   return (
@@ -23,14 +22,16 @@ const Home = () => {
       <div className={`${styles["home-container"]} container`}>
         <div className="row">
         {allTeams.map((team) => {
+          if (team.enabled) {
           return (
-            <div key={team.id} className={`${styles["home-card"]} ${styles[team.name.toLowerCase().replace(" ", "-")]} col-12 col-md-4`} onClick={() => handleClick(team.name)}>
+            <div key={team.id} className={`${styles["home-card"]} ${styles[team.name.toLowerCase().replace(" ", "-")]} col-12 col-md-4`} onClick={() => handleClick(team.id)}>
               <div className={styles.cardimgtop}></div>
               <div className={`${styles.cardbody} d-flex justify-content-center align-items-center`}>
                 {team.name}
               </div>
             </div>
           )
+          }
         })}
         </div>
       </div>

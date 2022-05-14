@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import MemberCard from "./MemberCard";
 import ReactPaginate from "react-paginate";
-import AuthContext from "../../context/auth/AuthContext";
+import AuthContext from "../../../context/auth/AuthContext";
 import { isBrowser } from "react-device-detect";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./ViewMembers.module.css";
 import cx from "classnames";
@@ -13,10 +13,11 @@ import cx from "classnames";
 import SearchBox from "./SearchBox";
 import SuggestionBox from "./SuggestionBox";
 import FilterBox from "./FilterBox";
-import MessageBox from "../messagebox/MessageBox";
-import WwcApi from "../../WwcApi";
-import ScrollToTop from "../scrollToTop/ScrollToTop";
-import { ERROR_REQUEST_MESSAGE } from "../../Messages";
+import MessageBox from "../../messagebox/MessageBox";
+import WwcApi from "../../../WwcApi";
+import ScrollToTop from "../../scrollToTop/ScrollToTop";
+import { ERROR_REQUEST_MESSAGE } from "../../../Messages";
+import { useTeamContext } from "../../../context/team/TeamContext";
 
 const sortOptions = {
   NEW: { value: "new", label: "Newest Member", prop: "-date_joined" },
@@ -25,8 +26,45 @@ const sortOptions = {
   LAST: { value: "last", label: "Last Name (A-Z)", prop: "last_name" },
 };
 
+const baseFilters = [
+  {
+    group: "role",
+    label: "Role",
+    type: "button",
+    options: [
+      { label: "Director", value: "DIRECTOR", enable: true },
+      { label: "Leader", value: "LEADER", enable: true },
+      { label: "Volunteer", value: "VOLUNTEER", enable: true },
+    ],
+  },
+  {
+    group: "status",
+    label: "Status",
+    type: "button",
+    options: [
+      { label: "Active", value: "ACTIVE", enable: true },
+      { label: "Inactive", value: "INACTIVE", enable: true },
+      { label: "Pending", value: "PENDING", enable: false },
+    ],
+  },
+  {
+    group: "date_joined",
+    label: "Date Added",
+    type: "selection",
+    options: [
+      { label: "Any time", value: "" },
+      { label: "3 months", value: "3months" },
+      { label: "6 months", value: "6months" },
+      { label: "2020", value: "current_year" },
+    ],
+  },
+];
+
 const ViewMembers = (props) => {
   const navigate = useNavigate();
+  const params = useParams();
+  const team = parseInt(params.team);
+  const { teams } = useTeamContext();
   const defaultUsersPerPage = 12;
   const [users, setUsers] = useState([]);
   const [paginationInfo, setPaginationInfo] = useState({
@@ -141,65 +179,37 @@ const ViewMembers = (props) => {
   const toggleFilterBox = () => {
     setIsApplyingFilter(!isApplyingFilter);
   };
-
-  const [filterOptions, setFilterOptions] = useState([
-    {
-      group: "role",
-      label: "Role",
-      type: "button",
-      options: [
-        { label: "Director", value: "DIRECTOR", enable: true },
-        { label: "Leader", value: "LEADER", enable: true },
-        { label: "Volunteer", value: "VOLUNTEER", enable: true },
-      ],
-    },
-    {
-      group: "status",
-      label: "Status",
-      type: "button",
-      options: [
-        { label: "Active", value: "ACTIVE", enable: true },
-        { label: "Inactive", value: "INACTIVE", enable: true },
-        { label: "Pending", value: "PENDING", enable: isDirector },
-      ],
-    },
-    {
+  
+  // create team filter if not chapter member page
+  let availableFilters = [...baseFilters];
+  let initialFilterStatus = { role: [], status: [], date_joined: [], team: [] };
+  if (team === 0) {
+    const teamFilter = [{ value: 0, label: "All Teams" }];
+    teams.forEach((t) => {
+      if (t.id !== 0) {
+        teamFilter.push({
+          value: t.id,
+          label: t.name
+        });
+      }
+    });
+    let teamOptions = {
       group: "team",
       label: "Team",
       type: "selection",
-      options: [],
-    },
-    {
-      group: "date_joined",
-      label: "Date Added",
-      type: "selection",
-      options: [
-        { label: "Any time", value: "" },
-        { label: "3 months", value: "3months" },
-        { label: "6 months", value: "6months" },
-        { label: "2020", value: "current_year" },
-      ],
-    },
-  ]);
-  
-  useEffect(() => { 
-    const getTeams = async () => {
-      let teams = await WwcApi.getTeams();
-      teams = teams.map((team) => {
-        return {
-          value: team.id,
-          label: team.name
-        }
-      });
-      teams.unshift({ value: 0, label: "All Teams" });
-      let options = [...filterOptions];
-      options[2].options = teams;
-      setFilterOptions(options);
+      options: teamFilter,
     };
-    getTeams();
-  }, []);
+    availableFilters.splice(2, 0, teamOptions);
+  } else {
+    initialFilterStatus.team = [team];
+  }
+  if (isDirector) {
+    availableFilters[1].options[2] = true;
+  }
 
-  const [filters, setFilters] = useState({ role: [], status: [], date_joined: [], team: [] });
+  const [filterOptions, setFilterOptions] = useState(availableFilters);
+
+  const [filters, setFilters] = useState(initialFilterStatus);
   const onFilterApply = (vals) => {
     const teams = vals.team || [];
     vals.team = teams.filter((val) => {
@@ -238,11 +248,10 @@ const ViewMembers = (props) => {
   return (
     <div
       id="viewMemberPage"
-      className={cx(styles["view-member-page"], "d-flex flex-column")}
+      className={cx(styles["view-member-page"])}
       ref={pageRef}
     >
       <div className={styles["view-member-page-list-wrapper"]}>
-        <div className={styles["page-label-wrapper"]}> </div>
         <div
           id="functionContainer"
           className={cx(styles["search-container"], "d-flex")}

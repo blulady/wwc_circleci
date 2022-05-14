@@ -17,8 +17,8 @@
   text-align: center;
 }
 
-main {
-  height: 100%;
+.login-main {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -15,7 +15,9 @@ exports[`renders learn react link 1`] = `
           <div
             class="WwcLogo"
           />
-          <main>
+          <main
+            class="login-main"
+          >
             <div
               class="Login col col-md-6 col-lg-4"
             >

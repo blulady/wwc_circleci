@@ -170,13 +170,13 @@ class WwcApi {
     return res.data;
   }
 
-  static async getVolunteerResources(slug) {
+  static async getTeamResources(slug) {
     return await axios.get(`${BASE_URL}/resources/${slug}`, {
       headers: getConfig(),
     });
   }
 
-  static async updateVolunteerResources(slug, links) {
+  static async updateTeamResources(slug, links) {
     return await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
       headers: getConfig(),
     });

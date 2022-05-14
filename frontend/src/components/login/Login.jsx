@@ -127,7 +127,7 @@ const Login = () => {
       <WwcBackground>
         <div className={cx('container', styles['container'])}>
           <div className={styles['WwcLogo']}></div>
-          <main>
+          <main className={styles['login-main']}>
             <div className={cx(styles['Login'], 'col col-md-6 col-lg-4')}>
               <div className={cx('header', styles['header'])}>
                 <div className={styles['h1Login']}>Chapter Tools Login</div>

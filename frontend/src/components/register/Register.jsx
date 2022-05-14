@@ -74,7 +74,7 @@ function Register(props) {
   return (
     <div className={cx('container-fluid', styles['container'])}>
       <div className={styles['WwcLogo']}></div>
-      <main>
+      <main className={styles['register-main']}>
         {errorOnLoading.hasError && (
           <MessageBox type="Error" title={errorOnLoading.title} message={errorOnLoading.message}></MessageBox>
         )}

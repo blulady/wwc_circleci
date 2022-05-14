@@ -1,8 +1,8 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { ReactComponent as MemberImg } from "../../images/open_person_icon.svg";
-import { ReactComponent as MemberSmImg } from "../../images/open_person_sm_icon.svg";
+import { ReactComponent as MemberImg } from "../../../images/open_person_icon.svg";
+import { ReactComponent as MemberSmImg } from "../../../images/open_person_sm_icon.svg";
 //import "./MemberCard.css";
 import { isBrowser, isMobile } from "react-device-detect";
 import { useNavigate } from "react-router-dom";

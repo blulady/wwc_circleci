@@ -16,7 +16,7 @@ import FilterBox from "./FilterBox";
 import MessageBox from "../../messagebox/MessageBox";
 import WwcApi from "../../../WwcApi";
 import ScrollToTop from "../../scrollToTop/ScrollToTop";
-import { ERROR_REQUEST_MESSAGE } from "../../../Messages";
+import { ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD } from "../../../Messages";
 import { useTeamContext } from "../../../context/team/TeamContext";
 
 const sortOptions = {
@@ -382,7 +382,7 @@ const ViewMembers = (props) => {
                 <MessageBox
                   type="Error"
                   title="Sorry!"
-                  message={ERROR_REQUEST_MESSAGE}
+                  message={ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD.replace("{0}", teams[team].name)}
                 ></MessageBox>
               </div>
             )}

@@ -400,7 +400,8 @@
     flex-direction: column;
     justify-content: space-evenly;
     padding-left: 15px;
-    padding-right: 15px;
+    padding-right: 75px;
+    overflow-wrap: anywhere;
   }
   .responsive-save-btn {
     float: right;
@@ -540,6 +541,7 @@
     justify-content: space-around;
     padding-left: 75px;
     padding-right: 75px;
+    overflow-wrap: anywhere;
   }
   .save-btn {
     width: 63px;
@@ -575,7 +577,7 @@
   border-radius: 5px;
 }
 .spacer {
-  flex: 1;
+  flex: 1em;
 }
 .hide {
   display: none;

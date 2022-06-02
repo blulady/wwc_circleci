@@ -22,7 +22,7 @@ class ValidateRegLinkViewTestCase(TransactionTestCase):
 
     def test_validate_token_mismatch(self):
         data = {"email": "volunteer@example.com",
-                "token": "8b7bd00fffa742ed836539f0acce6ce920220525000234"}
+                "token": "8b7bd00fffa742ed836539f0acce6ce920230525000234"}
         response = self.client.get("/api/validate/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {'success': {'message': self.USER_TOKEN_MISMATCH_MESSAGE, 'status': 'INVALID'}})

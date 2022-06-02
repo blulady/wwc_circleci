@@ -124,7 +124,7 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         Test to verify that a POST request with valid new user and mismatched valid token
         returns error response
         """
-        self.registration_request_data["token"] = "8b7bd00fffa742ed836539f0acce6ce920220525000234"
+        self.registration_request_data["token"] = "8b7bd00fffa742ed836539f0acce6ce920230525000234"
         expected_error = "Invalid token. Token in request does not match the token generated for this user."
         resp = self.__send_request(self.registration_request_data)
         self.__perform_response_assertions(resp, status.HTTP_400_BAD_REQUEST, expected_error)

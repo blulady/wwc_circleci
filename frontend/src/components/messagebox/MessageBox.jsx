@@ -26,7 +26,7 @@ const MessageBox = (props) => {
             styles["message-box-instructions"],
             "d-flex align-items-center justify-content-center flex-column"
           )}
-          data-testid="message-box"
+          data-testid="message-box-info"
         >
           <div className={styles["title"]}>{props.title}</div>
           {contentType == "html" ? (

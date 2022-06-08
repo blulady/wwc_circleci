@@ -11,7 +11,7 @@ import * as TeamContext from "../../../context/team/TeamContext";
 import Router from "react-router-dom";
 
 const userInfo = { userInfo: { role: "DIRECTOR" } };
-const teams = { teams: [{ id: 1, name: 'Team1', slug: "test" }] }
+const teams = { teams: [{ id: 1, name: "Team1", slug: "test" }] };
 jest.mock("../../../WwcApi", () => {
   return {
     ...jest.requireActual("../../../WwcApi"),
@@ -23,16 +23,17 @@ jest.mock("../../../WwcApi", () => {
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: jest.fn(),
- }));
+}));
 
 describe("Register Component Validation Tests", () => {
   beforeEach(() => {
     jest.resetAllMocks();
-    jest.spyOn(Router, 'useParams').mockReturnValue({ team: "0" })
+    jest.spyOn(Router, "useParams").mockReturnValue({ team: "0" });
 
-    const contextTeams = { teams: [{ id: 1, name: 'Team1', slug: "test" }] };
-    jest.spyOn(TeamContext, 'useTeamContext')
-    .mockImplementation(() => contextTeams);
+    const contextTeams = { teams: [{ id: 1, name: "Team1", slug: "test" }] };
+    jest
+      .spyOn(TeamContext, "useTeamContext")
+      .mockImplementation(() => contextTeams);
   });
 
   test("Tests TeamResources component behavior for GET resources", async () => {
@@ -153,10 +154,7 @@ describe("Register Component Validation Tests", () => {
     // Registration form is rendered
     const editLink = screen.getByTestId("editLink");
     const publishedLink = screen.getByTestId("publishLink");
-    const messageBox = screen.getByTestId("message-box");
-    expect(
-      screen.getByText(ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE)
-    ).toBeInTheDocument();
+    const messageBox = screen.getByTestId("message-box-info");
     // expect(editLink.value).toBe("test edit link");
     // expect(publishedLink.value).toBe("test published link");
   });

@@ -100,12 +100,7 @@ const TeamResources = (props) => {
         </div>
       )}
       {instructionsOnLoading && (
-        <div
-          className={cx(
-            styles["error-container"],
-            "d-flex justify-content-left"
-          )}
-        >
+        <div className={cx("d-flex justify-content-left")}>
           <MessageBox
             contentType="html"
             type="Instructions"

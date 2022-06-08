@@ -1,9 +1,28 @@
-export const ERROR_REQUEST_MESSAGE = "We could not process your request. \nPlease try again.";
-export const ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED ="The resource document could not be loaded. Please try later.";
-export const ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE ="No resources available at this time.";
-export const ERROR_REGISTER_LINK_USED ="This link has already been used.\nIf you didn't use the link, please contact a Director.";
-export const ERROR_REGISTER_LINK_EXPIRED ="This link has expired.\nPlease contact a Director.";
-export const ERROR_REGISTER_LINK_INVALID ="This link is invalid.\nPlease contact a Director.";
-export const ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD = "The list of {0} Team Members was unable to load. \nPlease try again."
-export const SUCCESS_REQUEST_PASSWORD_RESET = "Please check your email inbox for password reset instructions.";
-export const SUCCESS_PASSWORD_RESET = "You may now log in with your new password.";
+export const ERROR_REQUEST_MESSAGE =
+  "We could not process your request. \nPlease try again.";
+export const ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED =
+  "The resource document could not be loaded. Please try later.";
+export const ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE =
+  "No resources available at this time.";
+export const ERROR_REGISTER_LINK_USED =
+  "This link has already been used.\nIf you didn't use the link, please contact a Director.";
+export const ERROR_REGISTER_LINK_EXPIRED =
+  "This link has expired.\nPlease contact a Director.";
+export const ERROR_REGISTER_LINK_INVALID =
+  "This link is invalid.\nPlease contact a Director.";
+export const ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD =
+  "The list of {0} Team Members was unable to load. \nPlease try again.";
+export const SUCCESS_REQUEST_PASSWORD_RESET =
+  "Please check your email inbox for password reset instructions.";
+export const SUCCESS_PASSWORD_RESET =
+  "You may now log in with your new password.";
+export const INSTRUCTIONS_MESSAGE = `
+    <h5 class="c26">Instructions to set up Resource Document</h5>
+    <ul>
+    <li>Please create a Google Doc to be used for this resourcse document.</li>
+    <li>Modify Share to 'Anyone on the internet with this link view.'</li>
+    <li>Publish to the web: File -> Publish to the web -> Check 'Automatically republish when changes are made' -> Publish.</li>
+    <li>Enter url in Enter URL field.</li>
+    <li>Enter publish url in Published Embedded URL field.</li>
+    </ul>
+`;

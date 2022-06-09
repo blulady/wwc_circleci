@@ -2,19 +2,21 @@
 
 exports[`MessageBox it renders without crashing 1`] = `
 <div>
-  <div
-    class="error message-box d-flex align-items-center justify-content-center flex-column"
-    data-testid="message-box"
-  >
+  <div>
     <div
-      class="title"
+      class="error message-box d-flex align-items-center justify-content-center flex-column"
+      data-testid="message-box"
     >
-      Sorry!
-    </div>
-    <div
-      class="message"
-    >
-      We could not process your request. \\nPlease try again.
+      <div
+        class="title"
+      >
+        Sorry!
+      </div>
+      <div
+        class="message"
+      >
+        We could not process your request. \\nPlease try again.
+      </div>
     </div>
   </div>
 </div>

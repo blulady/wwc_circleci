@@ -114,22 +114,20 @@ exports[`ReviewMember it renders without crashing 1`] = `
               <div
                 class="hide"
               >
-                <div>
+                <div
+                  class="error message-box d-flex align-items-center justify-content-center flex-column"
+                  data-testid="message-box"
+                >
                   <div
-                    class="error message-box d-flex align-items-center justify-content-center flex-column"
-                    data-testid="message-box"
+                    class="title"
                   >
-                    <div
-                      class="title"
-                    >
-                      Sorry!
-                    </div>
-                    <div
-                      class="message"
-                    >
-                      We could not process your request. 
+                    Sorry!
+                  </div>
+                  <div
+                    class="message"
+                  >
+                    We could not process your request. 
 Please try again.
-                    </div>
                   </div>
                 </div>
               </div>

@@ -16,13 +16,3 @@ export const SUCCESS_REQUEST_PASSWORD_RESET =
   "Please check your email inbox for password reset instructions.";
 export const SUCCESS_PASSWORD_RESET =
   "You may now log in with your new password.";
-export const INSTRUCTIONS_MESSAGE = `
-    <h5 class="c26">Instructions to set up Resource Document</h5>
-    <ul>
-    <li>Please create a Google Doc to be used for this resourcse document.</li>
-    <li>Modify Share to 'Anyone on the internet with this link view.'</li>
-    <li>Publish to the web: File -> Publish to the web -> Check 'Automatically republish when changes are made' -> Publish.</li>
-    <li>Enter url in Enter URL field.</li>
-    <li>Enter publish url in Published Embedded URL field.</li>
-    </ul>
-`;

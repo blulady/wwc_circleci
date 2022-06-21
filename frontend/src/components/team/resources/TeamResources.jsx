@@ -3,11 +3,9 @@ import cx from "classnames";
 import AuthContext from "../../../context/auth/AuthContext";
 import WwcApi from "../../../WwcApi";
 import MessageBox from "../../messagebox/MessageBox";
-
 import {
   ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED,
   ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE,
-  INSTRUCTIONS_MESSAGE,
 } from "../../../Messages";
 import ResourcesLinks from "./ResourcesLinks";
 import { useParams } from "react-router-dom";
@@ -34,6 +32,16 @@ const TeamResources = (props) => {
   const teamInfo = teams[team];
 
   const slug = teamInfo.slug;
+
+  const instructions = `
+    <h5 class="c26">Instructions to set up Resource Document</h5>
+    <ul>
+      <li>Please create a Google Doc to be used for this resourcse document.</li>
+      <li>Modify Share to 'Anyone on the internet with this link view.'</li>
+      <li>Publish to the web: File -> Publish to the web -> Check 'Automatically republish when changes are made' -> Publish.</li>
+      <li>Enter url in Enter URL field.</li>
+      <li>Enter publish url in Published Embedded URL field.</li>
+    </ul>`;
 
   useEffect(() => {
     getTeamResources();
@@ -100,12 +108,14 @@ const TeamResources = (props) => {
         </div>
       )}
       {instructionsOnLoading && (
-        <div className={cx("d-flex justify-content-left")}>
-          <MessageBox
-            contentType="html"
-            type="Instructions"
-            message={INSTRUCTIONS_MESSAGE}
-          ></MessageBox>
+        <div
+          className={cx(
+            styles["instructions-box"],
+            "d-flex align-items-left justify-content-left flex-column"
+          )}
+          data-testid="message-box-info"
+        >
+          <div dangerouslySetInnerHTML={{ __html: instructions }}></div>
         </div>
       )}
       {!errorNoDocument && !errorOnLoading && !instructionsOnLoading && (

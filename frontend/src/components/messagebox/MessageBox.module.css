@@ -9,25 +9,6 @@
   margin: 15px auto;
 }
 
-.message-box-instructions {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-  max-width: 100%;
-  border-style: none;
-  background-color: #fff;
-}
-.message-box-instructions h5 {
-  margin: 2.3em 1.3em 1em;
-  font-weight: 700;
-}
-
-.message-box-instructions ul {
-  padding-inline-start: 3em;
-  width: 90%;
-  margin-bottom: 2rem;
-}
-
 .message-box.success {
   border: 1px solid #007a7c;
 }

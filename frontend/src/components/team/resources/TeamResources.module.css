@@ -1,18 +1,39 @@
 .team-resources-container {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 .resources-frame {
-    width: 100%;
-    height: 100%;
-    background: "#FFFFFF";
-    margin: 0;
-    padding: 0;
-    border: none;
+  width: 100%;
+  height: 100%;
+  background: "#FFFFFF";
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.instructions-box {
+  width: 90%;
+  padding: 5px;
+  box-sizing: border-box;
+  max-width: 100%;
+  border-style: none;
+  background-color: #fff;
+}
+.instructions-box h5 {
+  margin: 2.3em 1.3em 1em;
+  font-weight: 700;
+}
+
+.instructions-box ul {
+  padding-inline-start: 3em;
+  width: 80%;
+  margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 576px) {
-    .resources-frame {
-        margin-top: 25px;
-    }
+  .resources-frame {
+    margin-top: 25px;
+  }
+  .instructions-box {
+    width: 100%;
+  }
 }

@@ -19,7 +19,7 @@ exports[`ResourcesLinks it renders without crashing 1`] = `
         <input
           class="form-control-plaintext input-text"
           data-testid="editLink"
-          placeholder=""
+          placeholder="Enter URL:"
           readonly=""
           type="text"
           value="http://test.edit.com"
@@ -36,7 +36,7 @@ exports[`ResourcesLinks it renders without crashing 1`] = `
         <input
           class="form-control-plaintext input-text"
           data-testid="publishLink"
-          placeholder=""
+          placeholder="Enter Published Embedded URL"
           readonly=""
           type="text"
           value="http://test.publish.com"

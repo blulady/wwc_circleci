@@ -76,16 +76,16 @@ class SetNewPasswordViewTestCase(TransactionTestCase):
 
     # Test password should have at least 8 characters
     def test_password_field_length(self):
-        self.set_new_password_request_data["password"] = "pass"
-        expected_error = "Ensure this field has at least 8 characters."
+        self.set_new_password_request_data["password"] = "Pa5"
+        expected_error = "Password should be a minimum of 8 and maximum of 50 characters long"
         resp = self.__send_request(self.set_new_password_request_data)
         self.assertIs(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(resp.content), {'error': {'password': [expected_error]}})
 
     # Test password should have at least one upper case letter
     def test_password_one_upper_case(self):
-        self.set_new_password_request_data["password"] = "password"
-        expected_error = "Password should have at least one upper case letter"
+        self.set_new_password_request_data["password"] = "password123"
+        expected_error = "Password should have at least one uppercase letter"
         resp = self.__send_request(self.set_new_password_request_data)
         self.assertIs(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(resp.content), {'error': {'password': [expected_error]}})
@@ -93,7 +93,7 @@ class SetNewPasswordViewTestCase(TransactionTestCase):
     # Test password should have at least one lower case letter
     def test_password_one_lower_case(self):
         self.set_new_password_request_data["password"] = "PASSWORD"
-        expected_error = "Password should have at least one lower case letter"
+        expected_error = "Password should have at least one lowercase letter"
         resp = self.__send_request(self.set_new_password_request_data)
         self.assertIs(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(resp.content), {'error': {'password': [expected_error]}})

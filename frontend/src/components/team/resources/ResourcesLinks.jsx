@@ -1,74 +1,148 @@
 import React, { useEffect, useState } from "react";
-
 import styles from "./ResourcesLinks.module.css";
 import cx from "classnames";
 
 const ResourcesLinks = (props) => {
-    const [ isEditing, setIsEditing ] = useState(false);
-    const [ editSaveTxt, setEditSaveTxt ] = useState("Edit Links");
-    const [ editLink, setEditLink ] = useState(props.editUrl);
-    const [ publishLink, setPublishLink ] = useState(props.publishUrl);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editSaveTxt, setEditSaveTxt] = useState("Edit Links");
+  const [editLink, setEditLink] = useState(props.editUrl);
+  const [publishLink, setPublishLink] = useState(props.publishUrl);
 
-    useEffect(() => {
-        setEditLink(props.editUrl);
-        setPublishLink(props.publishUrl);
-    }, [props.editUrl, props.publishUrl]);
+  useEffect(() => {
+    setEditLink(props.editUrl);
+    setPublishLink(props.publishUrl);
 
+    if (props.editUrl.length === 0 && props.publishUrl.length === 0) {
+      setIsAdding(true);
+    } else {
+      setIsAdding(false);
+    }
+  }, [props.editUrl, props.publishUrl]);
 
-    const saveOrEdit = () => {
-        if (isEditing && props.onSave) {
-            props.onSave(editLink, publishLink);
-        }
-        setIsEditing(!isEditing);
-    };
+  const saveOrEdit = () => {
+    if (isEditing && props.onSave) {
+      props.onSave(editLink, publishLink);
+    }
+    setIsEditing(!isEditing);
+  };
 
-    useEffect(() => {
-        setEditSaveTxt(isEditing ? "Save Links" : "Edit Links");
-    }, [isEditing]);
+  const addDocument = () => {
+    props.onSave(
+      editLink,
+      publishLink,
+      "cannot add new document, resource doest not exist"
+    );
+  };
 
-    const openEditDocument = () => {
-        if (editLink) {
-            window.open(editLink, "_blank");
-        }
-    };
+  useEffect(() => {
+    setEditSaveTxt(isEditing ? "Save Links" : "Edit Links");
+  }, [isEditing]);
 
-    const onChangeEditLinks = (event) => {
-        setEditLink(event.target.value);
-    };
+  const openEditDocument = () => {
+    if (editLink) {
+      window.open(editLink, "_blank");
+    }
+  };
 
-    const onChangePublishLinks = (event) => {
-        setPublishLink(event.target.value);
-    };
+  const onChangeEditLinks = (event) => {
+    setEditLink(event.target.value);
+  };
 
-    return (
+  const onChangePublishLinks = (event) => {
+    setPublishLink(event.target.value);
+  };
+
+  const labels = {
+    editInput: "Edit URL:",
+    publishInput: "Published Embedded URL:",
+  };
+
+  if (isAdding) {
+    labels.editInput = "Enter URL:";
+    labels.publishInput = "Enter Published Embedded URL:";
+  }
+
+  return (
     <div className="row">
-        <div className="col-12 col-md-8">
-            <div className={styles["input-container"]}>
-                <div className={cx(styles["input-label"], "mb-2")}>Edit URL:</div>
-                <input type="text" readOnly={!isEditing} className={cx({ "form-control-plaintext": !isEditing, "wwc-text-input": isEditing }, styles["input-text"])} value={editLink} onChange={onChangeEditLinks} data-testid="editLink" />
-            </div>
-            <div className={styles["input-container"]}>
-                <div className={cx(styles["input-label"], "mb-2")}>Published Embedded URL:</div>
-                <input type="text" readOnly={!isEditing} className={cx({ "form-control-plaintext": !isEditing, "wwc-text-input": isEditing }, styles["input-text"])} value={publishLink} onChange={onChangePublishLinks} data-testid="publishLink" />
-            </div>
+      <div className="col-12 col-md-8">
+        <div className={styles["input-container"]}>
+          <div className={cx(styles["input-label"], "mb-2")}>
+            {labels.editInput}
+          </div>
+          <input
+            type="text"
+            readOnly={!isEditing && !isAdding}
+            className={cx(
+              {
+                "form-control-plaintext": !isEditing && !isAdding,
+                "wwc-text-input": isEditing || isAdding,
+              },
+              styles["input-text"]
+            )}
+            value={editLink}
+            onChange={onChangeEditLinks}
+            data-testid="editLink"
+            placeholder="Enter URL:"
+          />
         </div>
+        <div className={styles["input-container"]}>
+          <div className={cx(styles["input-label"], "mb-2")}>
+            {labels.publishInput}
+          </div>
+          <input
+            type="text"
+            readOnly={!isEditing && !isAdding}
+            className={cx(
+              {
+                "form-control-plaintext": !isEditing && !isAdding,
+                "wwc-text-input": isEditing || isAdding,
+              },
+              styles["input-text"]
+            )}
+            value={publishLink}
+            onChange={onChangePublishLinks}
+            data-testid="publishLink"
+            placeholder="Enter Published Embedded URL"
+          />
+        </div>
+      </div>
+      {isAdding ? (
         <div className="col-12 col-md-4">
-            <div className="d-flex justify-content-around">
-                <button onClick={saveOrEdit} className="wwc-action-button" data-testid="saveBtn">
-                    <div className="d-flex">
-                        <span className="icon edit-purple-icon mr-2"></span>
-                        {editSaveTxt}
-                    </div>
-                </button>
-                <button onClick={openEditDocument} className="wwc-action-button">
-                    <div className="d-flex">
-                        <span className="icon edit-purple-icon mr-2"></span>
-                        Edit Document
-                    </div>
-                </button>
-            </div>
+          <div className="d-flex justify-content-around">
+            <button
+              onClick={addDocument}
+              type="button"
+              className="wwc-action-button"
+            >
+              + Add Document
+            </button>
+          </div>
         </div>
-    </div>);
+      ) : (
+        <div className="col-12 col-md-4">
+          <div className="d-flex justify-content-around">
+            <button
+              onClick={saveOrEdit}
+              className="wwc-action-button"
+              data-testid="saveBtn"
+            >
+              <div className="d-flex">
+                <span className="icon edit-purple-icon mr-2"></span>
+                {editSaveTxt}
+              </div>
+            </button>
+            <button onClick={openEditDocument} className="wwc-action-button">
+              <div className="d-flex">
+                <span className="icon edit-purple-icon mr-2"></span>
+                Edit Document
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default ResourcesLinks;

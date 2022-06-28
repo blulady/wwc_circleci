@@ -1,45 +1,47 @@
 .message-box {
-    width: 100%;
-    max-width: 448px;
-    height: 100%;
-    max-height: 95px;
-    padding: 5px;
-    box-sizing: border-box;
-    border: 1px solid #000000;
-    margin: 15px auto;
+  width: 100%;
+  max-width: 448px;
+  height: 100%;
+  max-height: 95px;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid #000000;
+  margin: 15px auto;
 }
 
 .message-box.success {
-    border: 1px solid #007A7C;
+  border: 1px solid #007a7c;
 }
 
 .message-box.error {
-    border: 1px solid #FF0202;
+  border: 1px solid #ff0202;
+  padding: 10px;
+  height: auto;
 }
 
 .message-box .title {
-    font-weight: bolder;
-    font-size: 18px;
-    line-height: 25px;
+  font-weight: bolder;
+  font-size: 18px;
+  line-height: 25px;
 }
 
 .message-box.success .title {
-    color: #007A7C;
+  color: #007a7c;
 }
 
 .message-box .message {
-    font-size: 14px;
-    line-height: 17px;
-    white-space: pre-line;
-    text-align: center;
-    padding: 5px;
+  font-size: 14px;
+  line-height: 17px;
+  white-space: pre-line;
+  text-align: center;
+  padding: 5px;
 }
 
 @media only screen and (max-width: 576px) {
-    .message-box {
-        width: 100%;
-        max-width: 270px;
-        height: 100%;
-        max-height: 121px;
-    }
+  .message-box {
+    width: 100%;
+    max-width: 270px;
+    height: 100%;
+    max-height: 121px;
+  }
 }

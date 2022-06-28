@@ -1,128 +1,128 @@
 [
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Chapter Members"
-            },
-            {
-                "pageId": "resources",
-                "label": "Volunteer Resources"
-            }
-        ],
-        "slug": "volunteer_resource",
-        "enabled": true
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Event Volunteers"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Hackathon Volunteers"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Host Management"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Partnership Management"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Social Media Team"
-            },
-            {
-                "pageId": "resources",
-                "label": "Sodial Media Resources"
-            }
-        ],
-        "slug": "social_media_resource",
-        "enabled": true
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Tech Event Volunteers"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Volunteer Management"
-            },
-            {
-                "pageId": "resources",
-                "label": ""
-            }
-        ],
-        "slug": "",
-        "enabled": false
-    },
-    {
-        "pages": [
-            {
-                "pageId": "members",
-                "label": "Tech Bloggers"
-            },
-            {
-                "pageId": "resources",
-                "label": "Tech Bloggers Resources"
-            }
-        ],
-        "slug": "",
-        "enabled": true
-    }
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Chapter Members"
+      },
+      {
+        "pageId": "resources",
+        "label": "Volunteer Resources"
+      }
+    ],
+    "slug": "volunteer_resource",
+    "enabled": true
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Event Volunteers"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Hackathon Volunteers"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Host Management"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Partnership Management"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Social Media Team"
+      },
+      {
+        "pageId": "resources",
+        "label": "Sodial Media Resources"
+      }
+    ],
+    "slug": "social_media_resource",
+    "enabled": true
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Tech Event Volunteers"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Volunteer Management"
+      },
+      {
+        "pageId": "resources",
+        "label": ""
+      }
+    ],
+    "slug": "",
+    "enabled": false
+  },
+  {
+    "pages": [
+      {
+        "pageId": "members",
+        "label": "Tech Bloggers"
+      },
+      {
+        "pageId": "resources",
+        "label": "Tech Bloggers Resources"
+      }
+    ],
+    "slug": "tech_bloggers",
+    "enabled": true
+  }
 ]

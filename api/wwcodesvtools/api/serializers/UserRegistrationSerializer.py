@@ -39,6 +39,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Last name should not be more than 50 characters long")
         return value
 
+# TODO Use the password_validator
     def validate_password(self, value):
         """
         Check that the password is correct:

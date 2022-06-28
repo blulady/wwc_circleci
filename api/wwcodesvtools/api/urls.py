@@ -18,6 +18,7 @@ from api.views.ValidateRegLinkView import ValidateRegLinkView
 from api.views.GetResourceView import GetResourceView
 from api.views.EditResourceView import EditResourceView
 from api.views.UpdateMemberStatusView import UpdateMemberStatusView
+from api.views.UserView import UserView
 
 decorated_login_view = \
     swagger_auto_schema(
@@ -44,5 +45,6 @@ urlpatterns = [
     path('teams/', GetTeamsView.as_view()),
     path('resources/<str:slug>', GetResourceView.as_view()),
     path('resources/edit/<str:slug>', EditResourceView.as_view()),
-    path('validate/', ValidateRegLinkView.as_view())
+    path('validate/', ValidateRegLinkView.as_view()),
+    path('user/name', UserView.as_view()),
 ]

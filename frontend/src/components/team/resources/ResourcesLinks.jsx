@@ -53,11 +53,6 @@ const ResourcesLinks = (props) => {
     setPublishLink(event.target.value);
   };
 
-  const placeholder = {
-    enterURL: "",
-    enterEmbedded: "",
-  };
-
   const labels = {
     editInput: "Edit URL:",
     publishInput: "Published Embedded URL:",
@@ -66,8 +61,6 @@ const ResourcesLinks = (props) => {
   if (isAdding) {
     labels.editInput = "Enter URL:";
     labels.publishInput = "Enter Published Embedded URL:";
-    placeholder.enterURL = "Enter URL";
-    placeholder.enterEmbedded = "Enter Published Embedded URL";
   }
 
   return (
@@ -90,7 +83,7 @@ const ResourcesLinks = (props) => {
             value={editLink}
             onChange={onChangeEditLinks}
             data-testid="editLink"
-            placeholder={placeholder.enterURL}
+            placeholder="Enter URL:"
           />
         </div>
         <div className={styles["input-container"]}>
@@ -110,7 +103,7 @@ const ResourcesLinks = (props) => {
             value={publishLink}
             onChange={onChangePublishLinks}
             data-testid="publishLink"
-            placeholder={placeholder.enterEmbedded}
+            placeholder="Enter Published Embedded URL"
           />
         </div>
       </div>

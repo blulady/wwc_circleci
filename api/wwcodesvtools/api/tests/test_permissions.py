@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import TransactionTestCase
-from ..permissions import CanSendEmail, CanAddMember, CanDeleteMember, CanEditMember
+from ..permissions import CanSendEmail, CanAddMember, CanDeleteMember, CanDeleteMemberRole, CanEditMember
 from django.http.request import HttpRequest
+from rest_framework.generics import GenericAPIView
 
 
 class PermissionsTestCase(TransactionTestCase):
@@ -11,6 +12,7 @@ class PermissionsTestCase(TransactionTestCase):
     _leader = None
     _volunteer = None
     _req = HttpRequest()
+    _view = GenericAPIView()
 
     def setUp(self):
         self._director = self._director or User.objects.get(email='director@example.com')
@@ -88,3 +90,30 @@ class PermissionsTestCase(TransactionTestCase):
         self._req.user = self._volunteer
         permission = self._can_edit_member_permission.has_permission(self._req, None)
         self.assertFalse(permission, 'Volunteer should not have permission to edit member')
+
+    # Can delete member role
+    _can_delete_member_role_permission = CanDeleteMemberRole()
+
+    def test_can_delete_member_role_permission_true_for_director(self):
+        self._req.user = self._director
+        self._view.__dict__['kwargs'] = {'id': self._director.id + 1}
+        permission = self._can_delete_member_role_permission.has_permission(self._req, self._view)
+        self.assertTrue(permission, 'Director should have permission to edit member')
+
+    def test_can_delete_member_role_permission_false_for_leader(self):
+        self._req.user = self._leader
+        self._view.__dict__['kwargs'] = {'id': self._director.id + 1}
+        permission = self._can_delete_member_role_permission.has_permission(self._req, self._view)
+        self.assertFalse(permission, 'Leader should not have permission to edit member')
+
+    def test_can_delete_member_role_permission_false_for_volunteer(self):
+        self._req.user = self._volunteer
+        self._view.__dict__['kwargs'] = {'id': self._director.id + 1}
+        permission = self._can_delete_member_role_permission.has_permission(self._req, self._view)
+        self.assertFalse(permission, 'Volunteer should not have permission to edit member')
+
+    def test_can_delete_member_role_permission_false_if_director_deleting_own_role(self):
+        self._req.user = self._director
+        self._view.__dict__['kwargs'] = {'id': self._director.id}
+        permission = self._can_delete_member_role_permission.has_permission(self._req, self._view)
+        self.assertFalse(permission, 'Director should not have permission to edit own data')

@@ -18,6 +18,7 @@ from api.views.ValidateRegLinkView import ValidateRegLinkView
 from api.views.GetResourceView import GetResourceView
 from api.views.EditResourceView import EditResourceView
 from api.views.UpdateMemberStatusView import UpdateMemberStatusView
+from api.views.DeleteMemberRoleView import DeleteMemberRoleView
 from api.views.UserView import UserView
 
 decorated_login_view = \
@@ -42,6 +43,7 @@ urlpatterns = [
     path('user/delete/<int:id>', DeleteMemberView.as_view()),
     path('user/edit/<int:id>/status/', UpdateMemberStatusView.as_view()),
     path('user/edit/<int:id>/role_teams', EditMemberRoleTeamsView.as_view()),
+    path('user/edit/<int:id>/role/<str:role>', DeleteMemberRoleView.as_view()),
     path('teams/', GetTeamsView.as_view()),
     path('resources/<str:slug>', GetResourceView.as_view()),
     path('resources/edit/<str:slug>', EditResourceView.as_view()),

@@ -45,3 +45,14 @@ class CanEditResource(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return is_director_or_superuser(request.user.id, request.user.is_superuser)
+
+
+class CanDeleteMemberRole(permissions.BasePermission):
+    """
+    Check if user can delete member role.
+    """
+
+    def has_permission(self, request, view):
+        user_to_be_edited_id = view.kwargs['id']
+        logged_in_user_id = request.user.id
+        return (user_to_be_edited_id != logged_in_user_id) and (is_director_or_superuser(logged_in_user_id, request.user.is_superuser))

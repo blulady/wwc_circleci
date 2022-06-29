@@ -15,11 +15,15 @@ from api.views.LogoutView import LogoutView
 from api.views.DeleteMemberView import DeleteMemberView
 from api.views.GetTeamsView import GetTeamsView
 from api.views.ValidateRegLinkView import ValidateRegLinkView
-from api.views.GetResourceView import GetResourceView
-from api.views.EditResourceView import EditResourceView
 from api.views.UpdateMemberStatusView import UpdateMemberStatusView
+from api.views.resources_view import ResourceViewSet
 from api.views.DeleteMemberRoleView import DeleteMemberRoleView
 from api.views.UserView import UserView
+from rest_framework.routers import SimpleRouter
+
+router = SimpleRouter()
+router.register(r'resources', ResourceViewSet)
+
 
 decorated_login_view = \
     swagger_auto_schema(
@@ -45,8 +49,8 @@ urlpatterns = [
     path('user/edit/<int:id>/role_teams', EditMemberRoleTeamsView.as_view()),
     path('user/edit/<int:id>/role/<str:role>', DeleteMemberRoleView.as_view()),
     path('teams/', GetTeamsView.as_view()),
-    path('resources/<str:slug>', GetResourceView.as_view()),
-    path('resources/edit/<str:slug>', EditResourceView.as_view()),
     path('validate/', ValidateRegLinkView.as_view()),
     path('user/name', UserView.as_view()),
 ]
+
+urlpatterns += router.urls

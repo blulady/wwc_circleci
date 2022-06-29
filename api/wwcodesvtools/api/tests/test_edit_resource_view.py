@@ -2,9 +2,10 @@
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AND
+from rest_framework.permissions import IsAuthenticated
 from api.permissions import CanEditResource
-from ..views.EditResourceView import EditResourceView
+from ..views.resources_view import ResourceViewSet
+from ..models import Resource
 
 
 class EditResourceViewTestCase(TransactionTestCase):
@@ -28,9 +29,9 @@ class EditResourceViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def post_request(self, slug, data, bearer):
-        return self.client.post(f'/api/resources/edit/{slug}', data, **bearer,
-                                accept="application/json",
-                                content_type="application/json",)
+        json_type = "application/json"
+        request_url = f'/api/resources/{slug}/'
+        return self.client.put(request_url, data, **bearer, accept=json_type, content_type=json_type)
 
     # test cannot edit an invalid resource slug
     def test_edit_resource_invalid_slug_value(self):
@@ -45,7 +46,7 @@ class EditResourceViewTestCase(TransactionTestCase):
         response = self.post_request(self.SLUG, data, self.bearer)
         expected_error = 'This field may not be blank.'
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(expected_error, response.data['error'])
+        self.assertIn(expected_error, response.data['edit_link'][0])
 
     # test edit resource fails for blank published_link input
     def test_edit_resource_empty_input_published_link(self):
@@ -53,7 +54,7 @@ class EditResourceViewTestCase(TransactionTestCase):
         response = self.post_request(self.SLUG, data, self.bearer)
         expected_error = 'This field may not be blank.'
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(expected_error, response.data['error'])
+        self.assertIn(expected_error, response.data['published_link'])
 
     # test edit resource fails for invalid edit_link url
     def test_edit_resource_invalid_url_edit_link(self):
@@ -61,7 +62,7 @@ class EditResourceViewTestCase(TransactionTestCase):
         response = self.post_request(self.SLUG, data, self.bearer)
         expected_error = 'edit_link is invalid. Enter a valid url'
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(expected_error, response.data['error'])
+        self.assertIn(expected_error, response.data['edit_link'])
 
     # test edit resource fails for invalid url published_link
     def test_edit_resource_invalid_url_published_link(self):
@@ -69,19 +70,22 @@ class EditResourceViewTestCase(TransactionTestCase):
         response = self.post_request(self.SLUG, data, self.bearer)
         expected_error = 'published_link is invalid. Enter a valid url'
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(expected_error, response.data['error'])
+        self.assertIn(expected_error, response.data['published_link'])
 
     # test edit resource is successful with valid link urls
     def test_edit_resource_is_successfull_with_valid_links(self):
+        old_resource = Resource.objects.get(slug=self.SLUG)
         data = {"edit_link": "https://google.com/document", "published_link": "http://www.yahoo.com"}
+        self.assertNotEqual(old_resource.edit_link, data['edit_link'])
+        self.assertNotEqual(old_resource.edit_link, data['edit_link'])
         response = self.post_request(self.SLUG, data, self.bearer)
-        expected_result = 'Resource edited successfully'
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(expected_result, response.data['result'])
+        self.assertEqual(response.data, data)
 
     def test_edit_resource_view_permissions(self):
-        view_permissions = EditResourceView().permission_classes
-        # DRF Permissions OperandHolder Dictionary
-        expected_permissions = {'operator_class': AND, 'op1_class': IsAuthenticated, 'op2_class': CanEditResource}
-        self.assertEqual(len(view_permissions), 1)
-        self.assertDictEqual(view_permissions[0].__dict__, expected_permissions)
+        resources_viewset = ResourceViewSet()
+        resources_viewset.action = 'update'
+        view_permissions = resources_viewset.get_permissions()
+        self.assertEqual(len(view_permissions), 2)
+        self.assertEqual(type(view_permissions[0]), IsAuthenticated)
+        self.assertEqual(type(view_permissions[1]), CanEditResource)

@@ -1,7 +1,8 @@
 from api.models import Resource
 from rest_framework import status
 from django.test import TransactionTestCase
-from ..views.GetResourceView import GetResourceView
+# from ..views.GetResourceView import GetResourceView
+from api.views.resources_view import ResourceViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -27,7 +28,7 @@ class GetResourceViewTestCase(TransactionTestCase):
     def test_resources_valid_slug_director(self):
         access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/resources/volunteer_resource", **bearer)
+        response = self.client.get("/api/resources/volunteer_resource/", **bearer)
         expected_link = Resource.objects.get(slug='volunteer_resource')
         data_json = response.json()
         self.assertEqual(expected_link.edit_link, data_json['edit_link'])
@@ -38,7 +39,7 @@ class GetResourceViewTestCase(TransactionTestCase):
     def test_resources_valid_slug_leader(self):
         access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/resources/volunteer_resource", **bearer)
+        response = self.client.get("/api/resources/volunteer_resource/", **bearer)
         expected_link = Resource.objects.get(slug='volunteer_resource')
         data_json = response.json()
         self.assertNotIn('edit_link', data_json)
@@ -49,12 +50,12 @@ class GetResourceViewTestCase(TransactionTestCase):
     def test_resources_invalid_slug(self):
         access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/resources/volunteer_onboarding", **bearer)
+        response = self.client.get("/api/resources/volunteer_onboarding/", **bearer)
         data_json = response.json()
         self.assertEqual(data_json['detail'], 'Not found.')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_resources_view_permissions(self):
-        view_permissions = GetResourceView().permission_classes
+        view_permissions = ResourceViewSet().permission_classes
         self.assertEqual(len(view_permissions), 1)
         self.assertEqual(view_permissions[0], IsAuthenticated)

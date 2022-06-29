@@ -47,5 +47,12 @@
         "fields": {
             "name": "Volunteer Management"
         }
+    },
+    {
+        "model": "api.team",
+        "pk": 8,
+        "fields": {
+            "name": "Tech Bloggers"
+        }
     }
 ]

@@ -23,7 +23,7 @@ class GetTeamsViewTestCase(TransactionTestCase):
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/teams/", **bearer)
-        self.assertEqual(len(response.data), 7)
+        self.assertEqual(len(response.data), 8)
         self.assertEqual(json.loads(response.content)[0]['id'], 1)
         self.assertEqual(json.loads(response.content)[0]['name'], 'Event Volunteers')
         self.assertEqual(json.loads(response.content)[1]['id'], 2)
@@ -38,6 +38,8 @@ class GetTeamsViewTestCase(TransactionTestCase):
         self.assertEqual(json.loads(response.content)[5]['name'], 'Tech Event Volunteers')
         self.assertEqual(json.loads(response.content)[6]['id'], 7)
         self.assertEqual(json.loads(response.content)[6]['name'], 'Volunteer Management')
+        self.assertEqual(json.loads(response.content)[7]['id'], 8)
+        self.assertEqual(json.loads(response.content)[7]['name'], 'Tech Bloggers')
 
     def test_get_teams_view_permissions(self):
         view_permissions = GetTeamsView().permission_classes

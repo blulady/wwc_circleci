@@ -25,6 +25,9 @@
     line-height: 32px;
     font-size: 18px;
     color: #48484A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .suggestion-box ul li:hover {

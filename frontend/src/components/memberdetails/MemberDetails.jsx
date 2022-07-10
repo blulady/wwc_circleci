@@ -222,7 +222,9 @@ function ViewMemberDetails() {
               <Spinner />
             ) : (
               <div className={cx("col-10", styles["view-member-fields-div"])}>
-                <MemberImage image={ProfileImage} />
+                <div className={styles["view-member-image-div"]}>
+                  <MemberImage image={ProfileImage} />
+                </div>
                 <MemberInfoUnEditable
                   first_name={first_name}
                   last_name={last_name}

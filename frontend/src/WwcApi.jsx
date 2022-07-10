@@ -170,6 +170,18 @@ class WwcApi {
     return res.data;
   }
 
+  static async editUserName(userName) {
+    return await axios.patch(`${BASE_URL}/user/name`, userName, {
+      headers: getConfig(),
+    });
+  }
+
+  static async editUserPassword(data) {
+    return await axios.patch(`${BASE_URL}/user/password`, data, {
+      headers: getConfig(),
+    });
+  }
+
   static async getTeamResources(slug) {
     return await axios.get(`${BASE_URL}/resources/${slug}`, {
       headers: getConfig(),

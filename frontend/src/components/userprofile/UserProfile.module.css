@@ -1,0 +1,208 @@
+/* UserProfile */
+.view-user-image-div {
+  width: 182px;
+  height: 182px;
+  margin: 10px auto;
+}
+
+.view-user-name-email-date {
+    font-family: "Open Sans";
+    font-style: normal;
+  }
+
+/* UserName */
+.fullname-font {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  color: #4f4f4f;
+  align-self: stretch;
+  flex-grow: 0;
+  margin: 10px 0px 0px 0px;
+  word-wrap: normal;
+  word-break: break-all;
+  display: inline;
+}
+
+.name-edit-icon {
+    margin: auto 0.5em;
+    vertical-align: text-top;
+}
+
+
+/* UserInfoUnEditable */
+.email-font {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: #2376e5;
+  order: 0;
+  flex-grow: 0;
+  margin: 1em 0;
+}
+
+.datejoined-font {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: #48484a;
+  order: 0;
+  flex-grow: 0;
+}
+
+
+/* Edit Modals */
+.modal-title-font {
+font-weight: 600;
+font-size: 32px;
+line-height: 44px;
+color: #4f4f4f;
+align-self: stretch;
+flex-grow: 0;
+}
+
+.edit-instructions {
+  margin: 1em 0;
+}
+
+header p {
+  margin: 5px auto;
+}
+
+.btn {  
+  height: 39px;
+  border-radius: 5px;
+  background-color: #007a7c;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fff;
+  margin-top: 15px;
+}
+
+.confirm-btn {
+  width: 160px;
+  float: left;
+  margin-right: 15px;
+}
+
+.cancel-btn {
+  width: 80px;
+  float: right;
+  font-weight: 400;
+  color:#007a7c;
+  background-color: #fff;
+  border: 1px solid #007a7c;
+}
+
+.change-pw-btn {
+  align-self: flex-end;
+  font-weight: 600;
+  font-size: 14px;
+  color:#007a7c;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #007a7c;
+  margin: 0 15px 0 0;
+  padding: 0 0.5em;
+  line-height: 16px;
+}
+
+.warning {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 26px;
+  color: #48484a;
+}
+
+.btn:disabled {
+  opacity: 0.2;
+}
+
+@media only screen and (max-width: 576px) {
+  /* UserProfile */
+  .view-user-image-div{
+    width: 48px;
+    height: 48px;
+  }
+
+  .change-pw-btn {
+    font-weight: 400;
+    font-size: 12px;
+    color:#007a7c;
+  }
+
+
+  /* UserName */
+  .fullname-font {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: capitalize;
+  }
+
+
+  /* UserInfoUnEditable */
+  .email-font {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #2376e5;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 0px;
+  }
+
+  .datejoined-font {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #48484a;
+    margin: 0px;
+  }
+
+
+  /* Edit Modals */
+  .modal-title-font {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 0;
+  }
+
+  header p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+  }
+
+  .warning{
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+} 
+
+@media only screen and (max-width: 380px) { 
+  /* Edit Modals */ 
+  .cancel-btn {
+    float: none;
+    margin: 15px auto 0 auto;  
+  }
+
+  .confirm-btn {
+    float: none;
+    margin: 15px auto 0 auto; 
+  }
+}

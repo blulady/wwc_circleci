@@ -1,18 +1,4 @@
-.view-member-image-div {
-  width: 182px;
-  height: 182px;
-  float: left;
-}
-
 .img-size {
   width: 100%;
   height: 100%;
-}
-
-@media only screen and (max-width: 576px) {
-  .view-member-image-div{
-    margin: 10px 0 0 25px;
-    width: 36px;
-    height: 36px;
-  }
 }

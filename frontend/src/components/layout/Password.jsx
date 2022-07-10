@@ -53,44 +53,51 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
   return (
     <div className='form-group' onFocus={() => setPwdValidation(true)}>
       <label className={cx('pb-1', styles['label'])} htmlFor='Password'>{pwdLabel}</label>
-      <div>
-        <div className='input-group'>
-          <input
-            type={hidden ? "password" : "text"}
-            name='password'
-            className={cx('form-control', styles['input-pwd'])}
-            data-testid="password"
-            id='password'
-            value={password}
-            autoComplete="password"
-            onChange={validatePassword}
-          />
-          <div className='input-group-append'>
-            <span className={cx('input-group-text', styles['show-hide'])} onClick={handleShow}>
-              <u data-testid="show-hide">{hidden ? "SHOW" : "HIDE"}</u>
-            </span>
+      
+      <div className="row">
+
+        <div className="col"> {/* password input column */}
+          <div className={cx('input-group', styles['pwd-input-group'])}>
+            <input
+              type={hidden ? "password" : "text"}
+              name='password'
+              className={cx('form-control', styles['input-pwd'])}
+              data-testid="password"
+              id='password'
+              value={password}
+              autoComplete="password"
+              onChange={validatePassword}
+            />
+            <div className='input-group-append'>
+              <span className={cx('input-group-text', styles['show-hide'])} onClick={handleShow}>
+                <u data-testid="show-hide">{hidden ? "SHOW" : "HIDE"}</u>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.validations}>
-        <aside className={pwdValidation ? styles['display-inline'] : styles['display-none'] }>
-          {passwdValidStatus.map((x, idx) => {
-            const iconSrc = x ? checkIcon : cancelIcon;
-            return (
-              <div key={idx}>
-                <img
-                  src={iconSrc}
-                  alt='Invalid Password Icon'
-                  className={styles['validation-img']}
-                />
-                <span className={styles.pwddesc}>
-                  {passwordValidationDescriptions[idx]}
-                </span>
-              </div>
-            );
-          })}
-        </aside>
-      </div>
+        
+        <div className={pwdValidation ? cx("col-12", styles['display-block']): (styles['display-none'])}> {/* validations column */}
+          <aside>
+            {passwdValidStatus.map((x, idx) => {
+              const iconSrc = x ? checkIcon : cancelIcon;
+              return (
+                <div key={idx}>
+                  <img
+                    src={iconSrc}
+                    alt='Invalid Password Icon'
+                    className={styles['validation-img']}
+                  />
+                  <span className={styles.pwddesc}>
+                    {passwordValidationDescriptions[idx]}
+                  </span>
+                </div>
+              );
+            })}
+          </aside>
+        </div>
+
+      </div> {/* end row */}
+
     </div>
   );
 };

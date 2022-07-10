@@ -39,7 +39,7 @@ return submitted
   ? <Navigate to="/login" /> 
   :(
     <ContainerWithNav>
-        <div className={`${classes.ResetPassword} col col-md-6 col-lg-4`}>
+        <div className={classes.ResetPassword}>
           <header>
             <div className={classes.title}>Reset your password</div>
           </header>

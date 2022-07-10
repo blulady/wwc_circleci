@@ -16,3 +16,5 @@ export const SUCCESS_REQUEST_PASSWORD_RESET =
   "Please check your email inbox for password reset instructions.";
 export const SUCCESS_PASSWORD_RESET =
   "You may now log in with your new password.";
+export const SUCCESS_USER_PROFILE = 
+  "Changes to your profile have been saved.";

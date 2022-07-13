@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from api.helper_functions import send_email_helper
 
 import logging
 
@@ -71,6 +72,12 @@ class ChangePasswordView(GenericAPIView):
 
             if serializer.is_valid():
                 serializer.save()
+                email_subject = 'Password Changed Notification'
+                email_template = 'password_change_notification.html'
+                context_data = {'email': user_obj.email}
+                message_sent = send_email_helper(user_obj.email, email_subject, email_template, context_data)
+                if not message_sent:
+                    logger.info(f'ChangePasswordView: Change Password email not sent- {user_obj.email}')
                 response_data = {'result': self.SUCCESS_PASSWORD_CHANGED}
                 return Response(response_data, status.HTTP_200_OK)
             else:

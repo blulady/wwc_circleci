@@ -8,7 +8,7 @@ class UserViewTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
 
-    ERROR_INVALID_NAME = 'Error: either name was blank or name length not in range of 1-50 characters'
+    ERROR_INVALID_NAME = 'Either name was blank or name length not in range of 1-50 characters'
     SUCCESS_NAME_CHANGE = 'Name change was successful'
 
     def setUp(self):
@@ -34,22 +34,24 @@ class UserViewTestCase(TransactionTestCase):
         # TODO Write assertion to check that the name in updated in the db.
         response = self.patch_request(data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(response.content), self.SUCCESS_NAME_CHANGE)
+        self.assertEqual(json.loads(response.content)['success'], self.SUCCESS_NAME_CHANGE)
 
     def test_change_name_blank(self):
         data = {"first_name": "", "last_name": ""}
         response = self.patch_request(data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(response.content), self.ERROR_INVALID_NAME)
+        self.assertEqual(json.loads(response.content)['error'], self.ERROR_INVALID_NAME)
 
     def test_first_name_too_long(self):
         data = {"first_name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "last_name": "Robinson"}
         response = self.patch_request(data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(response.content), self.ERROR_INVALID_NAME)
+        self.assertEqual(json.loads(response.content)['error'], self.ERROR_INVALID_NAME)
 
     def test_last_name_too_long(self):
         data = {"first_name": "Alice", "last_name": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"}
         response = self.patch_request(data, self.bearer)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(response.content), self.ERROR_INVALID_NAME)
+        self.assertEqual(json.loads(response.content)['error'], self.ERROR_INVALID_NAME)
+
+# TODO write testcase for attempted name change for pending member return 403

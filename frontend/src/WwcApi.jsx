@@ -183,13 +183,13 @@ class WwcApi {
   }
 
   static async getTeamResources(slug) {
-    return await axios.get(`${BASE_URL}/resources/${slug}`, {
+    return await axios.get(`${BASE_URL}/resources/${slug}/`, {
       headers: getConfig(),
     });
   }
 
   static async updateTeamResources(slug, links) {
-    return await axios.post(`${BASE_URL}/resources/edit/${slug}`, links, {
+    return await axios.put(`${BASE_URL}/resources/${slug}/`, links, {
       headers: getConfig(),
     });
   }

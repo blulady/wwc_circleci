@@ -5,7 +5,6 @@ import cx from "classnames";
 const ResourcesLinks = (props) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editSaveTxt, setEditSaveTxt] = useState("Edit Links");
   const [editLink, setEditLink] = useState(props.editUrl);
   const [publishLink, setPublishLink] = useState(props.publishUrl);
 
@@ -35,9 +34,6 @@ const ResourcesLinks = (props) => {
     );
   };
 
-  useEffect(() => {
-    setEditSaveTxt(isEditing ? "Save Links" : "Edit Links");
-  }, [isEditing]);
 
   const openEditDocument = () => {
     if (editLink) {
@@ -127,10 +123,16 @@ const ResourcesLinks = (props) => {
               className="wwc-action-button"
               data-testid="saveBtn"
             >
-              <div className="d-flex">
-                <span className="icon edit-purple-icon mr-2"></span>
-                {editSaveTxt}
-              </div>
+              {isEditing ?
+                <div className="d-flex">
+                  <span className="icon save-purple-icon mr-2"></span>
+                    Save Links
+                </div> :
+                <div className="d-flex">
+                  <span className="icon edit-purple-icon mr-2"></span>
+                    Edit Links
+                </div>
+              }
             </button>
             <button onClick={openEditDocument} className="wwc-action-button">
               <div className="d-flex">

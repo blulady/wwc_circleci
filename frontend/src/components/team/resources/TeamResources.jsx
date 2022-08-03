@@ -74,18 +74,9 @@ const TeamResources = (props) => {
     }
   };
 
-  return (
-    <React.Fragment>
-      <div>
-        {isDirector && (
-          <ResourcesLinks
-            editUrl={teamResource.edit_link}
-            publishUrl={teamResource.published_link}
-            onSave={updateResources}
-          ></ResourcesLinks>
-        )}
-      </div>
-      {errorOnLoading && (
+  const messageBoxContent = () => {
+    if (errorOnLoading) {
+      return (
         <div className={"d-flex justify-content-center"}>
           <MessageBox
             type="Error"
@@ -93,8 +84,10 @@ const TeamResources = (props) => {
             message={ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED}
           ></MessageBox>
         </div>
-      )}
-      {errorNoDocument && (
+      )
+    }
+    else if (errorNoDocument) {
+      return (
         <div className={"d-flex justify-content-center"}>
           <MessageBox
             type="Error"
@@ -106,8 +99,10 @@ const TeamResources = (props) => {
             }
           ></MessageBox>
         </div>
-      )}
-      {instructionsOnLoading && (
+      )
+    }
+    else if (instructionsOnLoading) {
+      return (
         <div
           className={cx(
             styles["instructions-box"],
@@ -117,14 +112,31 @@ const TeamResources = (props) => {
         >
           <div dangerouslySetInnerHTML={{ __html: instructions }}></div>
         </div>
-      )}
-      {!errorNoDocument && !errorOnLoading && !instructionsOnLoading && (
+      )
+    }
+    else {
+      return (
         <iframe
           className={styles["resources-frame"]}
           src={teamResource.published_link}
           title="Team Resources"
         ></iframe>
-      )}
+      )
+    }
+  }
+
+  return (
+    <React.Fragment>
+      <div>
+        {isDirector && (
+          <ResourcesLinks
+            editUrl={teamResource.edit_link}
+            publishUrl={teamResource.published_link}
+            onSave={updateResources}
+          ></ResourcesLinks>
+        )}
+      </div>
+      {messageBoxContent()}
     </React.Fragment>
   );
 };

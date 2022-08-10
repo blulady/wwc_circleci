@@ -14,6 +14,19 @@ assignees: ''
 *As a I want so that I can*
 
 
+<details>
+<summary><b>Definition of Done</b></summary>
+
+- [ ] Unit test passed
+- [ ] Code reviewed
+- [ ] Acceptance criteria for each issue met
+- [ ] Functional tests passed 
+    - [ ] NA
+- [ ] Non-functional requirements met
+    - [ ] NA
+- [ ] Product owner accepts the User Story
+</details>
+
 #### Affects Version
 
 

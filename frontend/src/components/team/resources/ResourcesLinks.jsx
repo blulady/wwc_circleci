@@ -20,20 +20,18 @@ const ResourcesLinks = (props) => {
   }, [props.editUrl, props.publishUrl]);
 
   const saveOrEdit = () => {
-    if (isEditing && props.onSave) {
-      props.onSave(editLink, publishLink);
+    if (isEditing && props.onUpdateDocument) {
+      props.onUpdateDocument(editLink, publishLink);
     }
     setIsEditing(!isEditing);
   };
 
   const addDocument = () => {
-    props.onSave(
+    props.onSaveFirstDocument(
       editLink,
       publishLink,
-      "cannot add new document, resource doest not exist"
     );
   };
-
 
   const openEditDocument = () => {
     if (editLink) {

@@ -58,7 +58,22 @@ const TeamResources = (props) => {
     }
   };
 
-  const updateResources = async (editLink, publishedLink, errorMessage) => {
+  const addNewResources = async (editLink, publishedLink) => {
+    try {
+      await WwcApi.addNewResources({
+        edit_link: editLink,
+        published_link: publishedLink,
+        slug: slug
+      });
+    } catch (error) {
+      if (error.response.status === 404) {
+        setErrorNoDocument(true);
+        setErrorNoDocumentMessage("cannot add new document, resource does not exist");
+      }
+    }
+  }
+
+  const updateResources = async (editLink, publishedLink) => {
     try {
       await WwcApi.updateTeamResources(slug, {
         edit_link: editLink,
@@ -67,10 +82,8 @@ const TeamResources = (props) => {
     } catch (error) {
       if (error.response.status === 404) {
         setErrorNoDocument(true);
-        if (typeof errorMessage != "undefined") {
-          setErrorNoDocumentMessage(errorMessage);
-        }
-      } else setErrorOnLoading(true);
+        setErrorOnLoading(true);
+      }
     }
   };
 
@@ -132,7 +145,8 @@ const TeamResources = (props) => {
           <ResourcesLinks
             editUrl={teamResource.edit_link}
             publishUrl={teamResource.published_link}
-            onSave={updateResources}
+            onSaveFirstDocument={addNewResources}
+            onUpdateDocument={updateResources}
           ></ResourcesLinks>
         )}
       </div>

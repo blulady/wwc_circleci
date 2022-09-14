@@ -67,7 +67,7 @@ const TeamResources = (props) => {
       });
     } catch (error) {
       setErrorNoDocument(true);
-      setErrorNoDocumentMessage("cannot add new document, resource does not exist");
+      setErrorNoDocumentMessage("The resource document could not be saved. Please try later.");
     }
   }
 

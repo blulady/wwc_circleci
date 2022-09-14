@@ -66,10 +66,8 @@ const TeamResources = (props) => {
         slug: slug
       });
     } catch (error) {
-      if (error.response.status === 404) {
-        setErrorNoDocument(true);
-        setErrorNoDocumentMessage("cannot add new document, resource does not exist");
-      }
+      setErrorNoDocument(true);
+      setErrorNoDocumentMessage("cannot add new document, resource does not exist");
     }
   }
 

@@ -43,8 +43,7 @@ const baseFilters = [
     type: "button",
     options: [
       { label: "Active", value: "ACTIVE", enable: true },
-      { label: "Inactive", value: "INACTIVE", enable: true },
-      { label: "Pending", value: "PENDING", enable: false },
+      { label: "Inactive", value: "INACTIVE", enable: true }
     ],
   },
   {
@@ -179,7 +178,7 @@ const ViewMembers = (props) => {
   const toggleFilterBox = () => {
     setIsApplyingFilter(!isApplyingFilter);
   };
-  
+
   // create team filter if not chapter member page
   let availableFilters = [...baseFilters];
   let initialFilterStatus = { role: [], status: [], date_joined: [], team: [] };

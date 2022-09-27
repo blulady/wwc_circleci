@@ -6,6 +6,7 @@ import MessageBox from "../../messagebox/MessageBox";
 import {
   ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED,
   ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE,
+  ERROR_REQUEST_MESSAGE
 } from "../../../Messages";
 import ResourcesLinks from "./ResourcesLinks";
 import { useParams } from "react-router-dom";
@@ -14,9 +15,15 @@ import styles from "./TeamResources.module.css";
 
 const TeamResources = (props) => {
   const errorTitle = "Sorry!";
-  const [errorOnLoading, setErrorOnLoading] = useState(false);
-  const [errorNoDocument, setErrorNoDocument] = useState(false);
-  const [errorNoDocumentMessage, setErrorNoDocumentMessage] = useState("");
+
+  const [errorRetrieveDocument, setErrorRetrieveDocument] = useState(false);
+  const [errorRetrieveDocumentMessage, setErrorRetrieveDocumentMessage] = useState("");
+
+  const [errorAddNewResources, setErrorAddNewResources] = useState(false);
+  const [errorAddNewResourcesMessage, setErrorAddNewResourcesMessage] = useState("");
+
+  const [errorEditDocument, setErrorEditDocument] = useState(false);
+
   const [instructionsOnLoading, setInstructionsOnLoading] = useState(false);
   const [teamResource, setTeamResource] = useState({
     edit_link: "",
@@ -53,8 +60,19 @@ const TeamResources = (props) => {
       setTeamResource(teamrResources.data);
     } catch (error) {
       if (error.response.status === 404) {
-        setInstructionsOnLoading(true);
-      } else setErrorOnLoading(true);
+        if (isDirector) {
+          setInstructionsOnLoading(true);
+        } else {
+          setErrorRetrieveDocument(true);
+          setErrorRetrieveDocumentMessage(ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE);
+        }
+      }
+      else {
+        // how to hit this?
+        console.log(error, 'error for retrieve, but there is a saved link')
+        setErrorRetrieveDocument(true);
+        setErrorRetrieveDocumentMessage(ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED);
+      }
     }
   };
 
@@ -66,8 +84,9 @@ const TeamResources = (props) => {
         slug: slug
       });
     } catch (error) {
-      setErrorNoDocument(true);
-      setErrorNoDocumentMessage("The resource document could not be saved. Please try later.");
+      console.log('error adding a brand new resource')
+      setErrorAddNewResources(true);
+      setErrorAddNewResourcesMessage("The resource document could not be saved. Please try later.");
     }
   }
 
@@ -78,36 +97,41 @@ const TeamResources = (props) => {
         published_link: publishedLink,
       });
     } catch (error) {
-      if (error.response.status === 404) {
-        setErrorNoDocument(true);
-        setErrorOnLoading(true);
-      }
+      console.log('updateResources, how to hit no document error when editing')
+      setErrorEditDocument(true);
     }
   };
 
   const messageBoxContent = () => {
-    if (errorOnLoading) {
+    if (errorRetrieveDocument) { // getTeamResources
       return (
         <div className={"d-flex justify-content-center"}>
           <MessageBox
             type="Error"
             title={errorTitle}
-            message={ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED}
+            message={errorRetrieveDocumentMessage}
           ></MessageBox>
         </div>
       )
     }
-    else if (errorNoDocument) {
+    else if (errorAddNewResources) { // addNewResources
       return (
         <div className={"d-flex justify-content-center"}>
           <MessageBox
             type="Error"
             title={errorTitle}
-            message={
-              errorNoDocumentMessage.length == 0
-                ? ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE
-                : errorNoDocumentMessage
-            }
+            message={errorAddNewResourcesMessage}
+          ></MessageBox>
+        </div>
+      )
+    }
+    else if (errorEditDocument) { // updateResources
+      return (
+        <div className={"d-flex justify-content-center"}>
+          <MessageBox
+            type="Error"
+            title={errorTitle}
+            message={ERROR_REQUEST_MESSAGE}
           ></MessageBox>
         </div>
       )

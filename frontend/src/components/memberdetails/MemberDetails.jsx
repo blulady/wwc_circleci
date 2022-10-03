@@ -81,9 +81,9 @@ function ViewMemberDetails() {
     { id: 3, name: "Host Management" },
     { id: 4, name: "Partnership Management" },
     { id: 5, name: "Social Media" },
-    { id: 6, name: "Tech Bloggers" },
-    { id: 7, name: "Tech Event Volunteers" },
-    { id: 8, name: "Volunteer Management" },
+    { id: 6, name: "Tech Event Volunteers" },
+    { id: 7, name: "Volunteer Management" },
+    { id: 8, name: "Tech Bloggers" },
   ];
 
   let handleStatusChange = async (checked) => {

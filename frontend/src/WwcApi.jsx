@@ -194,6 +194,12 @@ class WwcApi {
     });
   }
 
+  static async addNewResources(links) {
+    return await axios.post(`${BASE_URL}/resources/`, links, {
+      headers: getConfig(),
+    });
+  }
+
   static async changeMemberStatus(userId, data) {
     return await axios.post(`${BASE_URL}/user/edit/${userId}/status/`, data, {
       headers: getConfig(),

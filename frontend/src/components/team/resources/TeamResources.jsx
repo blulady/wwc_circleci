@@ -15,15 +15,11 @@ import styles from "./TeamResources.module.css";
 
 const TeamResources = (props) => {
   const errorTitle = "Sorry!";
-
   const [errorRetrieveDocument, setErrorRetrieveDocument] = useState(false);
   const [errorRetrieveDocumentMessage, setErrorRetrieveDocumentMessage] = useState("");
-
   const [errorAddNewResources, setErrorAddNewResources] = useState(false);
   const [errorAddNewResourcesMessage, setErrorAddNewResourcesMessage] = useState("");
-
   const [errorEditDocument, setErrorEditDocument] = useState(false);
-
   const [instructionsOnLoading, setInstructionsOnLoading] = useState(false);
   const [teamResource, setTeamResource] = useState({
     edit_link: "",
@@ -43,7 +39,7 @@ const TeamResources = (props) => {
   const instructions = `
     <h5 class="c26">Instructions to set up Resource Document</h5>
     <ul>
-      <li>Please create a Google Doc to be used for this resourcse document.</li>
+      <li>Please create a Google Doc to be used for this resources document.</li>
       <li>Modify Share to 'Anyone on the internet with this link view.'</li>
       <li>Publish to the web: File -> Publish to the web -> Check 'Automatically republish when changes are made' -> Publish.</li>
       <li>Enter url in Enter URL field.</li>
@@ -53,6 +49,10 @@ const TeamResources = (props) => {
   useEffect(() => {
     getTeamResources();
   }, []);
+
+  useEffect(() => {
+    messageBoxContent();
+  }, [teamResource]);
 
   const getTeamResources = async () => {
     try {
@@ -68,8 +68,6 @@ const TeamResources = (props) => {
         }
       }
       else {
-        // how to hit this?
-        console.log(error, 'error for retrieve, but there is a saved link')
         setErrorRetrieveDocument(true);
         setErrorRetrieveDocumentMessage(ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED);
       }
@@ -78,13 +76,16 @@ const TeamResources = (props) => {
 
   const addNewResources = async (editLink, publishedLink) => {
     try {
-      await WwcApi.addNewResources({
+      let teamrResources = await WwcApi.addNewResources({
         edit_link: editLink,
         published_link: publishedLink,
         slug: slug
       });
+      setTeamResource(teamrResources.data);
+      setErrorAddNewResources(false);
+      setErrorAddNewResourcesMessage("");
+      setInstructionsOnLoading(false);
     } catch (error) {
-      console.log('error adding a brand new resource')
       setErrorAddNewResources(true);
       setErrorAddNewResourcesMessage("The resource document could not be saved. Please try later.");
     }
@@ -92,12 +93,13 @@ const TeamResources = (props) => {
 
   const updateResources = async (editLink, publishedLink) => {
     try {
-      await WwcApi.updateTeamResources(slug, {
+      let teamrResources = await WwcApi.updateTeamResources(slug, {
         edit_link: editLink,
         published_link: publishedLink,
       });
+      setTeamResource(teamrResources.data);
+      setErrorEditDocument(false);
     } catch (error) {
-      console.log('updateResources, how to hit no document error when editing')
       setErrorEditDocument(true);
     }
   };
@@ -155,7 +157,8 @@ const TeamResources = (props) => {
           className={styles["resources-frame"]}
           src={teamResource.published_link}
           title="Team Resources"
-        ></iframe>
+        >
+        </iframe>
       )
     }
   }

@@ -124,6 +124,7 @@ const ViewMembers = (props) => {
   const [isOpenSuggestionBox, setIsOpenSuggestionBox] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [search, setSearch] = useState("");
+  const [prevSearch, setPrevSearch] = useState("");
   const onSearch = async (query) => {
     setSearch(query);
     if (query.length === 3) {
@@ -159,6 +160,7 @@ const ViewMembers = (props) => {
     if (!searchStr) {
       setSuggestions([]);
     }
+    setPrevSearch(searchStr);
     setSearch(searchStr);
     getUsers(searchStr);
   };
@@ -170,6 +172,7 @@ const ViewMembers = (props) => {
     // if (match) {
     //   setUsers([match]);
     // }
+    setPrevSearch(selectedUser);
     setSearch(selectedUser);
     getUsers(selectedUser);
   };
@@ -214,11 +217,13 @@ const ViewMembers = (props) => {
     vals.team = teams.filter((val) => {
       return val != 0;
     });
+    setPrevSearch(search);
     setFilters(vals);
     toggleFilterBox();
   };
 
   const onFilterReset = (_filters) => {
+    setPrevSearch(search);
     setFilters(_filters);
     toggleFilterBox();
   };
@@ -245,6 +250,24 @@ const ViewMembers = (props) => {
   };
 
   return (
+
+  <React.Fragment>
+    {errorOnLoading && (
+      <div
+        className={cx(
+          styles["error-container"],
+          "d-flex justify-content-center"
+        )}
+      >
+        <MessageBox
+          type="Error"
+          title="Sorry!"
+          message={ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD.replace("{0}", teams[team].name)}
+        ></MessageBox>
+      </div>
+    )}
+    
+    {!errorOnLoading && (
     <div
       id="viewMemberPage"
       className={cx(styles["view-member-page"])}
@@ -365,32 +388,23 @@ const ViewMembers = (props) => {
             </div>
           )}
         </div>
+
         <div className={cx(styles["memberlist-container"], "container px-0")}>
           <div
             className={cx(styles["memberlist-row"], "row", {
               "no-gutters": isBrowser,
             })}
           >
-            {errorOnLoading && (
-              <div
-                className={cx(
-                  styles["error-container"],
-                  "d-flex justify-content-center"
-                )}
-              >
-                <MessageBox
-                  type="Error"
-                  title="Sorry!"
-                  message={ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD.replace("{0}", teams[team].name)}
-                ></MessageBox>
-              </div>
-            )}
 
-            {!users.length && (
-              <div className={styles["empty-users-msg"]}>
-                No name matching: {search}
-              </div>
-            )}
+            {!users.length && 
+              ((prevSearch.length > 0) ? 
+                (<div className={styles["empty-users-msg"]}>
+                  No name matching: {prevSearch}
+                </div>) : 
+                (<div className={styles["empty-users-msg"]}>
+                  No members to display
+                </div>)) 
+            }
 
             {(isBrowser ? paginationInfo.currentUsers : users).map(
               (userInfo, idx) => {
@@ -415,7 +429,7 @@ const ViewMembers = (props) => {
           </div>
         </div>
       </div>
-      {isBrowser && (
+      {isBrowser && users.length > 0 && (
         <div>
           <ReactPaginate
             previousLabel={""}
@@ -440,7 +454,9 @@ const ViewMembers = (props) => {
       )}
       <ScrollToTop />
     </div>
-  );
-};
+    )}
+  </React.Fragment>
+  ); //end component return
+}; // end component definition
 
 export default ViewMembers;

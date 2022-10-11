@@ -3,8 +3,7 @@ import { act, render, screen, fireEvent } from "@testing-library/react";
 import TeamResources from "./TeamResources";
 import AuthContext from "../../../context/auth/AuthContext";
 import {
-  ERROR_TEAM_RESOURCES_DOCUMENT_NOT_LOADED,
-  ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE,
+  ERROR_REQUEST_MESSAGE
 } from "../../../Messages";
 import WwcApi from "../../../WwcApi";
 import * as TeamContext from "../../../context/team/TeamContext";
@@ -124,10 +123,7 @@ describe("Register Component Validation Tests", () => {
     await act(async () => {
       fireEvent.click(saveBtn);
     });
-
-    expect(
-      screen.getByText(ERROR_TEAM_RESOURCES_NO_DOCUMENT_AVAILABLE)
-    ).toBeInTheDocument();
+    expect(screen.getByText(ERROR_REQUEST_MESSAGE, { collapseWhitespace: false })).toBeTruthy();
     expect(editLink.value).toBe("test edit link");
     expect(publishedLink.value).toBe("test published link");
   });

@@ -77,7 +77,7 @@
       },
       {
         "pageId": "resources",
-        "label": "Sodial Media Resources"
+        "label": "Sodial Media Team Resources"
       }
     ],
     "slug": "social_media_resource",
@@ -87,15 +87,15 @@
     "pages": [
       {
         "pageId": "members",
-        "label": "Tech Event Volunteers"
+        "label": "Tech Event Team"
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Tech Event Team Resources"
       }
     ],
-    "slug": "",
-    "enabled": false
+    "slug": "tech_event_resource",
+    "enabled": true
   },
   {
     "pages": [
@@ -122,7 +122,7 @@
         "label": "Tech Bloggers Resources"
       }
     ],
-    "slug": "tech_bloggers",
+    "slug": "tech_bloggers_resource",
     "enabled": true
   }
 ]

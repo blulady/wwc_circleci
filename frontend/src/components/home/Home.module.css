@@ -22,6 +22,8 @@
   
 }
 
+/* Note: The class names must match the teams data from the WWC API */
+
 .chapter-members  .cardimgtop{
   background: url(../../images/chapter-members.png);
 }
@@ -32,6 +34,10 @@
 
 .tech-bloggers .cardimgtop {
   background: url(../../images/tech-bloggers.png);
+}
+
+.tech-event-volunteers .cardimgtop {
+  background: url(../../images/tech-event-volunteers.png);
 }
 
 .cardbody {

@@ -24,7 +24,7 @@ const Home = () => {
         {allTeams.map((team) => {
           if (team.enabled) {
           return (
-            <div key={team.id} className={`${styles["home-card"]} ${styles[team.name.toLowerCase().replace(" ", "-")]} col-12 col-md-4`} onClick={() => handleClick(team.id)}>
+            <div key={team.id} className={`${styles["home-card"]} ${styles[team.name.toLowerCase().replaceAll(" ", "-")]} col-12 col-md-4`} onClick={() => handleClick(team.id)}>
               <div className={styles.cardimgtop}></div>
               <div className={`${styles.cardbody} d-flex justify-content-center align-items-center`}>
                 {team.name}

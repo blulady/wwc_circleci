@@ -18,10 +18,7 @@ const TeamProvider = ({ children }) => {
             } catch (e) {
                 console.log(e);
             }
-            //_teams = _teams.filter((t) => activeTeams.indexOf(t.id) > -1 );
-            // TODO: Remove me once backend adds Tech Bloggers team
             _teams.unshift({ id: 0, name: "Chapter Members" });
-            _teams.push({ id: 8, name: "Tech Bloggers" });
             _teams = _teams.map((t, i) => {
                 return { ...t, ...data[i]};
             });

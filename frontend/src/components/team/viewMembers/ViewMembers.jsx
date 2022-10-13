@@ -19,6 +19,8 @@ import ScrollToTop from "../../scrollToTop/ScrollToTop";
 import { ERROR_TEAM_MEMBERS_UNABLE_TO_LOAD } from "../../../Messages";
 import { useTeamContext } from "../../../context/team/TeamContext";
 
+let current_year =  new Date().getFullYear();
+
 const sortOptions = {
   NEW: { value: "new", label: "Newest Member", prop: "-date_joined" },
   OLD: { value: "old", label: "Oldest Member", prop: "date_joined" },
@@ -47,14 +49,14 @@ const baseFilters = [
     ],
   },
   {
-    group: "date_joined",
+    group: "created_at",
     label: "Date Added",
     type: "selection",
     options: [
       { label: "Any time", value: "" },
       { label: "3 months", value: "3months" },
       { label: "6 months", value: "6months" },
-      { label: "2020", value: "current_year" },
+      { label: current_year, value: current_year },
     ],
   },
 ];

@@ -56,7 +56,7 @@ const baseFilters = [
       { label: "Any time", value: "" },
       { label: "3 months", value: "3months" },
       { label: "6 months", value: "6months" },
-      { label: current_year, value: current_year },
+      { label: current_year, value: "current_year" },
     ],
   },
 ];

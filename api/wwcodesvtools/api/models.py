@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MaxLengthValidator
 
 # Create your models here.
 
@@ -87,3 +88,15 @@ class Resource(models.Model):
     slug = models.CharField(max_length=150, null=False, blank=False, unique=True)
     edit_link = models.CharField(max_length=255, null=False, blank=False)
     published_link = models.CharField(max_length=255, null=False, blank=False)
+
+
+class Invitee(models.Model):
+    email = models.EmailField(max_length=254, null=False, blank=False, unique=True)
+    message = models.TextField(blank=True, null=True, validators=[MaxLengthValidator(2000)])
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, default=1)
+    registration_token = models.CharField(null=False, blank=False, max_length=150)
+    resent_counter = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(5)])
+    accepted = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

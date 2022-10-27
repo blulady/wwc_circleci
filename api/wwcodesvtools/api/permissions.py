@@ -56,3 +56,12 @@ class CanDeleteMemberRole(permissions.BasePermission):
         user_to_be_edited_id = view.kwargs['id']
         logged_in_user_id = request.user.id
         return (user_to_be_edited_id != logged_in_user_id) and (is_director_or_superuser(logged_in_user_id, request.user.is_superuser))
+
+
+class CanAccessInvitee(permissions.BasePermission):
+    """
+    Check if user can access invitees.
+    """
+
+    def has_permission(self, request, view):
+        return is_director_or_superuser(request.user.id, request.user.is_superuser)

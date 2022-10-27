@@ -1,4 +1,5 @@
 from django.urls import path
+from api.views.InviteeView import InviteeViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
 from drf_yasg.utils import swagger_auto_schema
 from .swagger import login_response as resp
@@ -23,6 +24,7 @@ from rest_framework.routers import SimpleRouter
 
 router = SimpleRouter()
 router.register(r'resources', ResourceViewSet)
+router.register(r'invitee', InviteeViewSet)
 
 
 decorated_login_view = \

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TransactionTestCase
-from ..permissions import CanSendEmail, CanAddMember, CanDeleteMember, CanDeleteMemberRole, CanEditMember
+from ..permissions import CanAccessInvitee, CanSendEmail, CanAddMember, CanDeleteMember, CanDeleteMemberRole, CanEditMember
 from django.http.request import HttpRequest
 from rest_framework.generics import GenericAPIView
 
@@ -117,3 +117,21 @@ class PermissionsTestCase(TransactionTestCase):
         self._view.__dict__['kwargs'] = {'id': self._director.id}
         permission = self._can_delete_member_role_permission.has_permission(self._req, self._view)
         self.assertFalse(permission, 'Director should not have permission to edit own data')
+
+    # Can access invitee
+    _can_access_invitee_permission = CanAccessInvitee()
+
+    def test_can_access_invitee_permission_true_for_director(self):
+        self._req.user = self._director
+        permission = self._can_access_invitee_permission.has_permission(self._req, None)
+        self.assertTrue(permission, 'Director should have permission to access invitee')
+
+    def test_can_access_invitee_permission_false_for_leader(self):
+        self._req.user = self._leader
+        permission = self._can_access_invitee_permission.has_permission(self._req, None)
+        self.assertFalse(permission, 'Leader should not have permission to access invitee')
+
+    def test_can_access_invitee_permission_false_for_volunteer(self):
+        self._req.user = self._volunteer
+        permission = self._can_access_invitee_permission.has_permission(self._req, None)
+        self.assertFalse(permission, 'Volunteer should not have permission to access invitee')

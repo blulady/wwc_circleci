@@ -24,7 +24,7 @@ jest.mock("react-router-dom", () => ({
   useParams: jest.fn(),
 }));
 
-describe("Register Component Validation Tests", () => {
+describe("Team Resources Component Validation Tests", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     jest.spyOn(Router, "useParams").mockReturnValue({ team: "0" });

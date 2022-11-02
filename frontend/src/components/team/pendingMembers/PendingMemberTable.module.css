@@ -1,0 +1,41 @@
+.pending-members-table {
+    width: 100%;
+}
+
+.pending-members-table tr > :first-child {
+    width: 4vw;
+    padding-left: 1vw;
+}
+
+.pending-members-table thead {
+    height: 60px;
+    background: rgba(107, 55, 104, 0.1);
+}
+
+.pending-members-table tbody tr {
+    border-bottom: 1px solid #6B3768;
+    height: 107px;
+}
+
+.pending-members-table tbody tr > :last-child {
+    padding-left: 2vw;
+}
+
+.invite-button {
+    width: 124px;
+    height: 32px;
+    background: #007A7C;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+
+.icon.delete {
+    background: url("../../../images/delete_24px.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+}

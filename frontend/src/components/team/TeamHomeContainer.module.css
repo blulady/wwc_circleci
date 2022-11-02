@@ -21,6 +21,10 @@
   padding: 0 15px;
 }
 
+.tab-button:focus {
+  outline: none;
+}
+
 .tab-button > a {
   color: black;
 }
@@ -29,6 +33,7 @@
   background: rgba(130, 130, 130, 0.1);
   border-radius :8px;
   outline: none !important;
+  cursor: default !important;
 }
 
 .team-home-tab-contents {
@@ -50,6 +55,19 @@
     width: 95vw;
     margin: 0 auto;
     height: auto;
+  }
+
+  .team-home-tab-container {
+    height: 50px;
+  }
+
+  .tab-button {
+    min-width: initial;
+    height: 20px;
+    padding: 3px 6px;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 14px;
   }
 
   .team-home-tab-contents {

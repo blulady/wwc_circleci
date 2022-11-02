@@ -15,6 +15,7 @@ import PrivateRoute from "./PrivateRoute";
 import TeamHomeContainer from "./components/team/TeamHomeContainer";
 import TeamResources from "./components/team/resources/TeamResources";
 import ViewMembers from "./components/team/viewMembers/ViewMembers";
+import PendingMembers from "./components/team/pendingMembers/PendingMembers";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/team/:team' element={<PrivateRoute element={<TeamHomeContainer />}/>}>
             <Route path='members' element={<ViewMembers />} />
+            <Route path='pending' element={<PendingMembers />} />
             <Route path='resources' element={<TeamResources />} />
           </Route>
           <Route exact path='/member/view' element={<PrivateRoute element={<MemberDetails />}/>} />

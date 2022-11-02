@@ -8,6 +8,11 @@
       {
         "pageId": "resources",
         "label": "Volunteer Resources"
+      },
+      {
+        "pageId": "pending",
+        "label": "Pending Members",
+        "isDirectorOnly": true
       }
     ],
     "slug": "volunteer_resource",

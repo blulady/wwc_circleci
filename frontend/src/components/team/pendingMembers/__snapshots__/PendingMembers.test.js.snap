@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PendingMembers Component Validation Tests PendingMembers component is rendering 1`] = `
+<div>
+  <div>
+    <div
+      class="d-flex justify-content-end mb-2 mb-md-5"
+    >
+      <button
+        class="wwc-action-button"
+        type="button"
+      >
+        + Add Member
+      </button>
+    </div>
+    <table
+      class="pending-members-table"
+    >
+      <thead>
+        <tr>
+          <th />
+          <th>
+            Email
+          </th>
+          <th>
+            Role
+          </th>
+          <th>
+            Status
+          </th>
+          <th>
+            Resend Invite
+          </th>
+          <th>
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            abc@example.com
+          </td>
+          <td>
+            Director
+          </td>
+          <td>
+            Invited
+          </td>
+          <td>
+            <button
+              class="invite-button"
+              type="button"
+            >
+              Resend Invite
+            </button>
+          </td>
+          <td>
+            <button
+              class="delete icon"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            abc@example.com
+          </td>
+          <td>
+            Director
+          </td>
+          <td>
+            Invited
+          </td>
+          <td>
+            <button
+              class="invite-button"
+              type="button"
+            >
+              Resend Invite
+            </button>
+          </td>
+          <td>
+            <button
+              class="delete icon"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            abc@example.com
+          </td>
+          <td>
+            Director
+          </td>
+          <td>
+            Invited
+          </td>
+          <td>
+            <button
+              class="invite-button"
+              type="button"
+            >
+              Resend Invite
+            </button>
+          </td>
+          <td>
+            <button
+              class="delete icon"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            abc@example.com
+          </td>
+          <td>
+            Director
+          </td>
+          <td>
+            Invited
+          </td>
+          <td>
+            <button
+              class="invite-button"
+              type="button"
+            >
+              Resend Invite
+            </button>
+          </td>
+          <td>
+            <button
+              class="delete icon"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            5
+          </td>
+          <td>
+            abc@example.com
+          </td>
+          <td>
+            Director
+          </td>
+          <td>
+            Invited
+          </td>
+          <td>
+            <button
+              class="invite-button"
+              type="button"
+            >
+              Resend Invite
+            </button>
+          </td>
+          <td>
+            <button
+              class="delete icon"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;

@@ -42,3 +42,13 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
+
+@media only screen and (max-width: 576px) {
+    .wwc-action-button {
+        width: 106px;
+        height: 32px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 10px;
+    }
+}

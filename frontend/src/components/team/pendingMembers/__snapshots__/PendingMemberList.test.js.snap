@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PendingMemberList Component Validation Tests PendingMemberList component is rendering 1`] = `
+<div>
+  <div
+    class="pending-member-list-card d-flex flex-column"
+  >
+    <div
+      class="align-self-end icon more"
+    />
+    <div
+      class="d-flex row"
+    >
+      <div
+        class="column"
+      >
+        Email
+      </div>
+      <div
+        class="column"
+      >
+        abc@example.com
+      </div>
+    </div>
+    <div
+      class="d-flex row"
+    >
+      <div
+        class="column"
+      >
+        Role
+      </div>
+      <div
+        class="column"
+      >
+        volunteer
+      </div>
+    </div>
+    <div
+      class="d-flex row"
+    >
+      <div
+        class="column"
+      >
+        Status
+      </div>
+      <div
+        class="column"
+      >
+        invited
+      </div>
+    </div>
+    <div
+      class="d-flex row"
+    >
+      <div
+        class="column"
+      >
+        Resend Invite
+      </div>
+      <div
+        class="column"
+      >
+        <button
+          class="invite-button icon"
+        >
+          Resend Invite
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL =
   process.env.REACT_APP_API_URL ||
-  "https://wwcode-chtools-api-dev.herokuapp.com/api";
+  "https://wwcode-chtools-api.herokuapp.com/api";
 
 const getConfig = () => {
   let { access } = JSON.parse(sessionStorage.getItem("token"));
@@ -210,6 +210,17 @@ class WwcApi {
     return await axios.delete(`${BASE_URL}/user/edit/${userId}/role/`, data, {
       headers: getConfig(),
     });
+  }
+
+  static async getPendingMembers() {
+    return [{
+      email: "abc@example.com",
+      role: "volunteer",
+      status: "invited"
+    }];
+    // return await axios.get(`${BASE_URL}/invitees/`, {
+    //   headers: getConfig(),
+    // });
   }
 }
 export default WwcApi;

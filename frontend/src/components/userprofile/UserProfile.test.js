@@ -114,7 +114,7 @@ test("component is rendering", async () => {
     expect(screen.getByText("Alice Robinson")).toBeTruthy();
     expect(screen.getByText("volunteer@example.com")).toBeTruthy();
     expect(screen.getByText("active")).toBeTruthy();
-    expect(screen.getByText("Member Since February 18, 2021")).toBeTruthy();
+    expect(screen.getByText("Member Since February 19, 2021")).toBeTruthy();
     expect(screen.getByText("volunteer")).toBeTruthy();
     expect(screen.getByText("Partnership Management")).toBeTruthy();
 });

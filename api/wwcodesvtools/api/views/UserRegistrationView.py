@@ -91,7 +91,7 @@ class UserRegistrationView(GenericAPIView):
             res_status = self.ERROR_STATUS[self.INTERNAL_SERVER_ERROR_MESSAGE]
         if (error is None and res_status == status.HTTP_201_CREATED):
             return Response({'result': self.USER_ACTIVATED_SUCCESSFULLY}, status=res_status)
-        return Response({'error': error}, status=res_status)
+        return Response({'error': str(error)}, status=res_status)
 
     def __validate_request(self, user_queryset, request_token):
         if not user_queryset.exists():

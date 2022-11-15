@@ -1,10 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from ..validators.FirstAndLastNameValidator import validate_first_name, validate_last_name
 import re
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(write_only=True, required=False, validators=[validate_first_name])
+    last_name = serializers.CharField(write_only=True, validators=[validate_last_name])
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'password')
@@ -18,26 +22,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         instance.password = make_password(validated_data.get('password', instance.password))
         instance.save()
         return instance
-
-    def validate_first_name(self, value):
-        """
-        Check that the first_name is not None or empty.
-        """
-        if not value:
-            raise serializers.ValidationError("First name should not be empty or None")
-        if len(value) > 50:
-            raise serializers.ValidationError("First name should not be more than 50 characters long")
-        return value
-
-    def validate_last_name(self, value):
-        """
-        Check that the last_name is not None or empty.
-        """
-        if not value:
-            raise serializers.ValidationError("Last name should not be empty or None")
-        if len(value) > 50:
-            raise serializers.ValidationError("Last name should not be more than 50 characters long")
-        return value
 
 # TODO Use the password_validator
     def validate_password(self, value):

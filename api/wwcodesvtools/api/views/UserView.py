@@ -66,11 +66,10 @@ class UserView(GenericAPIView):
             else:
                 response_data = {'error': self.ERROR_SETTING_NEW_NAME}
                 res_status = status.HTTP_400_BAD_REQUEST
-
             return Response(response_data, res_status)
         except Exception as e:
             res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response({'error': e}, res_status)
+            return Response({'error': str(e)}, res_status)
 
     def send_email_notification(self, email, fn, ln):
         context_data = {"first_name": fn, "last_name": ln}

@@ -42,29 +42,4 @@ class ChangePasswordViewTestCase(TransactionTestCase):
         result = self.patch_request(data, self.bearer)
         self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(json.loads(result.content), {'error': ['Password should have at least one uppercase letter']})
-
-    def test_missing_lowercase(self):
-        data = {"password": "PASSWORD1"}
-        result = self.patch_request(data, self.bearer)
-        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(result.content), {'error': ['Password should have at least one lowercase letter']})
-
-    def test_missing_numeric(self):
-        data = {"password": "Password"}
-        result = self.patch_request(data, self.bearer)
-        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(result.content), {'error': ['Password should have at least one number']})
-
-    def test_password_too_long(self):
-        data = {"password": "A1bcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"}
-        result = self.patch_request(data, self.bearer)
-        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(result.content), {'error': ['Password should be a minimum of 8 and maximum of 50 characters long']})
-
-    def test_password_too_short(self):
-        data = {"password": "Pass1"}
-        result = self.patch_request(data, self.bearer)
-        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(result.content),
-                         {'error': ['Password should be a minimum of 8 and maximum of 50 characters long']})
 # TODO wirte tests for 500 Internal error  and serializer error scenario

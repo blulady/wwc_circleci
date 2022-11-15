@@ -24,7 +24,7 @@ class DeleteMemberRoleViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def delete_request(self, id, role, bearer):
-        return self.client.delete(f'/api/user/edit/{id}/role/{role}', **bearer,
+        return self.client.delete(f'/api/user/edit/{id}/role/{role}/', **bearer,
                                   accept="application/json",
                                   content_type="application/json", )
 

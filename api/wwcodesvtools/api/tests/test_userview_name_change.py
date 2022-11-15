@@ -26,7 +26,7 @@ class UserViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def patch_request(self, data, bearer):
-        change_name_api_url = "/api/user/name"
+        change_name_api_url = "/api/user/name/"
         return self.client.patch(change_name_api_url, data, **bearer, accept="application/json", content_type="application/json",)
 
     def test_change_name_success(self):

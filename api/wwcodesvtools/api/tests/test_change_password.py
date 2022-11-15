@@ -23,7 +23,7 @@ class ChangePasswordViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def patch_request(self, data, bearer):
-        change_password_url = "/api/user/password"
+        change_password_url = "/api/user/password/"
         return self.client.patch(f'{change_password_url}', data, **bearer,
                                  accept="application/json",
                                  content_type="application/json",)

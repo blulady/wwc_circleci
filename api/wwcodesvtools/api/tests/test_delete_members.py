@@ -24,7 +24,7 @@ class DeleteMembersTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def delete_request(self, id, bearer):
-        return self.client.delete(f'/api/user/delete/{id}', **bearer, accept="application/json", content_type="application/json",)
+        return self.client.delete(f'/api/user/delete/{id}/', **bearer, accept="application/json", content_type="application/json",)
 
     # test can delete member with role = DIRECTOR
     def test_can_delete_member(self):

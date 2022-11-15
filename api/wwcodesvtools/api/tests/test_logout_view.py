@@ -30,7 +30,7 @@ class LogoutViewTestCase(TransactionTestCase):
         self.assertEqual(logout_response.status_code, status.HTTP_205_RESET_CONTENT)
 
         data = {"refresh": refresh_token}
-        refresh_response = self.client.post("/api/login/refresh", data, **bearer)
+        refresh_response = self.client.post("/api/login/refresh/", data, **bearer)
         self.assertEqual(refresh_response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(json.loads(refresh_response.content)['detail'], "Token is blacklisted")
         self.assertEqual(json.loads(refresh_response.content)['code'], "token_not_valid")

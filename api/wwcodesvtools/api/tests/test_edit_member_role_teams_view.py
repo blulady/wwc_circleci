@@ -27,7 +27,7 @@ class EditMemberRoleTeamsViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     def post_request(self, id, data, bearer):
-        return self.client.put(f'/api/user/edit/{id}/role_teams', data, **bearer,
+        return self.client.put(f'/api/user/edit/{id}/role_teams/', data, **bearer,
                                accept="application/json",
                                content_type="application/json",)
 

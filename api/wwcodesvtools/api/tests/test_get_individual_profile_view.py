@@ -23,7 +23,7 @@ class GetIndividualProfileViewTestCase(TransactionTestCase):
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/profile", **bearer)
+        response = self.client.get("/api/user/profile/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg='HTTP 200 failed')
         self.assertEqual(member_content.get('first_name'), 'Alice', msg='Invalid first name')
@@ -34,7 +34,7 @@ class GetIndividualProfileViewTestCase(TransactionTestCase):
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/profile", **bearer)
+        response = self.client.get("/api/user/profile/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg='HTTP 200 failed')
         self.assertEqual(member_content.get('first_name'), 'John', msg='Invalid first name')
@@ -45,7 +45,7 @@ class GetIndividualProfileViewTestCase(TransactionTestCase):
         self.password = 'Password123'
         access_token = self.get_token(self.username, self.password)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/profile", **bearer)
+        response = self.client.get("/api/user/profile/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg='HTTP 200 failed')
         self.assertEqual(member_content.get('first_name'), 'Bruno', msg='Invalid first name')

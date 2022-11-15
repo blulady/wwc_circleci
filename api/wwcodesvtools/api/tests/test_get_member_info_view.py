@@ -31,7 +31,7 @@ class GetMemberInfoViewTestCase(TransactionTestCase):
         self.username = 'alexanderbrown@example.com'
         access_token = self.get_token(self.username)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/7", **bearer)
+        response = self.client.get("/api/user/7/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(member_content.get('id'), 7)
         self.assertEqual(member_content.get('first_name'), "Alexander")
@@ -46,7 +46,7 @@ class GetMemberInfoViewTestCase(TransactionTestCase):
     def test_get_member_info_for_director(self):
         access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/1", **bearer)
+        response = self.client.get("/api/user/1/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(member_content.get('id'), 1)
         self.assertEqual(member_content.get('first_name'), "John")
@@ -62,7 +62,7 @@ class GetMemberInfoViewTestCase(TransactionTestCase):
     def test_get_member_info_for_leader(self):
         access_token = self.get_token(self.LEADER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/3", **bearer)
+        response = self.client.get("/api/user/3/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(member_content.get('id'), 3)
         self.assertEqual(member_content.get('first_name'), "Bruno")
@@ -79,7 +79,7 @@ class GetMemberInfoViewTestCase(TransactionTestCase):
     def test_get_member_info_for_volunteer(self):
         access_token = self.get_token(self.VOLUNTEER_EMAIL)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/user/2", **bearer)
+        response = self.client.get("/api/user/2/", **bearer)
         member_content = json.loads(response.content)
         self.assertEqual(member_content.get('id'), 2)
         self.assertEqual(member_content.get('first_name'), "Alice")

@@ -37,3 +37,7 @@ urlpatterns = [
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0)),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0)),
 ]
+
+handler400 = 'rest_framework.exceptions.bad_request'
+handler500 = 'rest_framework.exceptions.server_error'
+handler404 = 'utils.JSONErrorViews.error_404'

@@ -52,8 +52,8 @@ class InviteeModelTest(TransactionTestCase):
                            "created_by": 1
                            })
         response = self.client.post("/api/invitee/", data, **self.bearer, accept=json_type, content_type=json_type)
-        self.assertEqual(response.status_code,  status.HTTP_201_CREATED)
-        self.assertEqual(response.data['email'], 'user@example.com')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('token', json.loads(response.content))
 
     # Testing GET invitee by id endpoint
     def test_invitee_read_for_director(self):

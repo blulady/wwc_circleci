@@ -10,7 +10,7 @@ class InviteeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invitee
-        fields = ('email', 'message', 'role', 'role_name', 'status', 'registration_token', 'resent_counter', 'accepted', 'created_at', 'updated_at', 'created_by')
+        fields = ('id', 'email', 'message', 'role', 'role_name', 'status', 'registration_token', 'resent_counter', 'accepted', 'created_at', 'updated_at', 'created_by')
 
         extra_kwargs = {
             'message': {'write_only': True},

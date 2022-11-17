@@ -15,7 +15,7 @@ class InviteeModelTest(TransactionTestCase):
 
     def test_contains_expected_fields(self):
         data = self.serializer.data
-        self.assertEqual(set(data.keys()), set(['email', 'role_name', 'status', 'created_at', 'updated_at']))
+        self.assertEqual(set(data.keys()), set(['id', 'email', 'role_name', 'status', 'created_at', 'updated_at']))
 
     def test_data_has_email_for_given_invitee(self):
         data = self.serializer.data

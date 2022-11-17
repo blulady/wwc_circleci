@@ -1,6 +1,6 @@
 from api.models import Invitee
 from rest_framework import serializers
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from django.conf import settings
 
 
@@ -37,7 +37,7 @@ class InviteeSerializer(serializers.ModelSerializer):
         INVITED = 'INVITED'
         RESENT = 'RESENT'
         EXPIRED = 'EXPIRED'
-        is_expired = self.is_token_expired(invitee.updated_at)
+        is_expired = self.is_token_expired(invitee.registration_token)
         if(is_expired):
             return EXPIRED
         elif(invitee.resent_counter == 0):
@@ -46,10 +46,9 @@ class InviteeSerializer(serializers.ModelSerializer):
             return RESENT
 
     """
-    Validate if the token/registration link is expired based on the update date (invitee_update_at)
+    Validate if the token/registration link is expired based on the date (last 14 digits of the token)
     It's expired if it's been more than 72hrs
     """
-    def is_token_expired(self, invitee_updated_at):
-        token_datetime = invitee_updated_at
-        now_datetime = datetime.now(timezone.utc)
-        return (now_datetime - timedelta(seconds=settings.REGISTRATION_LINK_EXPIRATION) > token_datetime)
+    def is_token_expired(self, registration_token):
+        token_datetime = datetime.strptime(registration_token[-14:], '%Y%m%d%H%M%S')
+        return (datetime.now() - timedelta(seconds=settings.REGISTRATION_LINK_EXPIRATION) > token_datetime)

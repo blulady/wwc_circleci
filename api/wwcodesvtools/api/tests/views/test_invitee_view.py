@@ -1,6 +1,7 @@
 from django.test import TransactionTestCase
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
+from datetime import datetime
 import json
 
 
@@ -40,10 +41,12 @@ class InviteeModelTest(TransactionTestCase):
     # Testing CREATE invitee endpoint
     def test_invitee_create(self):
         json_type = "application/json"
+        now = datetime.now().strftime('%Y%m%d%H%M%S')
+        token = f"abcdefa0342a4330bc790f23ac70a7b6{now}"
         data = json.dumps({"email": "user@example.com",
                            "message": "string",
                            "role": 1,
-                           "registration_token": "string",
+                           "registration_token": token,
                            "resent_counter": 0,
                            "accepted": False,
                            "created_by": 1

@@ -50,10 +50,10 @@ class GetMembersSearchTestCase(TransactionTestCase):
     def test_get_members_search_by_last_name_for_director_role(self):
         access_token = self.get_token(self.DIRECTOR_EMAIL, self.DIRECTOR_PASSWORD)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/?search=mil", **bearer)
+        response = self.client.get("/api/users/?search=cla", **bearer)
         responseLength = len(response.data)
         self.assertEqual(responseLength, 1)
-        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Miller')
+        self.assertEqual(json.loads(response.content)[0]['last_name'], 'Clark')
 
     # Testing get members searching with role = DIRECTOR, first_name/last_name='not_matching_anything'
     def test_member_search_return_empty_for_no_match_for_director_role(self):

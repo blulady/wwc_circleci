@@ -9,8 +9,6 @@ class GetMembersViewTestCase(TransactionTestCase):
     reset_sequences = True
     fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
     DIRECTOR_EMAIL = 'director@example.com'
-    LEADER_EMAIL = 'leader@example.com'
-    VOLUNTEER_EMAIL = 'volunteer@example.com'
     PASSWORD = 'Password123'
 
     def get_token(self, username):
@@ -24,7 +22,7 @@ class GetMembersViewTestCase(TransactionTestCase):
         return s.validated_data['access']
 
     # Testing get members with role = DIRECTOR
-    # 'PENDING' status members and 'email' field are in the response
+    # 'email' field is in the response, pending field is not in response
     def test_get_members_role_director(self):
         access_token = self.get_token(None)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
@@ -32,31 +30,19 @@ class GetMembersViewTestCase(TransactionTestCase):
         members = json.loads(response.content)
         for member in members:
             self.assertIsNotNone(member['email'])
-            self.assertIn(member['status'], ('PENDING', 'ACTIVE'))
+            self.assertNotIn(member['status'], ('PENDING'))
 
-    # Testing get members with role = VOLUNTEER
-    # 'PENDING' status members and 'email' field not in the response
-    def test_get_members_role_volunteer(self):
-        self.username = self.VOLUNTEER_EMAIL
+    # Testing get members with any member
+    # pending and email fields not in the response
+    def test_get_members_common(self):
+        self.username = 'alexanderbrown@example.com'
         access_token = self.get_token(self.username)
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/", **bearer)
         members = json.loads(response.content)
         for member in members:
             self.assertRaises(KeyError, lambda: member['email'])
-            self.assertIn(member['status'], 'ACTIVE')
-
-    # Testing get members with role = LEADER
-    # 'PENDING' status members and 'email' field not in the response
-    def test_get_members_role_leader(self):
-        self.username = self.LEADER_EMAIL
-        access_token = self.get_token(self.username)
-        bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
-        response = self.client.get("/api/users/", **bearer)
-        members = json.loads(response.content)
-        for member in members:
-            self.assertRaises(KeyError, lambda: member['email'])
-            self.assertIn(member['status'], 'ACTIVE')
+            self.assertNotIn(member['status'], 'PENDING')
 
     def test_get_members_view_permissions(self):
         view_permissions = GetMembersView().permission_classes

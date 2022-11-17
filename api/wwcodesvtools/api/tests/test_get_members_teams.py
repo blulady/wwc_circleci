@@ -30,6 +30,7 @@ class TestGetMembersTeams(TransactionTestCase):
         bearer = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(access_token)}
         response = self.client.get("/api/users/?ordering=first_name", **bearer)
         members = json.loads(response.content)
+
         self.assertEqual(members[0]['first_name'], 'Alexander')
         self.assertListEqual(members[0]['role_teams'], [{'role_name': Role.LEADER}])
 
@@ -47,17 +48,19 @@ class TestGetMembersTeams(TransactionTestCase):
                                      {'role_name': Role.LEADER, 'team_id': 7, 'team_name': 'Volunteer Management'}]
         self.assertListEqual(members[3]['role_teams'], bruno_expected_role_teams)
 
-        self.assertEqual(members[4]['first_name'], 'Caroline')
-        self.assertListEqual(members[4]['role_teams'], [{'role_name': Role.LEADER}])
-
-        self.assertEqual(members[5]['first_name'], 'Jack')
-        self.assertListEqual(members[5]['role_teams'], [{'role_name': Role.LEADER}])
-
-        self.assertEqual(members[6]['first_name'], 'John')
+        self.assertEqual(members[4]['first_name'], 'John')
         john_expected_role_teams = [{'role_name': Role.DIRECTOR, 'team_id': 5, 'team_name': 'Social Media'}]
-        self.assertListEqual(members[6]['role_teams'], john_expected_role_teams)
+        self.assertListEqual(members[4]['role_teams'], john_expected_role_teams)
 
-        self.assertEqual(members[7]['first_name'], 'Sophie')
+        self.assertEqual(members[5]['first_name'], 'Sophie')
         sophie_expected_role_teams = [{'role_name': Role.LEADER, 'team_id': 6, 'team_name': 'Tech Event Volunteers'},
                                       {'role_name': Role.VOLUNTEER, 'team_id': 2, 'team_name': 'Hackathon Volunteers'}]
-        self.assertListEqual(members[7]['role_teams'], sophie_expected_role_teams)
+        self.assertListEqual(members[5]['role_teams'], sophie_expected_role_teams)
+
+        self.assertEqual(members[6]['first_name'], 'Sophie')
+        sophie_butler_expected_role_teams = [{'role_name': Role.DIRECTOR, 'team_id': 4, 'team_name': 'Partnership Management'},
+                                             {'role_name': Role.LEADER, 'team_id': 1, 'team_name': 'Event Volunteers'}]
+        self.assertListEqual(members[6]['role_teams'], sophie_butler_expected_role_teams)
+
+        self.assertEqual(members[7]['first_name'], 'Vincent')
+        self.assertListEqual(members[7]['role_teams'], [{'role_name': Role.LEADER}])

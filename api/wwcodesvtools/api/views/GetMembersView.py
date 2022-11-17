@@ -72,10 +72,7 @@ class GetMembersView(ListAPIView):
         distinct_fields.append('id')
         # add distinct clause on user id to eliminate duplicate rows from the query results.
         # DISTINCT ON expression matches the ORDER BY clause
-        queryset = User.objects.order_by(*order_fields).distinct(*distinct_fields)
-
-        if not self.is_user_director_or_superuser:
-            queryset = User.objects.exclude(userprofile__status="PENDING")
+        queryset = User.objects.order_by(*order_fields).distinct(*distinct_fields).exclude(userprofile__status="PENDING")
 
         status_filter = set(self.request.query_params.getlist('status'))
         if status_filter and status_filter.issubset(UserProfile.ALL_STATUS_VALUES):

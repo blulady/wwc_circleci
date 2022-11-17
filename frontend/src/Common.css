@@ -45,10 +45,23 @@
 
 @media only screen and (max-width: 576px) {
     .wwc-action-button {
-        width: 106px;
         height: 32px;
         font-weight: 400;
         font-size: 12px;
         line-height: 10px;
+    }
+
+    .wwc-action-button .icon {
+        width: 16px;
+        height: 16px;
+        color: #6B3768;
+    
+    }
+    
+    .wwc-action-button .icon:before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        display: inline-block;
     }
 }

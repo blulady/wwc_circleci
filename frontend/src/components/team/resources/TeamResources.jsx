@@ -37,7 +37,7 @@ const TeamResources = (props) => {
   const slug = teamInfo.slug;
 
   const instructions = `
-    <h5 class="c26">Instructions to set up Resource Document</h5>
+    <h5 class="c26">Instructions to set up Resources Document</h5>
     <ul>
       <li>Please create a Google Doc to be used for this resources document.</li>
       <li>Modify Share to 'Anyone on the internet with this link view.'</li>

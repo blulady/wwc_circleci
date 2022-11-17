@@ -25,7 +25,6 @@
 
 .instructions-box ul {
   padding-inline-start: 3em;
-  width: 80%;
   margin-bottom: 2rem;
 }
 
@@ -35,5 +34,6 @@
   }
   .instructions-box {
     width: 100%;
+    margin-top: 25px;
   }
 }

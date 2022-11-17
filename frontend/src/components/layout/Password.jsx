@@ -9,12 +9,14 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
   const [hidden, setHidden] = useState(true);
   const [pwdValidation, setPwdValidation] = useState(false);
   const passwordValidationDescriptions = [
-    "8-50 characters",
+    "8-16 characters",
+    "No spaces",
     "At least  1 upper case letter",
     "At least 1 lower case letter",
     "At least 1 numeric character",
   ];
   const [passwdValidStatus, setPasswdValidStatus] = useState([
+    false,
     false,
     false,
     false,
@@ -28,7 +30,8 @@ const Password = ({ setPwd , pwdLabel= "Password *"}) => {
   // function for validating password
   const validatePassword = (e) => {
     const regexs = [
-      RegExp(/^(?=.{8,50}$)/),
+      RegExp(/^(?=.{8,16}$)/),
+      RegExp(/^\S*$/),
       RegExp(/(?=.*[A-Z])/),
       RegExp(/(?=.*[a-z])/),
       RegExp(/(?=.*[0-9])/),

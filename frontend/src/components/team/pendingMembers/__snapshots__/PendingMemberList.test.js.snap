@@ -31,7 +31,7 @@ exports[`PendingMemberList Component Validation Tests PendingMemberList componen
         Role
       </div>
       <div
-        class="column"
+        class="column wwc-text-capitalize"
       >
         volunteer
       </div>
@@ -45,7 +45,7 @@ exports[`PendingMemberList Component Validation Tests PendingMemberList componen
         Status
       </div>
       <div
-        class="column"
+        class="column wwc-text-capitalize"
       >
         invited
       </div>

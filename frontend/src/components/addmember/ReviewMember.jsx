@@ -77,7 +77,7 @@ function ReviewMember(props) {
       };
       try {
         setErrorOnRequest(false);
-        const results = await WwcApi.createMember(memberInfo);
+        const results = await WwcApi.addInvitee(memberInfo);
         navigate("/member/add",
           { state: { fromReview: true }});
       } catch (error) {
@@ -197,7 +197,7 @@ function ReviewMember(props) {
                                 checked={memberRole.MemberRoleId === item.id}
                                 id={item.id}
                                 name='Role'
-                                value={item.role}
+                                value={item.id}
                                 pclass={edit.RoleInput ? "hide" : "show"}
                                 datatarget='#confirmModal'
                                 onClick={() => handleRadioClick(item.id)}

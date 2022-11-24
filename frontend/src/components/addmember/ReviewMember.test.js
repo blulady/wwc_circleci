@@ -110,7 +110,7 @@ describe('ReviewMember', () => {
     });
 
     test('it redirects on send invite click', async () => {
-        const apiSpy = jest.spyOn(WwcApi, 'createMember').mockReturnValue(await Promise.resolve('success'));
+        const apiSpy = jest.spyOn(WwcApi, 'addInvitee').mockReturnValue(await Promise.resolve('success'));
         const { container } = render(<ReviewMember />);
         const sendInvite = container.querySelector('.sendinvite-btn');
 
@@ -138,7 +138,7 @@ describe('ReviewMember', () => {
           
         CustomException.prototype = Object.create(Error.prototype);
         const exception = new CustomException('createMember failed')
-        const apiSpy = jest.spyOn(WwcApi, 'createMember').mockImplementation(() => {
+        const apiSpy = jest.spyOn(WwcApi, 'addInvitee').mockImplementation(() => {
             throw exception;
         });
         const { container, getByTestId } = render(<ReviewMember />);

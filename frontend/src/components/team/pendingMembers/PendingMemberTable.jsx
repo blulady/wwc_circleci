@@ -13,8 +13,8 @@ const PendingMemberTable = (props) => {
         <tr key={idx}>
             <td>{idx + 1}</td>
             <td>{user.email}</td>
-            <td>{user.role}</td>
-            <td>{user.status}</td>
+            <td className="wwc-text-capitalize">{user.role_name.toLowerCase()}</td>
+            <td className="wwc-text-capitalize">{user.status.toLowerCase()}</td>
             <td>
                 <button className={styles["invite-button"]} type="button">Resend Invite</button>
             </td>

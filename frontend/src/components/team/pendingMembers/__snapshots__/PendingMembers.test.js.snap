@@ -44,119 +44,15 @@ exports[`PendingMembers Component Validation Tests PendingMembers component is r
           <td>
             abc@example.com
           </td>
-          <td>
-            Director
+          <td
+            class="wwc-text-capitalize"
+          >
+            volunteer
           </td>
-          <td>
-            Invited
-          </td>
-          <td>
-            <button
-              class="invite-button"
-              type="button"
-            >
-              Resend Invite
-            </button>
-          </td>
-          <td>
-            <button
-              class="delete icon"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            2
-          </td>
-          <td>
-            abc@example.com
-          </td>
-          <td>
-            Director
-          </td>
-          <td>
-            Invited
-          </td>
-          <td>
-            <button
-              class="invite-button"
-              type="button"
-            >
-              Resend Invite
-            </button>
-          </td>
-          <td>
-            <button
-              class="delete icon"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            3
-          </td>
-          <td>
-            abc@example.com
-          </td>
-          <td>
-            Director
-          </td>
-          <td>
-            Invited
-          </td>
-          <td>
-            <button
-              class="invite-button"
-              type="button"
-            >
-              Resend Invite
-            </button>
-          </td>
-          <td>
-            <button
-              class="delete icon"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            4
-          </td>
-          <td>
-            abc@example.com
-          </td>
-          <td>
-            Director
-          </td>
-          <td>
-            Invited
-          </td>
-          <td>
-            <button
-              class="invite-button"
-              type="button"
-            >
-              Resend Invite
-            </button>
-          </td>
-          <td>
-            <button
-              class="delete icon"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            5
-          </td>
-          <td>
-            abc@example.com
-          </td>
-          <td>
-            Director
-          </td>
-          <td>
-            Invited
+          <td
+            class="wwc-text-capitalize"
+          >
+            invited
           </td>
           <td>
             <button

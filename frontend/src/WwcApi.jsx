@@ -65,7 +65,7 @@ axios.interceptors.response.use(
 
 class WwcApi {
   static async login(data) {
-    return await axios.post(`${BASE_URL}/login`, data, {
+    return await axios.post(`${BASE_URL}/login/`, data, {
       headers: { "content-type": "application/json" },
     });
   }
@@ -132,6 +132,12 @@ class WwcApi {
 
   static async createMember(data) {
     return await axios.post(`${BASE_URL}/user/create/`, data, {
+      headers: getConfig(),
+    });
+  }
+
+  static async addInvitee(data) {
+    return await axios.post(`${BASE_URL}/invitee/`, data, {
       headers: getConfig(),
     });
   }
@@ -212,15 +218,11 @@ class WwcApi {
     });
   }
 
-  static async getPendingMembers() {
-    return [{
-      email: "abc@example.com",
-      role: "volunteer",
-      status: "invited"
-    }];
-    // return await axios.get(`${BASE_URL}/invitees/`, {
-    //   headers: getConfig(),
-    // });
+  static async getInvitees() {
+    let res = await axios.get(`${BASE_URL}/invitee/`, {
+      headers: getConfig(),
+    });
+    return res.data;
   }
 }
 export default WwcApi;

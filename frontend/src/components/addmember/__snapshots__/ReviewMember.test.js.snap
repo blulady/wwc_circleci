@@ -237,7 +237,7 @@ Please try again.
                               id="1"
                               name="Role"
                               type="radio"
-                              value="Volunteer"
+                              value="1"
                             />
                             <div
                               class="member-role"
@@ -259,7 +259,7 @@ Please try again.
                               id="2"
                               name="Role"
                               type="radio"
-                              value="Leader"
+                              value="2"
                             />
                             <div
                               class="member-role"
@@ -282,7 +282,7 @@ Please try again.
                               id="3"
                               name="Role"
                               type="radio"
-                              value="Director"
+                              value="3"
                             />
                             <div
                               class="member-role"

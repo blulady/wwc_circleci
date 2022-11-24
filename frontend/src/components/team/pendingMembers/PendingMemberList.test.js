@@ -4,7 +4,7 @@ import PendingMemberList from "./PendingMemberList";
 
 const pendingMembers = [{
     email: "abc@example.com",
-    role: "volunteer",
+    role_name: "volunteer",
     status: "invited"
 }];
 

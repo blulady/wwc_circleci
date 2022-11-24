@@ -124,7 +124,7 @@ function AddMember(props) {
                           }
                           id={item.id}
                           name='Role'
-                          value={item.role}
+                          value={item.id}
                           pclass='hide'
                           datatarget='#confirmModal'
                           onClick={() => handleRadioClick(item.id)}

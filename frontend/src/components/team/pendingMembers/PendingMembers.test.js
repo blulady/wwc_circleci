@@ -1,13 +1,22 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import WwcApi from "../../../WwcApi";
 import PendingMembers from "./PendingMembers";
 
 jest.mock("../../../WwcApi", () => {
   return {
     ...jest.requireActual("../../../WwcApi"),
-    getPendingMembers: jest.fn(),
+    getInvitees: jest.fn(),
   };
+});
+
+const mockNavigation = jest.fn();
+jest.mock('react-router-dom', () => {
+  const ActualReactRouterDom = jest.requireActual('react-router-dom');
+  return {
+    ...ActualReactRouterDom,
+    useNavigate: () => mockNavigation
+  }
 });
 
 
@@ -18,39 +27,54 @@ describe("PendingMembers Component Validation Tests", () => {
 
   test("PendingMembers component is rendering", async () => {
     // Mock GET resources
-    WwcApi.getPendingMembers.mockImplementation(async () => {
-      return await Promise.resolve({
-        data: {
-            email: "abc@example.com",
-            role: "volunteer",
-            status: "invited"
-        },
-      });
+    WwcApi.getInvitees.mockImplementation(async () => {
+      return await Promise.resolve(
+        [{
+          email: "abc@example.com",
+          role_name: "volunteer",
+          status: "invited"
+        }]
+      );
     });
 
-    const { container } = render(
+    let res;
+    await act(async () => {
+      res = render(
         <PendingMembers />
       );
-
-    expect(container).toMatchSnapshot();
+    });
+    expect(res.container).toMatchSnapshot();
 
   });
 
-  // Enable and test once BE is ready as some data is currently hard coded
-//   test("PendingMembers component renders no invitess message", async () => {
-//     // Mock GET resources
-//     WwcApi.getPendingMembers.mockImplementation(async () => {
-//         return await Promise.resolve({
-//             data: {
-//             email: "abc@example.com",
-//             role: "volunteer",
-//             status: "invited"
-//             },
-//         });
-//     });
-//     const { container, getByText } = render(
-//         <PendingMembers />
-//     );
-//     expect(getByText("No invitees to display")).toBeTruthy();
-//   });
+  test("PendingMembers component renders no invitess message", async () => {
+    // Mock GET resources
+    WwcApi.getInvitees.mockImplementation(async () => {
+      return await Promise.resolve([]);
+    });
+
+    let res;
+    await act(async () => {
+      res = render(
+        <PendingMembers />
+      );
+    });
+
+    expect(res.getByText("No invitees to display")).toBeTruthy();
+  });
+
+  test('PedingMembers component: Error while getting invitees', async () => {
+    WwcApi.getInvitees.mockImplementation(async () => {
+      throw new Error("No invitees");
+    });
+
+    let res;
+    await act(async () => {
+      res = render(
+        <PendingMembers />
+      );
+    });
+
+    expect(res.getByTestId('message-box')).toBeInTheDocument();
+  });
 });

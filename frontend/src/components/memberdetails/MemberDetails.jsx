@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import AuthContext from "../../context/auth/AuthContext";
 import ContainerWithNav from "../layout/ContainerWithNav";
-import ChapterMembersButton from "./ChapterMembersButton";
+import BackToTeamHomeButton from "./BackToTeamHomeButton";
 import BackToMemberPortal from "../layout/BackToMemberPortal";
 import MemberImage from "./MemberImage";
 import MemberInfoUnEditable from "./MemberInfoUnEditable";
@@ -22,7 +22,7 @@ import { ERROR_REQUEST_MESSAGE } from "../../Messages";
 
 function ViewMemberDetails() {
   const location = useLocation();
-  const { id } = location.state;
+  const { id, teamId } = location.state;
   const { userInfo } = useContext(AuthContext);
 
   const [errorOnLoading, setErrorOnLoading] = useState(false);
@@ -207,7 +207,7 @@ function ViewMemberDetails() {
   return (
     <ContainerWithNav>
       <div className={styles["view-member-wrapper"]}>
-        <ChapterMembersButton />
+        <BackToTeamHomeButton label="Back to" teamId={teamId} />
         <div className={styles["member-container"]}>
           <BackToMemberPortal />
           <div className={cx(styles["member-details-container"], "align-items-center")}>

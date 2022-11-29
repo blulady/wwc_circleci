@@ -52,6 +52,7 @@
   line-height: 32px;
   /* Input/StrokeWWCode-Gray */
   color: #333333;
+  text-align: center;
 }
 
 @media only screen and (max-width: 768px) {

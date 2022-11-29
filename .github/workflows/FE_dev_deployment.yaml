@@ -64,6 +64,6 @@ jobs:
           heroku container:push web
           --app wwcode-chtools-fe-dev
         env:
-          REACT_APP_API_URL:https://wwcode-chtools-api-dev.herokuapp.com/api
+          REACT_APP_API_URL: https://wwcode-chtools-api-dev.herokuapp.com/api
       - name: "Releases the container"    
         run: heroku container:release web --app wwcode-chtools-fe-dev

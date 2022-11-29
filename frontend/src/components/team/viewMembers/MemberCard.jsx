@@ -5,7 +5,7 @@ import { ReactComponent as MemberImg } from "../../../images/open_person_icon.sv
 import { ReactComponent as MemberSmImg } from "../../../images/open_person_sm_icon.svg";
 //import "./MemberCard.css";
 import { isBrowser, isMobile } from "react-device-detect";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./MemberCard.module.css";
 import cx from "classnames";
@@ -45,9 +45,11 @@ const MemberCard = (props) => {
     return { top: 0, left: 0 };
   };
 
+  const { team } = useParams() || 0;
+
   const handleClick = (a) => {
     navigate("/member/view",{
-      state: cardUserInfo,
+      state: { ...cardUserInfo, teamId: team }
     });
   };
 

@@ -13,7 +13,7 @@
   min-width: 100%;
   min-height: 100%;
   margin: auto;
-  padding: 0rem 11.25rem;
+  padding: 0rem 10vw;
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
@@ -44,7 +44,6 @@
   position: absolute;
   width: 140px;
   height: 75.16px;
-  left: 180px;
   top: 16px;
 
   background: url(../../images/logoPNG1.png);

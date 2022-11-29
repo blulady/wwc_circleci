@@ -3,6 +3,7 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MemberDetails from "./MemberDetails";
 import AuthContext from "../../context/auth/AuthContext";
+import * as TeamContext from '../../context/team/TeamContext';
 
 const mockNavigation = jest.fn();
 
@@ -28,7 +29,8 @@ jest.mock("react-router-dom", () => ({
           "team_name": "Event Volunteers",
           "role_name": "VOLUNTEER"
         }
-      ]
+      ],
+      teamId: 0
     },
   }),
 }));
@@ -81,6 +83,9 @@ jest.mock("../layout/ContainerWithNav", function () {
 });
 
 test("component is rendering", async () => {
+  const contextTeams = { teams: [{ id: 1, name: 'Team1', pages: [{ label: "Test Page" }] }] };
+  jest.spyOn(TeamContext, 'useTeamContext')
+  .mockImplementation(() => contextTeams);
   await act(async () => {
     render(
       <AuthContext.Provider value={userInfo}>
@@ -100,6 +105,9 @@ test("component is rendering", async () => {
 });
 
 test("change status to inactive by clicking slider", async () => {
+  const contextTeams = { teams: [{ id: 1, name: 'Team1', pages: [{ label: "Test Page" }] }] };
+  jest.spyOn(TeamContext, 'useTeamContext')
+  .mockImplementation(() => contextTeams);
   await act(async () => {
     render(
       <AuthContext.Provider value={userInfo}>
@@ -114,6 +122,9 @@ test("change status to inactive by clicking slider", async () => {
 });
 
 test("opens edit teams form on btn click", async () => {
+  const contextTeams = { teams: [{ id: 1, name: 'Team1', pages: [{ label: "Test Page" }] }] };
+  jest.spyOn(TeamContext, 'useTeamContext')
+  .mockImplementation(() => contextTeams);
   let _container;
   await act(async () => {
     const { container } = render(

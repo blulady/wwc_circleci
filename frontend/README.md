@@ -95,6 +95,24 @@
 - All tests will be run when you create a pull request as well as when you merge to master branch.
 
 ## Heroku Setup and Deployment
+   1. Login to Railway
+```
+   railway login
+```
+   This will open a browser. Please use a provided credntial to login. If you don't, ask FE leaders.
+
+   2. Associate the project with the current directory. Make sure you are running the command from frontend directory.
+```
+   railway link
+```
+   Follow the steps. FE project is <b>wwcode-chtools-fe</b>.
+
+   3. Deploy
+```
+   railway up
+```
+   
+## Heroku Setup and Deployment(Deprecated)
 
 * Initial Setup(one time only)
 ```

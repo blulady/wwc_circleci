@@ -2,6 +2,7 @@ from django.template.loader import get_template
 from django.core.mail import EmailMessage
 from django.conf import settings
 from smtplib import SMTPException
+from datetime import datetime, timedelta
 from django.core.validators import validate_email, ValidationError
 from pathlib import Path
 from api.models import User_Team, Role
@@ -49,3 +50,10 @@ def is_director_or_superuser(user_id, is_superuser):
     except Exception as e:
         logger.error(f'is_director_or_superuser: Error user not found : {e}')
         return False
+
+
+# Validate if the token/registration link is expired based on the date (last 14 digits of the token)
+# It's expired if it's been more than 72hrs
+def is_token_expired(self, registration_token):
+    token_datetime = datetime.strptime(registration_token[-14:], '%Y%m%d%H%M%S')
+    return (datetime.now() - timedelta(seconds=settings.REGISTRATION_LINK_EXPIRATION) > token_datetime)

@@ -67,6 +67,7 @@ class UserRegistrationView(GenericAPIView):
     }
 
     @swagger_auto_schema(responses=post_response_schema)
+    @transaction.atomic
     def post(self, request):
         response_status = None
         error = None

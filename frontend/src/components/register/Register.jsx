@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Register.module.css";
 import cx from 'classnames';
 import queryString from "query-string";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Password from "../layout/Password";
 import Spinner from "../layout/Spinner";
 import WwcApi from "../../WwcApi";
@@ -13,7 +13,9 @@ import { ERROR_REQUEST_MESSAGE, ERROR_REGISTER_LINK_USED, ERROR_REGISTER_LINK_EX
 
 function Register(props) {
   const navigate = useNavigate();
-  const { email, token } = queryString.parse(props.location.search);
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get("email");
+  const token = searchParams.get("token");
   const [errorOnLoading, setErrorOnLoading] = useState({ hasError: false });
   const [processing, setProcessing] = useState(true);
   const [userInfo, setUserInfo] = useState({

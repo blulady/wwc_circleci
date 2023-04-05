@@ -3,8 +3,6 @@ import TeamContext from "./TeamContext";
 import WwcApi from "../../WwcApi"
 import data from "./teamInfo.json"
 
-// TODO: Temp variable to filter out teams not yet developed
-const activeTeams = [5]
 
 const TeamProvider = ({ children }) => {
     const [teams, setTeams] = useState([]);

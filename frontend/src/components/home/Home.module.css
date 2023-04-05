@@ -28,6 +28,10 @@
   background: url(../../images/chapter-members.png);
 }
 
+.host-management .cardimgtop {
+  background: url(../../images/host-management.png);
+}
+
 .social-media .cardimgtop {
   background: url(../../images/social-media.png);
 }

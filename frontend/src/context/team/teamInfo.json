@@ -26,10 +26,10 @@
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Event Volunteers Resources"
       }
     ],
-    "slug": "",
+    "slug": "event_volunteers_resource",
     "enabled": false
   },
   {
@@ -40,10 +40,10 @@
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Hackathon Volunteers Resources"
       }
     ],
-    "slug": "",
+    "slug": "hackathon_volunteers_resource",
     "enabled": false
   },
   {
@@ -54,11 +54,11 @@
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Host Management Resources"
       }
     ],
-    "slug": "",
-    "enabled": false
+    "slug": "host_management_resource",
+    "enabled": true
   },
   {
     "pages": [
@@ -68,10 +68,10 @@
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Partnership Management Resources"
       }
     ],
-    "slug": "",
+    "slug": "partner_management_resource",
     "enabled": false
   },
   {
@@ -110,10 +110,10 @@
       },
       {
         "pageId": "resources",
-        "label": ""
+        "label": "Volunteer Management Resources"
       }
     ],
-    "slug": "",
+    "slug": "volunteer_management_resource",
     "enabled": false
   },
   {

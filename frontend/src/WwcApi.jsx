@@ -36,7 +36,7 @@ axios.interceptors.response.use(
         originalRequest._retry = true;
         const { refresh } = JSON.parse(sessionStorage.getItem("token"));
         return axios
-          .post(`${BASE_URL}/login/refresh`, { refresh: refresh })
+          .post(`${BASE_URL}/login/refresh/`, { refresh: refresh })
           .then((res) => {
             if (res.status === 200) {
               console.log(res);

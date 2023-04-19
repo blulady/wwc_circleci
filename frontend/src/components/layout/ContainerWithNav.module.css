@@ -39,6 +39,9 @@
 
 /*----------container-navbar settings----------- */
 
+.navbar-wwc-logo {
+  margin-right: 80px;
+}
 /* ---- navbar logo --- */
 .navbar-wwc-logo .logo-png {
   position: absolute;

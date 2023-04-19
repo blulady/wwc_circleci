@@ -83,6 +83,12 @@
       {
         "pageId": "resources",
         "label": "Sodial Media Team Resources"
+      },
+      {
+        "pageId": "platforms",
+        "label": "Social Media Platforms",
+        "type": "externalLink",
+        "link": "https://linktr.ee/wwcodesv"
       }
     ],
     "slug": "social_media_resource",

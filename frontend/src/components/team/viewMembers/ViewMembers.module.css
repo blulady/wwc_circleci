@@ -227,6 +227,7 @@
 @media only screen and (max-width: 576px) {
   .view-member-page .view-member-page-list-wrapper {
     height: 100%;
+    margin-top: -10px;
   }
 
   .view-member-page .memberlist-container {

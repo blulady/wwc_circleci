@@ -32,15 +32,25 @@ const TeamHomeContainer = (props) => {
         className={cx(styles["team-home-container"], "d-flex flex-column")}
       >
         <div className={styles["team-home-container-inner"]}>
-          <div className={styles["team-home-tab-container"] + " d-flex align-items-end"}>
+          <div className={styles["team-home-tab-container"]}>
             {
               teamInfo.pages.map((page, i) => {
+                if (page.type === 'externalLink') {
+                  return (
+                      <a href={page.link} target="_blank" rel="noopener">
+                        <button className={styles["tab-button"]}>
+                        {page.label}</button>
+                      </a>
+                  )
+                }
                 if (!page.isDirectorOnly || isDirector) {
                   return (
-                  
                     <NavLink to={"/team/" + team + "/" + page.pageId} key={i}>
-                      <button className={styles["tab-button"] + ((i === currentPage) ? " " + styles["tab-button-selected"] : '')} onClick={() => setCurrentPage(i)}>
-                        {page.label}</button></NavLink>
+                      <button
+                        className={styles["tab-button"] + ((i === currentPage) ? " " + styles["tab-button-selected"] : '')}
+                        onClick={() => setCurrentPage(i)}>
+                      {page.label}</button>
+                    </NavLink>
                   )
                 }
               }

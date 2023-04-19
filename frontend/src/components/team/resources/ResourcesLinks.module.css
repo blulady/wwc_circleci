@@ -12,3 +12,9 @@
 .input-text {
     width: 100%;
 }
+
+@media only screen and (max-width: 576px) {
+    .input-container {
+        margin-top: 10px;
+    }
+}

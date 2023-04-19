@@ -10,8 +10,8 @@ const RoleRadioInput = (props) => {
         id={props.id}
         name={props.name}
         value={props.value}
-        data-toggle="modal"
-        data-target={props.datatarget}
+        data-bs-toggle="modal"
+        data-bs-target={props.datatarget}
         onClick={props.onClick}
         onChange={props.onChange}
       />

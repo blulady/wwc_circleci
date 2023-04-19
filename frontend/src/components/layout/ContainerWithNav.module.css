@@ -94,7 +94,7 @@
   color: white;
   background-color: #007d7f;
   text-transform: uppercase;
-  display: flex;
+  display: flex !important;
   justify-content: center;
   align-items: center;
   margin-left: auto;

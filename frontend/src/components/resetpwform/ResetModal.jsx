@@ -17,7 +17,7 @@ const ResetModal = (props) => {
               type="button"
               className="close"
               aria-label="Close"
-              data-dismiss="modal"
+              data-bs-dismiss="modal"
               close={props.close}
             >
               <span aria-hidden="true">&times;</span>
@@ -33,7 +33,7 @@ const ResetModal = (props) => {
               <button
                 type="button"
                 className="modal-success-btn"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
                 onClick={props.onClick}
               >
                 Close

@@ -57,6 +57,9 @@ exports[`PendingMembers Component Validation Tests PendingMembers component is r
           <td>
             <button
               class="invite-button"
+              data-bs-target="#resendConfirmationDialog"
+              data-bs-toggle="modal"
+              data-bs-user="abc@example.com"
               type="button"
             >
               Resend Invite
@@ -70,6 +73,60 @@ exports[`PendingMembers Component Validation Tests PendingMembers component is r
         </tr>
       </tbody>
     </table>
+    <div
+      class="modal"
+      id="resendConfirmationDialog"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div
+        class="modal-dialog modal-dialog-centered"
+      >
+        <div
+          class="modal-content"
+        >
+          <div
+            class="modal-header font-weight-bold"
+          >
+            <header
+              class="text-center"
+            >
+              <div
+                class="modal-title-text"
+              >
+                Are you sure?
+              </div>
+            </header>
+          </div>
+          <div
+            class="modal-body"
+          >
+            <div
+              class="mb-5"
+            >
+              Are you sure you want to resend the registration link?
+            </div>
+            <div
+              class="text-center"
+            >
+              <button
+                class="btn btn cancel-btn dialog-button mr-3"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                class="btn btn confirm-btn dialog-button submit-button"
+                data-bs-dismiss="modal"
+                type="submit"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;

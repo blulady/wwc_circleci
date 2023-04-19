@@ -1,0 +1,16 @@
+.dialog-button {
+    width: 120px;
+    height: 39px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #007A7C;
+    border-color: #007A7C;
+}
+
+.dialog-button.submit-button {
+    background: #007A7C;
+    color: #FFFFFF;
+}

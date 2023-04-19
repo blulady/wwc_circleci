@@ -46,6 +46,8 @@ exports[`PendingMemberTable Component Validation Tests PendingMemberTable compon
         <td>
           <button
             class="invite-button"
+            data-bs-toggle="modal"
+            data-bs-user="abc@example.com"
             type="button"
           >
             Resend Invite

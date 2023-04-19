@@ -18,7 +18,7 @@ const RequestSentModal = (props) => {
               type='button'
               className='close'
               aria-label='Close'
-              data-dismiss='modal'
+              data-bs-dismiss='modal'
               onClick={props.close}
             >
               <span aria-hidden='true'>&times;</span>
@@ -34,7 +34,7 @@ const RequestSentModal = (props) => {
               <button
                 type='button'
                 className={classes.btn}
-                data-dismiss='modal'
+                data-bs-dismiss='modal'
                 onClick={props.close}
               >
                 Close

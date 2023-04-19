@@ -27,7 +27,7 @@ const ConfirmDeleteRoleModal = ({role, deleteRole, closeModal}) => {
               <p>Are you sure you want to remove the <strong>{role}</strong> role and its associated teams?</p>
             </div>
             <div className="modal-footer d-flex justify-content-center">
-              <button type="button" className={cx("btn btn-primary", styles["modal-submit"])} onClick={handleSubmit} data-dismiss="modal">Confirm</button>
+              <button type="button" className={cx("btn btn-primary", styles["modal-submit"])} onClick={handleSubmit} data-bs-dismiss="modal">Confirm</button>
             </div>
           </div>
         </div>

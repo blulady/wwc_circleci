@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL =
   process.env.REACT_APP_API_URL ||
-  "https://wwcode-chtools-api.herokuapp.com/api";
+  "https://wwcode-chtools-api-dev-development.up.railway.app/api";
 
 const getConfig = () => {
   let { access } = JSON.parse(sessionStorage.getItem("token"));
@@ -223,6 +223,12 @@ class WwcApi {
       headers: getConfig(),
     });
     return res.data;
+  }
+
+  static async resendInvite() {
+    return await new Promise((resolve, reject) => {
+      resolve();
+    });
   }
 }
 export default WwcApi;

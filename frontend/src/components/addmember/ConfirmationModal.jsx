@@ -14,7 +14,7 @@ const ConfirmationModal = (props) => {
               <button
                 type="button"
                 className="modal-confirm-btn"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
               >
                 Confirm
               </button>

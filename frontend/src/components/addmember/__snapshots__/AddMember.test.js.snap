@@ -36,7 +36,7 @@ exports[`AddMember it renders without crashing 1`] = `
                 aria-expanded="false"
                 aria-haspopup="true"
                 class="user-button"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 id="navbarDropdown"
                 role="button"
               >
@@ -191,8 +191,8 @@ exports[`AddMember it renders without crashing 1`] = `
                     >
                       <input
                         class="form-check-input position-static role-radio"
-                        data-target="#confirmModal"
-                        data-toggle="modal"
+                        data-bs-target="#confirmModal"
+                        data-bs-toggle="modal"
                         id="1"
                         name="Role"
                         type="radio"
@@ -214,8 +214,8 @@ exports[`AddMember it renders without crashing 1`] = `
                     >
                       <input
                         class="form-check-input position-static role-radio"
-                        data-target="#confirmModal"
-                        data-toggle="modal"
+                        data-bs-target="#confirmModal"
+                        data-bs-toggle="modal"
                         id="2"
                         name="Role"
                         type="radio"
@@ -237,8 +237,8 @@ exports[`AddMember it renders without crashing 1`] = `
                     >
                       <input
                         class="form-check-input position-static role-radio"
-                        data-target="#confirmModal"
-                        data-toggle="modal"
+                        data-bs-target="#confirmModal"
+                        data-bs-toggle="modal"
                         id="3"
                         name="Role"
                         type="radio"
@@ -349,7 +349,7 @@ exports[`AddMember it renders without crashing 1`] = `
                         >
                           <button
                             class="modal-confirm-btn"
-                            data-dismiss="modal"
+                            data-bs-dismiss="modal"
                             type="button"
                           >
                             Confirm

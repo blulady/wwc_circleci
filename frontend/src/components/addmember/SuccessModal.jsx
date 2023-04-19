@@ -15,7 +15,7 @@ const SuccessModal = (props) => {
               type="button"
               className="close"
               aria-label="Close"
-              data-dismiss="modal"
+              data-bs-dismiss="modal"
               close={props.close}
             >
               <span aria-hidden="true">&times;</span>

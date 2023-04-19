@@ -326,7 +326,7 @@ const ViewMembers = (props) => {
           {isBrowser && (
             <div
               id="sortContainer"
-              className={styles["sort-container"] + " d-flex"}
+              className={styles["sort-container"] + " d-flex dropdown"}
             >
               <div id="sortLabel" className={styles.label}>
                 Sort By:
@@ -339,7 +339,7 @@ const ViewMembers = (props) => {
                 )}
                 type="button"
                 id="sortDropdownButton"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
                 data-offset="{top: 10}"

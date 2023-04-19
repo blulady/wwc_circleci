@@ -41,8 +41,8 @@ const AddNewRole = ({selectedRolesForUser, allRoles, addNewRole}) => {
                       id={item.id}
                       name="Role"
                       value={item.role}
-                      data-toggle="modal"
-                      data-target="#confirmModal"
+                      data-bs-toggle="modal"
+                      data-bs-target="#confirmModal"
                       onChange={(e) => handleRoleChange(e,item.id)}
                     />
                     <div className={cx(classes["custom-radio-btn"],selectedRoles.has(item.value) && classes['disabled'], role.role === item.role && classes['selected'] )}></div>

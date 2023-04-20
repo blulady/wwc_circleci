@@ -1,24 +1,40 @@
 from django.test import TransactionTestCase
 from django.contrib.auth.models import User
 from rest_framework import status
-from ..models import RegistrationToken, UserProfile
+from ...models import Invitee, Role, User_Team
 from rest_framework.permissions import AllowAny
-from ..views.UserRegistrationView import UserRegistrationView
+from ...views.UserRegistrationView import UserRegistrationView
 from datetime import datetime
 
 
 class UserRegistrationViewTestCase(TransactionTestCase):
     reset_sequences = True
-    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json']
+    fixtures = ['users_data.json', 'teams_data.json', 'roles_data.json', 'invitee.json']
     CONTENT_TYPE_APPLICATION_JSON = "application/json"
+    DIRECTOR_EMAIL = 'director@example.com'
+    PASSWORD = 'Password123'
+    now = datetime.now().strftime('%Y%m%d%H%M%S')
+    token = f"abcdefa0342a4330bc790f23ac70a7b6{now}"
+
+    def create_invitee(self):
+        invitee = Invitee(email="volunteer1@example.com",
+                          message="Invitee testing",
+                          role=Role.objects.get(name='VOLUNTEER'),
+                          registration_token=self.token,
+                          resent_counter=0,
+                          accepted=False,
+                          created_by=User.objects.get(email=self.DIRECTOR_EMAIL)
+                          )
+        invitee.save()
 
     def setUp(self):
+        self.create_invitee()
         self.registration_request_data = {
-            "email": "leaderPendingStatus@example.com",
+            "email": "volunteer1@example.com",
             "first_name": "Caroline",
             "last_name": "Miller",
             "password": "Password123",
-            "token": "938d60469dc74cceae396f2c963f105520500219015651",
+            "token": self.token,
         }
 
     def __send_request(self, data):
@@ -45,14 +61,13 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         successfully_updated_status_code = 201
         self.assertIs(resp.status_code, successfully_updated_status_code)
         self.assertEqual(resp["content-type"], self.CONTENT_TYPE_APPLICATION_JSON)
-        self.assertEqual(resp.data["result"], "User Activated Succesfully")
-        # Check user status is now ACTIVE
-        user_email = self.registration_request_data["email"]
-        registered_user = User.objects.get(email=user_email)
-        self.assertEqual(registered_user.userprofile.status, UserProfile.ACTIVE)
-        # Check token is marked as used
-        token = RegistrationToken.objects.get(token=self.registration_request_data["token"])
-        self.assertTrue(token.used)
+        self.assertEqual(resp.data["result"], "User Registered Successfully")
+        # Check new user was created
+        self.assertEqual(User.objects.filter(email='volunteer1@example.com').exists(), True)
+        # Check new user-role-team was created
+        self.assertEqual(User_Team.objects.filter(user_id=User.objects.get(email='volunteer1@example.com').id).exists(), True)
+        # Check the invitee is deleted
+        self.assertRaises(Invitee.DoesNotExist, Invitee.objects.get, email=self.registration_request_data["email"])
 
     # Test with password field missing in request data
     def test_password_required_fail(self):
@@ -114,28 +129,18 @@ class UserRegistrationViewTestCase(TransactionTestCase):
         now = datetime.now().strftime('%Y%m%d%H%M%S')
         invalid_token = f"abcdefa0342a4330bc790f23ac70a7b6{now}"
         self.registration_request_data["token"] = invalid_token
-        expected_error = "Invalid token. Token does not exist in our system."
+        expected_error = "Invalid token. Token in request does not match the token generated for this user."
         resp = self.__send_request(self.registration_request_data)
-        self.__perform_response_assertions(resp, status.HTTP_404_NOT_FOUND, expected_error)
+        self.__perform_response_assertions(resp, status.HTTP_400_BAD_REQUEST, expected_error)
 
     # Test invited email with mismatched token
     def test_newuser_mismatched_token(self):
         """
         Test to verify that a POST request with valid new user and mismatched valid token
-        returns error response
+        returns invalid token response.
         """
-        self.registration_request_data["token"] = "8b7bd00fffa742ed836539f0acce6ce920230525000234"
+        self.registration_request_data["token"] = "0223ed8f8936448dafd37088c955333420210219015606"
         expected_error = "Invalid token. Token in request does not match the token generated for this user."
-        resp = self.__send_request(self.registration_request_data)
-        self.__perform_response_assertions(resp, status.HTTP_400_BAD_REQUEST, expected_error)
-
-    # Test Active User trying to register
-    def test_ActiveUser_Register_fail(self):
-        """
-        Test to verify that a POST call with Active User returns error response
-        """
-        self.registration_request_data["email"] = "volunteer@example.com"
-        expected_error = "User is already registered and Active"
         resp = self.__send_request(self.registration_request_data)
         self.__perform_response_assertions(resp, status.HTTP_400_BAD_REQUEST, expected_error)
 

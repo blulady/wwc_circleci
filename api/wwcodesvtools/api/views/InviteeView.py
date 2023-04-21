@@ -13,6 +13,7 @@ from django.utils.http import urlencode
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
+from django.db import transaction
 
 logger = logging.getLogger('django')
 
@@ -80,6 +81,7 @@ class InviteeViewSet(viewsets.ModelViewSet):
                          ),
                          operation_description="POST /invitee/",
                          responses=post_response_schema)
+    @transaction.atomic
     def create(self, request):
         res_status = None
         error = None
@@ -112,27 +114,31 @@ class InviteeViewSet(viewsets.ModelViewSet):
             # create invitee in the invitee table
             serializer_invitee = InviteeSerializer(data=invitee_data)
             if serializer_invitee.is_valid():
+                # creating txn savepoint
+                sid = transaction.savepoint()
                 serializer_invitee.save()
-                logger.info('InviteeViewSet Create: Invitee data inserted successfully')
-                res_status = status.HTTP_201_CREATED
-            else:
-                error = serializer_invitee.errors
-                res_status = status.HTTP_400_BAD_REQUEST
-
-            # If invitee created successfully with no errors, then send email notification to the new invitee
-            if (error is None and res_status == status.HTTP_201_CREATED):
+                logger.info('InviteeViewSet Create: Invitee data valid')
+                # If invitee created successfully, then send email notification to the new invitee
                 message_sent = self.send_email_notification(email, registration_token, message)
                 if message_sent:
-                    logger.info('InviteeViewSet Create : Invitee created and email sent successfully')
+                    # all well, commit data to the db
+                    transaction.savepoint_commit(sid)
                     res_status = status.HTTP_200_OK
+                    logger.info('InviteeViewSet Create : Invitee created and email sent successfully')
                 else:
+                    # something went wrong sending the email, don't commit data to db, rollback txn
+                    transaction.savepoint_rollback(sid)
                     res_status = status.HTTP_502_BAD_GATEWAY
                     error = self.ERROR_SENDING_EMAIL_NOTIFICATION
+                    logger.info('InviteeViewSet Create : email NOT sent, invitee rolled back')
+            else:
+                # invalid data
+                error = serializer_invitee.errors
+                res_status = status.HTTP_400_BAD_REQUEST
         except Exception as e:
             error = self.ERROR_CREATING_INVITEE
             logger.error(f'InviteeViewSet Create: {error}: {e}')
             res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-
         if (error is None and res_status == status.HTTP_200_OK):
             return Response({'result': self.INVITEE_CREATED_SUCCESSFULLY, 'token': registration_token}, status=res_status)
         return Response({'error': error}, status=res_status)

@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import environ
 from datetime import timedelta
-import django_heroku
 
 env = environ.Env()
 # reading .env file
@@ -32,8 +31,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['wwcode-chtools-api.herokuapp.com', 'localhost']
-
+ALLOWED_HOSTS = ['wwcode-chtools-api-dev-development.up.railway.app', 'wwcode-chtools-api-stage-production.up.railway.app', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['wwcode-chtools-api-dev-development.up.railway.app', 'wwcode-chtools-api-stage-production.up.railway.app']
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,7 +91,6 @@ DATABASES = {
     'default': env.db(),
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -129,6 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Email Settings
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
@@ -176,8 +177,8 @@ LOGGING = {
 }
 
 # Configure Django App for Heroku.
-django_heroku.settings(locals())
-del DATABASES['default']['OPTIONS']['sslmode']
+# django_heroku.settings(locals())
+# del DATABASES['default']['OPTIONS']['sslmode']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

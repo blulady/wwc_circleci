@@ -3,13 +3,14 @@
 ## Setup instructions using Docker:
 1. Install [Docker Community Edition](https://docs.docker.com/install/) if it
 is not already installed.
-1. Once Docker is installed, run the following commands:
+2. Comment out [ApiConfig.ready()](https://github.com/WomenWhoCode/WWCode-SV/blob/master/api/wwcodesvtools/api/apps.py)  function  in the apps.py file prior to deploy to prevent flush token error
+3. Once Docker is installed, run the following commands:
     ```
     $ cd api/wwcodesvtools/
     $ copy ".env.example" file to ".env"
     $ docker-compose up
     ```
-1. The web application will be available at http://localhost:8000
+4. The web application will be available at http://localhost:8000
 
 ### Compose
 Generally it is more convenient to run the containers in the background using daemon mode. To start the containers in daemon mode, use the following command:
@@ -84,6 +85,10 @@ will completely remove any data you have already stored in the database.
 
 ## Deploying onto Heroku
 * Check that the containers are working on the localhost.
+* Comment out [ApiConfig.ready()](https://github.com/WomenWhoCode/WWCode-SV/blob/master/api/wwcodesvtools/api/apps.py) function prior to deploy to prevent flush token error
+```
+Comment out  ApiConfig.ready() in the apps.py file
+```
 * Login to heroku
 ```
 heroku login

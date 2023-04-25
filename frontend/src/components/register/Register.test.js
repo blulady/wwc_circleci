@@ -27,7 +27,7 @@ describe('Register Component Validation Tests', () => {
       async () => {
         return await Promise.resolve({
             data: {
-              success: {
+              detail: {
                   status: "VALID",
                   message: "Toke is valid"
               }
@@ -60,7 +60,7 @@ describe('Register Component Validation Tests', () => {
       async () => {
         return await Promise.resolve({
             data: {
-              success: {
+              detail: {
                   status: "USED",
                   message: "Token is already used"
               }
@@ -77,7 +77,7 @@ describe('Register Component Validation Tests', () => {
     // Error message is rendered
     const msgBox = screen.getByTestId('message-box');
     expect(screen.getByText(/Oops/i)).toBeInTheDocument();
-    expect(screen.getByText(/This link has already been used/i)).toBeInTheDocument();
+    expect(screen.getByText(/Token is already used/i)).toBeInTheDocument();
     expect(msgBox).toBeInTheDocument();
   });
 
@@ -87,9 +87,9 @@ describe('Register Component Validation Tests', () => {
       async () => {
         return await Promise.resolve({
             data: {
-              success: {
+              detail: {
                   status: "EXPIRED",
-                  message: "Token has expired"
+                  message: "Token is expired"
               }
             }
         })}
@@ -104,7 +104,7 @@ describe('Register Component Validation Tests', () => {
     // Error message is rendered
     const msgBox = screen.getByTestId('message-box');
     expect(screen.getByText(/Oops/i)).toBeInTheDocument();
-    expect(screen.getByText(/This link has expired/i)).toBeInTheDocument();
+    expect(screen.getByText(/Token is expired/i)).toBeInTheDocument();
     expect(msgBox).toBeInTheDocument();
   });
 
@@ -114,7 +114,7 @@ describe('Register Component Validation Tests', () => {
       async () => {
         return await Promise.resolve({
             data: {
-              success: {
+              detail: {
                   status: "INVALID",
                   message: "Invalid token. Token in request does not match the token generated for this user."
               }
@@ -131,7 +131,7 @@ describe('Register Component Validation Tests', () => {
     // Error message is rendered
     const msgBox = screen.getByTestId('message-box');
     expect(screen.getByText(/Oops/i)).toBeInTheDocument();
-    expect(screen.getByText(/This link is invalid/i)).toBeInTheDocument();
+    expect(screen.getByText(/Invalid token/i)).toBeInTheDocument();
     expect(msgBox).toBeInTheDocument();
   });
 

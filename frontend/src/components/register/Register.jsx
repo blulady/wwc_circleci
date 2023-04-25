@@ -31,14 +31,8 @@ function Register(props) {
         WwcApi.validateInvitation({ params: { email, token } }) // check valid invitation
           .then((res) => {
             setProcessing(false);
-            if (res.data.success.status === "USED") {
-              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_USED });
-            }
-            if (res.data.success.status === "EXPIRED") {
-              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_EXPIRED });
-            }
-            if (res.data.success.status === "INVALID") {
-              setErrorOnLoading({ hasError: true, title: "Oops!", message: ERROR_REGISTER_LINK_INVALID });
+            if (res.data.detail.status !== "ACTIVE" && res.data.detail.status !== "VALID") {
+              setErrorOnLoading({ hasError: true, title: "Oops!", message: res.data.detail.message });
             }
           })
           .catch((error) => {

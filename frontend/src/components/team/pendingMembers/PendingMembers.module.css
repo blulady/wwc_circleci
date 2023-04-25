@@ -1,3 +1,7 @@
+.pending-members-container {
+    overflow-y: scroll;
+}
+
 .no-users-msg {
     font-weight: 600;
     font-size: 18xx;

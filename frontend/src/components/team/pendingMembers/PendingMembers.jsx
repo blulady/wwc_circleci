@@ -67,7 +67,7 @@ const PendingMembers = (props) => {
             </div>)
     } else {
         return (
-            <div>
+            <div className={styles["pending-members-container"]}>
                 <div className="d-flex justify-content-end mb-2 mb-md-5">
                     <button type="button" className="wwc-action-button" onClick={goToAddMember}>+ Add Member</button>
                 </div>

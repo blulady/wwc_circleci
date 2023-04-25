@@ -2,7 +2,9 @@
 
 exports[`PendingMembers Component Validation Tests PendingMembers component is rendering 1`] = `
 <div>
-  <div>
+  <div
+    class="pending-members-container"
+  >
     <div
       class="d-flex justify-content-end mb-2 mb-md-5"
     >

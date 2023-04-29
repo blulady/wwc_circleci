@@ -15,7 +15,7 @@ const PendingMemberTable = (props) => {
             <td className="wwc-text-capitalize">{user.role_name.toLowerCase()}</td>
             <td className="wwc-text-capitalize">{user.status.toLowerCase()}</td>
             <td>
-                <button className={styles["invite-button"]} type="button" data-bs-toggle="modal" data-bs-target={props.target} data-bs-user={user.email}>Resend Invite</button>
+                <button className={styles["invite-button"]} type="button" data-bs-toggle="modal" data-bs-target={props.target} data-bs-user={user.id}>Resend Invite</button>
             </td>
             <td>
                 <button className={styles["delete"] + " " + styles["icon"]}></button>

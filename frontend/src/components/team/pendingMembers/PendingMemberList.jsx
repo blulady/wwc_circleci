@@ -24,7 +24,7 @@ const PendingMemberList = (props) => {
                 </div>
                 <div className={"d-flex " + styles["row"]}>
                     <div className={styles["column"]}>Resend Invite</div>
-                    <div className={styles["column"]}><button className={styles["invite-button"] + " " + styles["icon"]} data-bs-toggle="modal" data-bs-target={props.target} data-bs-user={user.email}>Resend Invite</button></div>
+                    <div className={styles["column"]}><button className={styles["invite-button"] + " " + styles["icon"]} data-bs-toggle="modal" data-bs-target={props.target} data-bs-user={user.id}>Resend Invite</button></div>
                 </div>
             </div>
         )

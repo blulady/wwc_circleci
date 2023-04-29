@@ -64,7 +64,6 @@ exports[`PendingMemberList Component Validation Tests PendingMemberList componen
         <button
           class="invite-button icon"
           data-bs-toggle="modal"
-          data-bs-user="abc@example.com"
         >
           Resend Invite
         </button>

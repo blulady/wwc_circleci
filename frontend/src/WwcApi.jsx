@@ -225,9 +225,9 @@ class WwcApi {
     return res.data;
   }
 
-  static async resendInvite() {
-    return await new Promise((resolve, reject) => {
-      resolve();
+  static async resendInvite(userId) {
+    return await axios.patch(`${BASE_URL}/invitee/${userId}/resend `, null, {
+      headers: getConfig(),
     });
   }
 }

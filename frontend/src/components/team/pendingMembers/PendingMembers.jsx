@@ -15,6 +15,7 @@ const PendingMembers = (props) => {
     const [users, setUsers] = useState([]);
     const [errorOnLoading, setErrorOnLoading] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
 
     const renderTable = () => {
@@ -39,7 +40,7 @@ const PendingMembers = (props) => {
     };
 
     const resendInvite = async () => {
-       await WwcApi.resendInvite();
+       await WwcApi.resendInvite(currentUser);
        await getInvitees();       
        setShowMessage(true);
     };
@@ -49,6 +50,7 @@ const PendingMembers = (props) => {
         if (target) {
             user = target.getAttribute("data-bs-user");
         }
+        setCurrentUser(user);
     };
 
     useEffect(() => {

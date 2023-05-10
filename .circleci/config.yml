@@ -1,6 +1,9 @@
 version: 4.1.1
 jobs:
   build:
+    filters:
+      branches:
+        ignore: ^FE.*
     docker:
       - image: circleci/python:3.8
         environment:

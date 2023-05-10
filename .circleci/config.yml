@@ -35,6 +35,7 @@ jobs:
       - run:
           name: Installing Python dependencies in a venv
           command: |
+            python -m site --user-site
             python3 -m venv venv
             . venv/bin/activate
             cd api/wwcodesvtools

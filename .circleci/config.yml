@@ -3,7 +3,7 @@ jobs:
   build:
     filters:
       branches:
-        ignore: ^FE.*
+        only: /^BE.*/
     docker:
       - image: cimg/python:3.8.4
         environment:

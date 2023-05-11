@@ -8,7 +8,7 @@ jobs:
       - image: cimg/python:3.8.4
         environment:
           DATABASE_URL: postgres://postgres@localhost:5432/postgres_test?sslmode=disable
-      - image: circleci/postgres:12.0-alpine-ram
+      - image: cimg/postgres:12.0-alpine-ram
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: postgres_test

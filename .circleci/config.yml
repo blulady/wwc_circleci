@@ -1,10 +1,9 @@
 version: 4.1.1
-#testing branch ignore
 jobs:
   build:
     filters:
       branches:
-        only: /^BE.*/
+        only: /^main.*/
     docker:
       - image: cimg/python:3.8.4
         environment:
